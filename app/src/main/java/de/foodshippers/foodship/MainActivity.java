@@ -1,7 +1,9 @@
 package de.foodshippers.foodship;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -21,6 +23,8 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    CommunicationManager conMan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,13 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        final IntentFilter filters = new IntentFilter();
+        conMan = new CommunicationManager(Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+        NetworkChangeReceiver netreceiver = new NetworkChangeReceiver(conMan, getApplication());
+        filters.addAction("android.net.wifi.WIFI_STATE_CHANGED");
+        filters.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        super.registerReceiver(netreceiver, filters);
+
     }
 
     @Override
