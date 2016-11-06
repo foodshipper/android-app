@@ -35,9 +35,9 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                new IntentIntegrator(MainActivity.this).setOrientationLocked(true).setBeepEnabled(true)
+                        .setDesiredBarcodeFormats(Arrays.asList("EAN_8", "EAN_13"))
+                        .initiateScan();
             }
         });
 
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         final IntentFilter filters = new IntentFilter();
-        conMan = new CommunicationManager(Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
+        conMan = new CommunicationManager(Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID),getApplicationContext());
         NetworkChangeReceiver netreceiver = new NetworkChangeReceiver(conMan, getApplication());
         filters.addAction("android.net.wifi.WIFI_STATE_CHANGED");
         filters.addAction("android.net.conn.CONNECTIVITY_CHANGE");
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity
             if (result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, "Scanned: " + result.getContents() + " Code" + result.getFormatName(), Toast.LENGTH_LONG).show();
+                conMan.sendFood(result.getContents());
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -110,9 +110,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            new IntentIntegrator(this).setOrientationLocked(true).setBeepEnabled(true)
-                    .setDesiredBarcodeFormats(Arrays.asList("EAN_8", "EAN_13"))
-                    .initiateScan();
+
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {

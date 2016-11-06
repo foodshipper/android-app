@@ -1,13 +1,89 @@
 package de.foodshippers.foodship;
 
+import android.content.Context;
+import android.widget.Toast;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by hannes on 06.11.16.
  */
 public class CommunicationManager {
 
     private final String android_id;
+    public boolean Sendable = false;
+    private List<String> PendingFooIds = new LinkedList<>();
+    RequestQueue queue;
+    String BaseURL = "http://api.foodshipper.de/v1/";
+    Context AppContext;
 
-    public CommunicationManager(String an_id) {
+
+    public CommunicationManager(String an_id, Context appcontext) {
         this.android_id = an_id;
+        queue = Volley.newRequestQueue(appcontext);
+        this.AppContext = appcontext;
+        queue.start();
+    }
+
+    public void setSendable(boolean sendable) {
+        Sendable = sendable;
+        if (sendable) {
+            sendPending();
+        }
+    }
+
+    public boolean isSendable() {
+        return Sendable;
+    }
+
+    public boolean sendFood(String code) {
+        if (isSendable()) {
+            queue.add(createStringRequest(code));
+            return true;
+        } else {
+            PendingFooIds.add(code);
+            System.out.println();
+            return false;
+        }
+
+    }
+
+    public StringRequest createStringRequest(String foodID) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, BaseURL.concat("product/".concat(foodID)),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(AppContext, response, Toast.LENGTH_LONG).show();
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.networkResponse.statusCode == 404) {
+                    Toast.makeText(AppContext, "Produkt nicht gefunden.", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(AppContext, "BIG Fehler" + error.getMessage(), Toast.LENGTH_LONG).show();
+                    System.out.println(error);
+                }
+            }
+        });
+        return stringRequest;
+    }
+
+    public boolean sendPending() {
+        Toast.makeText(AppContext,Integer.toString(PendingFooIds.size()), Toast.LENGTH_LONG).show();
+        for (String pendingFooId : PendingFooIds) {
+            queue.add(createStringRequest(pendingFooId));
+        }
+        return true;
+
     }
 }

@@ -11,11 +11,13 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 
     private final CommunicationManager conMan;
     private int Internet_Status;
+    private boolean connectedWithAPI;
 
 
     public NetworkChangeReceiver(CommunicationManager manager, Context base) {
         this.conMan = manager;
         this.Internet_Status = NetworkUtil.getConnectivityStatusString(base);
+        System.out.println("Anfang "  + change(this.getInternet_Status(),0));
     }
 
     @Override
@@ -49,13 +51,16 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
             switch (latest) {
                 case NetworkUtil.NETWORK_STATUS_MOBILE:
                     Change = "MOBILE";
+                    conMan.setSendable(false);
                     break;
                 case NetworkUtil.NETWORK_STAUS_WIFI:
                     Change = "Wifi";
+                    conMan.setSendable(true);
                     break;
                 case NetworkUtil.NETWORK_STATUS_NOT_CONNECTED:
                 default:
                     Change = "NoInternet";
+                    conMan.setSendable(false);
             }
         }
         return Change;
