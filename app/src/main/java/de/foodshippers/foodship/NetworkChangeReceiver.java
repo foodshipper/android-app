@@ -14,16 +14,19 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     private boolean connectedWithAPI;
 
 
-    public NetworkChangeReceiver(CommunicationManager manager, Context base) {
+    public NetworkChangeReceiver(CommunicationManager manager, Context conStartUp) {
         this.conMan = manager;
-        this.Internet_Status = NetworkUtil.getConnectivityStatusString(base);
-        System.out.println("Anfang "  + change(this.getInternet_Status(),0));
+        parseChanges(conStartUp);
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        int status = NetworkUtil.getConnectivityStatusString(context);
-        System.out.println(change(status, this.Internet_Status));
+      parseChanges(context);
+    }
+
+    public void parseChanges(Context con){
+        int status = NetworkUtil.getConnectivityStatusString(con);
+        System.out.println(ProcessNetworkChange(status, this.Internet_Status));
         this.Internet_Status = status;
     }
 
@@ -43,7 +46,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
         return false;
     }
 
-    public String change(int latest, int old) {
+    public String ProcessNetworkChange(int latest, int old) {
         String Change;
         if (old == latest) {
             Change = "";
