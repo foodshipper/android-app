@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -68,7 +67,7 @@ public class GridViewAdapter extends BaseAdapter {
             holder.image.setImageBitmap(bmp);
             return row;
         }else{
-            ImageItem item = (ImageItem) data.get(position);
+            FoodItem item = (FoodItem) data.get(position);
             holder.imageTitle.setText(item.getTitle());
             holder.image.setImageBitmap(item.getImage());
             return row;

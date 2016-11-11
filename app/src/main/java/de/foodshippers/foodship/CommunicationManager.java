@@ -18,11 +18,11 @@ import java.util.List;
 public class CommunicationManager {
 
     private final String android_id;
-    public boolean Sendable = false;
+    private boolean Sendable = false;
     private List<String> PendingFooIds = new LinkedList<>();
-    RequestQueue queue;
-    String BaseURL = "http://api.foodshipper.de/v1/";
-    Context AppContext;
+    private RequestQueue queue;
+    private String BaseURL = "http://api.foodshipper.de/v1/";
+    private Context AppContext;
 
 
     public CommunicationManager(String an_id, Context appcontext) {
@@ -79,7 +79,7 @@ public class CommunicationManager {
     }
 
     public boolean sendPending() {
-        Toast.makeText(AppContext,Integer.toString(PendingFooIds.size()), Toast.LENGTH_LONG).show();
+        Toast.makeText(AppContext, Integer.toString(PendingFooIds.size()), Toast.LENGTH_LONG).show();
         for (String pendingFooId : PendingFooIds) {
             queue.add(createStringRequest(pendingFooId));
         }

@@ -1,28 +1,28 @@
 package de.foodshippers.foodship;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.Toast;
+import android.widget.*;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -36,17 +36,73 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        try {
+            System.out.println("Secure " + Settings.Secure.getInt(this.getContentResolver(), Settings.Secure.ANDROID_ID) );
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        //Floating Button
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new IntentIntegrator(MainActivity.this).setOrientationLocked(true).setBeepEnabled(true)
-                        .setDesiredBarcodeFormats(Arrays.asList("EAN_8", "EAN_13"))
-                        .initiateScan();
+//                new IntentIntegrator(MainActivity.this).setOrientationLocked(true).setBeepEnabled(false)
+//                        .setDesiredBarcodeFormats(Arrays.asList("EAN_8", "EAN_13"))
+//                        .initiateScan();
+                String m_Text = "";
+//                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+//                builder.setTitle("Title");
+//
+//                final EditText input = new EditText(MainActivity.this);
+//                input.setHint("Name");
+//                input.setInputType(InputType.TYPE_CLASS_TEXT);
+//                final EditText input2 = new EditText(MainActivity.this);
+//                input2.setHint("Kategorie");
+//                input2.setInputType(InputType.TYPE_CLASS_TEXT);
+//                builder.setView(input2);
+//
+//
+//// Set up the buttons
+//                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        System.out.println(input.getText().toString());
+//                    }
+//                });
+//                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.cancel();
+//                    }
+//                });
+//
+//                builder.show();
+                final Dialog dialog = new Dialog(MainActivity.this);
+                dialog.setContentView(R.layout.costumdialog);
+                dialog.setTitle("Title...");
+
+                // set the custom dialog components - text, image and button
+//                input.setHint("Name");
+//                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                EditText text = (EditText) dialog.findViewById(R.id.name_text);
+                text.setHint("Android custom dialog example!");
+
+                Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
             }
         });
 
-
+        //GridView
         gridView = (GridView) findViewById(R.id.gridView);
         gridAdapter = new GridViewAdapter(this, R.layout.grid_item_layout, new ArrayList());
         gridView.setAdapter(gridAdapter);
@@ -54,7 +110,7 @@ public class MainActivity extends AppCompatActivity
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                Toast.makeText(MainActivity.this, "" + position + v +"Hannes"+ id,
+                Toast.makeText(MainActivity.this, "" + position + v + "Hannes" + id,
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -67,9 +123,11 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        final IntentFilter filters = new IntentFilter();
-        conMan = new CommunicationManager(Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID),getApplicationContext());
+
+        //Communication Manager
+        conMan = new CommunicationManager(Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID), getApplicationContext());
         NetworkChangeReceiver netreceiver = new NetworkChangeReceiver(conMan, getApplication());
+        final IntentFilter filters = new IntentFilter();
         filters.addAction("android.net.wifi.WIFI_STATE_CHANGED");
         filters.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         super.registerReceiver(netreceiver, filters);

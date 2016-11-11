@@ -1,0 +1,35 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+    <EditText
+            android:id="@+id/name_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFF"
+            android:text=""
+            android:layout_toRightOf="@+id/image"/>
+
+    <EditText
+            android:id="@+id/kat_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFF"
+            android:text=""/>
+
+    <EditText
+            android:id="@+id/id_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFF"
+            android:text=""/>
+
+    <Button
+            android:id="@+id/dialogButtonOK"
+            android:layout_width="100px"
+            android:layout_height="wrap_content"
+            android:text=" Ok "
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+    />
+
+</RelativeLayout>

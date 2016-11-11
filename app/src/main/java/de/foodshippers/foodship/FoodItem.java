@@ -5,11 +5,11 @@ import android.graphics.Bitmap;
 /**
  * Created by hannes on 09.11.16.
  */
-public class ImageItem {
+public class FoodItem {
     private Bitmap image;
     private String title;
 
-    public ImageItem(Bitmap image, String title) {
+    public FoodItem(Bitmap image, String title) {
         super();
         this.image = image;
         this.title = title;
