@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity
         filters.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         super.registerReceiver(netreceiver, filters);
         FoodViewFragment frag = new FoodViewFragment();
-        getFragmentManager().beginTransaction().replace(R.id.main_placeholder,frag).commit();
+        getFragmentManager().beginTransaction().replace(R.id.main_placeholder, frag).commit();
     }
 
     @Override
