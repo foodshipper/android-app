@@ -1,4 +1,4 @@
-package de.foodshippers.foodship;
+package de.foodshippers.foodship.ownedFood;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import de.foodshippers.foodship.R;
+import de.foodshippers.foodship.ownedFood.FoodItem;
 
 import java.util.ArrayList;
 

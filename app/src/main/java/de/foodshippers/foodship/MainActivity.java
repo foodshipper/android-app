@@ -1,8 +1,6 @@
 package de.foodshippers.foodship;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -14,15 +12,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-
-import java.util.ArrayList;
+import de.foodshippers.foodship.ownedFood.FoodViewFragment;
+import de.foodshippers.foodship.ownedFood.GridViewAdapter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         try {
-            System.out.println("Secure " + Settings.Secure.getInt(this.getContentResolver(), Settings.Secure.ANDROID_ID) );
+            System.out.println("Secure " + Settings.Secure.getInt(this.getContentResolver(), Settings.Secure.ANDROID_ID));
         } catch (Settings.SettingNotFoundException e) {
             e.printStackTrace();
         }
@@ -80,15 +80,13 @@ public class MainActivity extends AppCompatActivity
 //
 //                builder.show();
                 final Dialog dialog = new Dialog(MainActivity.this);
-                dialog.setContentView(R.layout.costumdialog);
+                dialog.setContentView(R.layout.costum_dialog);
                 dialog.setTitle("Title...");
-
                 // set the custom dialog components - text, image and button
 //                input.setHint("Name");
 //                input.setInputType(InputType.TYPE_CLASS_TEXT);
                 EditText text = (EditText) dialog.findViewById(R.id.name_text);
                 text.setHint("Android custom dialog example!");
-
                 Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
                 // if button is clicked, close the custom dialog
                 dialogButton.setOnClickListener(new View.OnClickListener() {
@@ -97,23 +95,22 @@ public class MainActivity extends AppCompatActivity
                         dialog.dismiss();
                     }
                 });
-
                 dialog.show();
             }
         });
 
         //GridView
-        gridView = (GridView) findViewById(R.id.gridView);
-        gridAdapter = new GridViewAdapter(this, R.layout.grid_item_layout, new ArrayList());
-        gridView.setAdapter(gridAdapter);
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                Toast.makeText(MainActivity.this, "" + position + v + "Hannes" + id,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+//        gridView = (GridView) findViewById(R.id.gridView);
+//        gridAdapter = new GridViewAdapter(this, R.layout.grid_item_layout, new ArrayList());
+//        gridView.setAdapter(gridAdapter);
+//
+//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            public void onItemClick(AdapterView<?> parent, View v,
+//                                    int position, long id) {
+//                Toast.makeText(MainActivity.this, "" + position + v + "Hannes" + id,
+//                        Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -131,7 +128,8 @@ public class MainActivity extends AppCompatActivity
         filters.addAction("android.net.wifi.WIFI_STATE_CHANGED");
         filters.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         super.registerReceiver(netreceiver, filters);
-
+        FoodViewFragment frag = new FoodViewFragment();
+        getFragmentManager().beginTransaction().replace(R.id.main_placeholder,frag).commit();
     }
 
     @Override
