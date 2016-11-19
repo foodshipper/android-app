@@ -1,5 +1,6 @@
 package de.foodshippers.foodship;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity
     private GridView gridView;
     private GridViewAdapter gridAdapter;
     private FoodshipDbHelper databse;
+    private int currentView;
+    private Fragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
         //DateBase
         databse = new FoodshipDbHelper(getApplicationContext());
         //Communication Manager
@@ -86,9 +90,9 @@ public class MainActivity extends AppCompatActivity
         filters.addAction("android.net.wifi.WIFI_STATE_CHANGED");
         filters.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         super.registerReceiver(netreceiver, filters);
-        //FoodFragment
-        FoodViewFragment frag = new FoodViewFragment();
-        getFragmentManager().beginTransaction().replace(R.id.main_placeholder, frag).commit();
+
+        //Create initial fragment
+        this.onNavigationItemSelected(navigationView.getMenu().getItem(0));
     }
 
     @Override
@@ -141,9 +145,19 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        if (currentView != id) {
+            currentView = id;
+            if (id == R.id.nav_groceries) {
+                currentFragment = new FoodViewFragment();
+            } else if (id == R.id.nav_dev) {
+                // TODO: 19.11.16 Add Dev Fragment
+                currentFragment = new FoodViewFragment();
 
-        if (id == R.id.nav_overview) {
-
+            } else if (id == R.id.nav_contact) {
+                currentFragment = new ContactFragment();
+                getFragmentManager().beginTransaction().replace(R.id.main_placeholder, new ContactFragment()).commit();
+            }
+            getFragmentManager().beginTransaction().replace(R.id.main_placeholder, currentFragment).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

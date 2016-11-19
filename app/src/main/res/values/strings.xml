@@ -11,4 +11,12 @@
     <string name="pick_location">Pick Home Location</string>
     <string name="error_set_location">Error while sending location to Server</string>
     <string name="try_again">Try again!</string>
+    <string name="nav_groceries">Overview</string>
+    <string name="nav_dev">Developer Settings</string>
+    <string name="nav_contact">Contact</string>
+
+    <string name="contact_title">Contact</string>
+    <string name="contact_text"><![CDATA[Foodship is made by Hannes Hilbert & Sönke Huster]]></string>
+    <string name="contact_title_icons">Icons</string>
+    <string name="contact_text_icons">Icons made by <a href="http://www.flaticon.com/authors/madebyoliver" title="Madebyoliver">Madebyoliver</a> from <a href="http://www.flaticon.com">flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></string>
 </resources>
