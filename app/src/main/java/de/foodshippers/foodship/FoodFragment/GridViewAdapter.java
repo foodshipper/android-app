@@ -1,4 +1,4 @@
-package de.foodshippers.foodship;
+package de.foodshippers.foodship.FoodFragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import de.foodshippers.foodship.R;
 
 import java.util.ArrayList;
 
@@ -29,7 +30,7 @@ public class GridViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        if(data.size() > 0){
+        if (data.size() > 0) {
             return data.size();
         }
         return 1;
@@ -60,13 +61,13 @@ public class GridViewAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) row.getTag();
         }
-        if(data.size() == 0){
+        if (data.size() == 0) {
             holder.imageTitle.setText("Test");
             Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
             Bitmap bmp = Bitmap.createBitmap(100, 100, conf);
             holder.image.setImageBitmap(bmp);
             return row;
-        }else{
+        } else {
             FoodItem item = (FoodItem) data.get(position);
             holder.imageTitle.setText(item.getTitle());
             holder.image.setImageBitmap(item.getImage());
