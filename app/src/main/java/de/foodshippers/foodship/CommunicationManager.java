@@ -1,6 +1,7 @@
 package de.foodshippers.foodship;
 
 import android.content.Context;
+import android.provider.Settings;
 import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -85,5 +86,9 @@ public class CommunicationManager {
         }
         return true;
 
+    }
+
+    public static String getUserId(Context c) {
+        return Settings.Secure.getString(c.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 }
