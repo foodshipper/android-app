@@ -5,4 +5,10 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <string name="welcome_headline">Welcome to Foodship</string>
+    <string name="welcome_text">Thanks for giving our App a try! To find a dinner in your neighborhood, we have to determine your home location.</string>
+    <string name="pick_location">Pick Home Location</string>
+    <string name="error_set_location">Error while sending location to Server</string>
+    <string name="try_again">Try again!</string>
 </resources>

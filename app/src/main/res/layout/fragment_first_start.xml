@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              tools:context="de.foodshippers.foodship.FirstStartFragment"
+              android:orientation="vertical"
+              style="@style/Base.DialogWindowTitleBackground.AppCompat">
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/welcome_headline"
+            style="@style/TextAppearance.AppCompat.Headline"/>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/welcome_text"
+            style="@style/TextAppearance.AppCompat.Body1"/>
+
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/pick_location"
+            android:id="@+id/pickLocationBtn"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_gravity="center_horizontal"
+            android:clickable="false"/>
+
+    <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/sendLocationProgress"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"/>
+</LinearLayout>
