@@ -26,8 +26,8 @@ public class CommunicationManager {
     private Context AppContext;
 
 
-    public CommunicationManager(String an_id, Context appcontext) {
-        this.android_id = an_id;
+    public CommunicationManager(Context appcontext) {
+        this.android_id = getUserId(appcontext);
         queue = Volley.newRequestQueue(appcontext);
         this.AppContext = appcontext;
         queue.start();

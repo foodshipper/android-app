@@ -3,7 +3,6 @@ package de.foodshippers.foodship;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -37,11 +36,7 @@ public class MainActivity extends AppCompatActivity
 
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        try {
-            System.out.println("Secure " + Settings.Secure.getInt(this.getContentResolver(), Settings.Secure.ANDROID_ID));
-        } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-        }
+        System.out.println("Secure " + CommunicationManager.getUserId(getApplicationContext()));
 
         //Floating Button
 
@@ -84,7 +79,7 @@ public class MainActivity extends AppCompatActivity
         //DateBase
         databse = new FoodshipDbHelper(getApplicationContext());
         //Communication Manager
-        conMan = new CommunicationManager(Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID), getApplicationContext());
+        conMan = new CommunicationManager(getApplicationContext());
         //NetworkReceiver
         NetworkChangeReceiver netreceiver = new NetworkChangeReceiver(conMan, getApplication());
         final IntentFilter filters = new IntentFilter();
@@ -147,7 +142,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_overview) {
 
         }
 
