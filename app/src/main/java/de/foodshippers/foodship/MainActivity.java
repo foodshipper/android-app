@@ -1,6 +1,5 @@
 package de.foodshippers.foodship;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -15,26 +14,28 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import de.foodshippers.foodship.ownedFood.FoodViewFragment;
-import de.foodshippers.foodship.ownedFood.GridViewAdapter;
+import de.foodshippers.foodship.FoodFragment.FoodViewFragment;
+import de.foodshippers.foodship.FoodFragment.GridViewAdapter;
+import de.foodshippers.foodship.db.FoodshipDbHelper;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    CommunicationManager conMan;
+    private CommunicationManager conMan;
     private GridView gridView;
     private GridViewAdapter gridAdapter;
+    private FoodshipDbHelper databse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         try {
             System.out.println("Secure " + Settings.Secure.getInt(this.getContentResolver(), Settings.Secure.ANDROID_ID));
@@ -48,69 +49,29 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                new IntentIntegrator(MainActivity.this).setOrientationLocked(true).setBeepEnabled(false)
+                //                new IntentIntegrator(MainActivity.this).setOrientationLocked(true).setBeepEnabled(false)
 //                        .setDesiredBarcodeFormats(Arrays.asList("EAN_8", "EAN_13"))
 //                        .initiateScan();
-                String m_Text = "";
-//                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-//                builder.setTitle("Title");
-//
-//                final EditText input = new EditText(MainActivity.this);
-//                input.setHint("Name");
-//                input.setInputType(InputType.TYPE_CLASS_TEXT);
-//                final EditText input2 = new EditText(MainActivity.this);
-//                input2.setHint("Kategorie");
-//                input2.setInputType(InputType.TYPE_CLASS_TEXT);
-//                builder.setView(input2);
-//
-//
-//// Set up the buttons
-//                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        System.out.println(input.getText().toString());
+//                JSONArray jsonObject = null;
+//                try {
+//                    jsonObject = new JSONArray("[\"milk\", \"water\", \"tomato\", \"flour\", \"pork\", \"chicken\", \"beef\", \"undefined\"]");
+//                    for (int i = 0; i < jsonObject.length(); i++) {
+//                        ContentValues values = new ContentValues();
+//                        values.put(FoodshipContract.ProductTypeTable.CN_NAME, (String) jsonObject.get(i));
 //                    }
-//                });
-//                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.cancel();
-//                    }
-//                });
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                Cursor cursor = getApplicationContext().getContentResolver().query(new Uri.Builder().scheme("content").authority(FoodshipContract.ProductTypeTable.TABLE_NAME).build(),
+//                        null, null, null, null, null);
+//                System.out.println(cursor.getColumnCount());
 //
-//                builder.show();
-                final Dialog dialog = new Dialog(MainActivity.this);
-                dialog.setContentView(R.layout.costum_dialog);
-                dialog.setTitle("Title...");
-                // set the custom dialog components - text, image and button
-//                input.setHint("Name");
-//                input.setInputType(InputType.TYPE_CLASS_TEXT);
-                EditText text = (EditText) dialog.findViewById(R.id.name_text);
-                text.setHint("Android custom dialog example!");
-                Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-                // if button is clicked, close the custom dialog
-                dialogButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
+//
+//                conMan.getTypes();
             }
         });
 
-        //GridView
-//        gridView = (GridView) findViewById(R.id.gridView);
-//        gridAdapter = new GridViewAdapter(this, R.layout.grid_item_layout, new ArrayList());
-//        gridView.setAdapter(gridAdapter);
-//
-//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            public void onItemClick(AdapterView<?> parent, View v,
-//                                    int position, long id) {
-//                Toast.makeText(MainActivity.this, "" + position + v + "Hannes" + id,
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        // DrawerToggle
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -120,14 +81,17 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        //DateBase
+        databse = new FoodshipDbHelper(getApplicationContext());
         //Communication Manager
         conMan = new CommunicationManager(Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID), getApplicationContext());
+        //NetworkReceiver
         NetworkChangeReceiver netreceiver = new NetworkChangeReceiver(conMan, getApplication());
         final IntentFilter filters = new IntentFilter();
         filters.addAction("android.net.wifi.WIFI_STATE_CHANGED");
         filters.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         super.registerReceiver(netreceiver, filters);
+        //FoodFragment
         FoodViewFragment frag = new FoodViewFragment();
         getFragmentManager().beginTransaction().replace(R.id.main_placeholder, frag).commit();
     }

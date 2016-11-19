@@ -1,4 +1,4 @@
-package de.foodshippers.foodship.ownedFood;
+package de.foodshippers.foodship.FoodFragment;
 
 import android.graphics.Bitmap;
 
