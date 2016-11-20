@@ -17,11 +17,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.Toast;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import de.foodshippers.foodship.FoodFragment.FoodViewFragment;
 import de.foodshippers.foodship.FoodFragment.GridViewAdapter;
 import de.foodshippers.foodship.db.FoodshipDbHelper;
+
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -34,6 +42,7 @@ public class MainActivity extends AppCompatActivity
     private final String CURRENT_VIEW_KEY = "currentView";
     private Fragment currentFragment;
     private static final String TAG = "MainActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,25 +58,10 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //                new IntentIntegrator(MainActivity.this).setOrientationLocked(true).setBeepEnabled(false)
-//                        .setDesiredBarcodeFormats(Arrays.asList("EAN_8", "EAN_13"))
-//                        .initiateScan();
-//                JSONArray jsonObject = null;
-//                try {
-//                    jsonObject = new JSONArray("[\"milk\", \"water\", \"tomato\", \"flour\", \"pork\", \"chicken\", \"beef\", \"undefined\"]");
-//                    for (int i = 0; i < jsonObject.length(); i++) {
-//                        ContentValues values = new ContentValues();
-//                        values.put(FoodshipContract.ProductTypeTable.CN_NAME, (String) jsonObject.get(i));
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                Cursor cursor = getApplicationContext().getContentResolver().query(new Uri.Builder().scheme("content").authority(FoodshipContract.ProductTypeTable.TABLE_NAME).build(),
-//                        null, null, null, null, null);
-//                System.out.println(cursor.getColumnCount());
-//
-//
-//                conMan.getTypes();
+                new IntentIntegrator(MainActivity.this).setOrientationLocked(true).setBeepEnabled(false)
+                        .setDesiredBarcodeFormats(Arrays.asList("EAN_8", "EAN_13"))
+                        .initiateScan();
+
             }
         });
 
@@ -90,7 +84,7 @@ public class MainActivity extends AppCompatActivity
         NetworkChangeReceiver.newInstance(conMan, getApplicationContext());
 
         //Create initial fragment
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             this.onNavigationItemSelected(savedInstanceState.getInt(CURRENT_VIEW_KEY, R.id.nav_groceries));
         } else {
             this.onNavigationItemSelected(R.id.nav_groceries);
@@ -136,12 +130,34 @@ public class MainActivity extends AppCompatActivity
     // Get the results:
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        final IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                conMan.sendFood(result.getContents());
+//                conMan.sendFood(result.getContents());
+                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://api.foodshipper.de/v1/".concat("product/".concat(result.getContents())),
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+                            }
+                        }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error.networkResponse.statusCode == 404) {
+                            UnknownFoodDialog newFragment = UnknownFoodDialog.newInstance(result.getContents());
+                            newFragment.show(getFragmentManager(), "dialog");
+                        } else {
+                            Toast.makeText(getApplicationContext(), "BIG Fehler" + error.getMessage(), Toast.LENGTH_LONG).show();
+                            System.out.println(error);
+                        }
+                    }
+                });
+                queue.add(stringRequest);
+                queue.start();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -181,4 +197,7 @@ public class MainActivity extends AppCompatActivity
         super.onPause();
         NetworkChangeReceiver.unregister();
     }
+
+
+
 }
