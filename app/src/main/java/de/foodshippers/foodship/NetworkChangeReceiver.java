@@ -26,8 +26,8 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
         conMan = manager;
         if(mReceiver == null) {
             mReceiver = new NetworkChangeReceiver();
-            mReceiver.register(conStartUp);
         }
+        mReceiver.register(conStartUp);
         return mReceiver;
     }
 
@@ -48,8 +48,10 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     }
 
     private void unregister(Context context) {
-        context.unregisterReceiver(mReceiver);
-        isRegistered = false;
+        if(isRegistered) {
+            context.unregisterReceiver(mReceiver);
+            isRegistered = false;
+        }
     }
 
     @Override
