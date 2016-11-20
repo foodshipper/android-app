@@ -34,12 +34,20 @@ public class DeveloperFragment extends Fragment {
             public void onClick(View view) {
                 SharedPreferences.Editor e = PreferenceManager
                         .getDefaultSharedPreferences(getActivity())
-                .edit();
+                        .edit();
                 Utils.putDouble(e, "latitude", 0);
                 Utils.putDouble(e, "longitude", 0);
                 e.apply();
                 Intent intent = new Intent(getActivity(), SplashActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        Button refreshFoodTypes = (Button) v.findViewById(R.id.refreshFoodTypesBtn);
+        refreshFoodTypes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SplashActivity.downloadFoodTypes(getActivity().getApplicationContext(),false);
             }
         });
         return v;
