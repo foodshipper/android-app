@@ -3,20 +3,53 @@ package de.foodshippers.foodship;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 
 /**
  * Created by hannes on 06.11.16.
  */
 public class NetworkChangeReceiver extends BroadcastReceiver {
 
-    private final CommunicationManager conMan;
+    private static CommunicationManager conMan;
     private int Internet_Status;
     private boolean connectedWithAPI;
+    private static NetworkChangeReceiver mReceiver = null;
+    private static Context mContext = null;
+    private boolean isRegistered = false;
 
+    private NetworkChangeReceiver() {
+        parseChanges(mContext);
+    }
 
-    public NetworkChangeReceiver(CommunicationManager manager, Context conStartUp) {
-        this.conMan = manager;
-        parseChanges(conStartUp);
+    public static NetworkChangeReceiver newInstance(CommunicationManager manager, Context conStartUp) {
+        mContext = conStartUp;
+        conMan = manager;
+        if(mReceiver == null) {
+            mReceiver = new NetworkChangeReceiver();
+            mReceiver.register(conStartUp);
+        }
+        return mReceiver;
+    }
+
+    private void register(Context context) {
+        if(context != null && !isRegistered) {
+            final IntentFilter filters = new IntentFilter();
+            filters.addAction("android.net.wifi.WIFI_STATE_CHANGED");
+            filters.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+            context.registerReceiver(this, filters);
+            isRegistered = true;
+        }
+    }
+
+    public static void unregister() {
+        if(mReceiver != null) {
+            mReceiver.unregister(mContext);
+        }
+    }
+
+    private void unregister(Context context) {
+        context.unregisterReceiver(mReceiver);
+        isRegistered = false;
     }
 
     @Override

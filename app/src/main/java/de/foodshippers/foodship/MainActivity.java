@@ -2,8 +2,8 @@ package de.foodshippers.foodship;
 
 import android.app.Fragment;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity
     private GridViewAdapter gridAdapter;
     private FoodshipDbHelper databse;
     private int currentView;
+    private final String CURRENT_VIEW_KEY = "currentView";
     private Fragment currentFragment;
 
     @Override
@@ -85,14 +86,14 @@ public class MainActivity extends AppCompatActivity
         //Communication Manager
         conMan = new CommunicationManager(getApplicationContext());
         //NetworkReceiver
-        NetworkChangeReceiver netreceiver = new NetworkChangeReceiver(conMan, getApplication());
-        final IntentFilter filters = new IntentFilter();
-        filters.addAction("android.net.wifi.WIFI_STATE_CHANGED");
-        filters.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-        super.registerReceiver(netreceiver, filters);
+        NetworkChangeReceiver.newInstance(conMan, getApplicationContext());
 
         //Create initial fragment
-        this.onNavigationItemSelected(navigationView.getMenu().getItem(0));
+        if(savedInstanceState != null) {
+            this.onNavigationItemSelected(savedInstanceState.getInt(CURRENT_VIEW_KEY, R.id.nav_groceries));
+        } else {
+            this.onNavigationItemSelected(R.id.nav_groceries);
+        }
     }
 
     @Override
@@ -110,6 +111,12 @@ public class MainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_VIEW_KEY, currentView);
     }
 
     @Override
@@ -140,11 +147,14 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        return onNavigationItemSelected(id);
+    }
+
+    private boolean onNavigationItemSelected(Integer id) {
         if (currentView != id) {
             currentView = id;
             if (id == R.id.nav_groceries) {
@@ -163,5 +173,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NetworkChangeReceiver.unregister();
     }
 }
