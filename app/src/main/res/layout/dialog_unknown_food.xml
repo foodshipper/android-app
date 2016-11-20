@@ -6,7 +6,10 @@
         android:orientation="vertical"
               android:paddingLeft="@dimen/activity_horizontal_margin"
               android:paddingRight="@dimen/activity_horizontal_margin">
-
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/set_food_type"/>
     <AutoCompleteTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
