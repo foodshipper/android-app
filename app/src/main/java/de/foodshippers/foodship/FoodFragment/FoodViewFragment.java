@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 import de.foodshippers.foodship.R;
+import de.foodshippers.foodship.UnknownFoodDialog;
 
 import java.util.ArrayList;
 
@@ -34,6 +35,7 @@ public class FoodViewFragment extends Fragment {
                                     int position, long id) {
                 Toast.makeText(getActivity(), "" + position + v + "Hannes" + id,
                         Toast.LENGTH_SHORT).show();
+                showDialog();
             }
 
         });
@@ -43,4 +45,10 @@ public class FoodViewFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
     }
+
+    private void showDialog() {
+        UnknownFoodDialog newFragment = UnknownFoodDialog.newInstance("123");
+        newFragment.show(getFragmentManager(), "dialog");
+    }
+
 }
