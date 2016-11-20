@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity
     private int currentView;
     private final String CURRENT_VIEW_KEY = "currentView";
     private Fragment currentFragment;
-
+    private static final String TAG = "MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,14 +159,14 @@ public class MainActivity extends AppCompatActivity
         if (currentView != id) {
             currentView = id;
             if (id == R.id.nav_groceries) {
+                Log.d(TAG, "onNavigationItemSelected: Selected Grocery View");
                 currentFragment = new FoodViewFragment();
             } else if (id == R.id.nav_dev) {
-                // TODO: 19.11.16 Add Dev Fragment
-                currentFragment = new FoodViewFragment();
-
+                Log.d(TAG, "onNavigationItemSelected: Selected Developer View");
+                currentFragment = new DeveloperFragment();
             } else if (id == R.id.nav_contact) {
+                Log.d(TAG, "onNavigationItemSelected: Selected Contact View");
                 currentFragment = new ContactFragment();
-                getFragmentManager().beginTransaction().replace(R.id.main_placeholder, new ContactFragment()).commit();
             }
             getFragmentManager().beginTransaction().replace(R.id.main_placeholder, currentFragment).commit();
         }

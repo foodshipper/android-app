@@ -79,7 +79,7 @@ public class LocationPickerFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PLACE_PICKER_REQUEST) {
+        if (requestCode == PLACE_PICKER_REQUEST && data != null) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(getContext(), data);
                 SharedPreferences.Editor sharedPreferences = PreferenceManager
