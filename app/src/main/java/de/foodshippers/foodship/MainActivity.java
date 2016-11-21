@@ -21,6 +21,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import de.foodshippers.foodship.FoodFragment.FoodViewFragment;
 import de.foodshippers.foodship.FoodFragment.GridViewAdapter;
+import de.foodshippers.foodship.api.FoodshipJobManager;
 import de.foodshippers.foodship.api.RestClient;
 import de.foodshippers.foodship.api.model.Product;
 import de.foodshippers.foodship.api.service.ProductService;
@@ -43,12 +44,13 @@ public class MainActivity extends AppCompatActivity
     private final String CURRENT_VIEW_KEY = "currentView";
     private Fragment currentFragment;
     private static final String TAG = "MainActivity";
+    private FoodshipJobManager mManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        mManager = FoodshipJobManager.getInstance(getApplicationContext());
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         System.out.println("Secure " + CommunicationManager.getUserId(getApplicationContext()));
