@@ -25,17 +25,21 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import de.foodshippers.foodship.api.RestClient;
+import de.foodshippers.foodship.api.model.Product;
+import de.foodshippers.foodship.api.service.ProductService;
 import de.foodshippers.foodship.db.FoodshipContract;
 import de.foodshippers.foodship.db.FoodshipDbHelper;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 import static de.foodshippers.foodship.db.FoodshipContract.ProductTypeTable.CN_NAME;
 
 
-public class UnknownFoodDialog extends DialogFragment {
+public class UnknownFoodDialog extends DialogFragment implements Callback {
     private static final String ARG_EAN = "unknownEan";
     private static final String TAG = "UnknownFoodDialog";
     private String unknownEan;
-    private SendFoodTypeTask mTask = null;
     Button mPositiveBtn = null;
 
     public static UnknownFoodDialog newInstance(String ean) {
@@ -120,8 +124,10 @@ public class UnknownFoodDialog extends DialogFragment {
 
     public void doPositiveClick(String type) {
         Log.d(TAG, "doPositiveClick: Add EAN with type " + type);
-        mTask = new SendFoodTypeTask();
-        mTask.sendFoodType(unknownEan, type);
+        ProductService productService = new RestClient().getProductService();
+        Call<Void> pCall = productService.addProduct(unknownEan, null, type);
+        pCall.enqueue(this);
+
     }
 
     public void doNegativeClick() {
@@ -131,48 +137,36 @@ public class UnknownFoodDialog extends DialogFragment {
     @Override
     public void onStop() {
         super.onStop();
-        if(mTask != null) {
-            mTask.stop();
+    }
+
+    /**
+     * Invoked for a received HTTP response.
+     * <p>
+     * Note: An HTTP response may still indicate an application-level failure such as a 404 or 500.
+     * Call {@link Response#isSuccessful()} to determine if the response indicates success.
+     *
+     * @param call
+     * @param response
+     */
+    @Override
+    public void onResponse(Call call, retrofit2.Response response) {
+        if(response.isSuccessful()) {
+            Log.d(TAG, "onResponse: Added Product!");
+        } else {
+            Log.d(TAG, "onResponse: Could not add product: " + response.code());
         }
     }
 
-    private class SendFoodTypeTask {
-        private RequestQueue queue;
-        private Context mContext;
+    /**
+     * Invoked when a network exception occurred talking to the server or when an unexpected
+     * exception occurred creating the request or processing the response.
+     *
+     * @param call
+     * @param t
+     */
+    @Override
+    public void onFailure(Call call, Throwable t) {
 
-        void sendFoodType(final String ean, final String type) {
-            mContext = getActivity().getApplicationContext();
-            queue = Volley.newRequestQueue(mContext);
-            Uri.Builder uriBuilder = new Uri.Builder();
-            uriBuilder.scheme("http")
-                    .authority("api.foodshipper.de")
-                    .appendPath("v1")
-                    .appendPath("product")
-                    .appendPath(ean)
-                    .appendQueryParameter("name", "Unknown")
-                    .appendQueryParameter("type", type);
-
-            StringRequest rq = new StringRequest(Request.Method.PUT, uriBuilder.build().toString(), new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    UnknownFoodDialog.this.onFoodTypeSent();
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e(TAG, "onErrorResponse: " + error);
-                    Toast.makeText(mContext, R.string.error_set_location, Toast.LENGTH_LONG).show();
-                }
-            });
-            queue.add(rq);
-            queue.start();
-        }
-
-        public void stop() {
-            if (queue != null) {
-                queue.stop();
-            }
-        }
     }
 
     private class FoodTypeFilterAdapter extends SimpleCursorAdapter {

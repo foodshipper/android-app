@@ -17,22 +17,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.Toast;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import de.foodshippers.foodship.FoodFragment.FoodViewFragment;
 import de.foodshippers.foodship.FoodFragment.GridViewAdapter;
+import de.foodshippers.foodship.api.RestClient;
+import de.foodshippers.foodship.api.model.Product;
+import de.foodshippers.foodship.api.service.ProductService;
 import de.foodshippers.foodship.db.FoodshipDbHelper;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Callback<Product> {
 
     private CommunicationManager conMan;
     private GridView gridView;
@@ -135,29 +136,9 @@ public class MainActivity extends AppCompatActivity
             if (result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-//                conMan.sendFood(result.getContents());
-                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://api.foodshipper.de/v1/".concat("product/".concat(result.getContents())),
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-                            }
-                        }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        if (error.networkResponse.statusCode == 404) {
-                            UnknownFoodDialog newFragment = UnknownFoodDialog.newInstance(result.getContents());
-                            newFragment.show(getFragmentManager(), "dialog");
-                        } else {
-                            Toast.makeText(getApplicationContext(), "BIG Fehler" + error.getMessage(), Toast.LENGTH_LONG).show();
-                            System.out.println(error);
-                        }
-                    }
-                });
-                queue.add(stringRequest);
-                queue.start();
+                ProductService pService = new RestClient().getProductService();
+                Call<Product> getProductCall = pService.getProduct(result.getContents());
+                getProductCall.enqueue(this);
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -199,5 +180,46 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    /**
+     * Invoked for a received HTTP response.
+     * <p>
+     * Note: An HTTP response may still indicate an application-level failure such as a 404 or 500.
+     * Call {@link Response#isSuccessful()} to determine if the response indicates success.
+     *
+     * @param call
+     * @param response
+     */
+    @Override
+    public void onResponse(Call<Product> call, Response<Product> response) {
+        Log.d(TAG, "onResponse: Got Response");
+        if(response.isSuccessful()) {
+            Log.d(TAG, "onResponse: Product is known");
+            Product p = response.body();
+            Toast.makeText(getApplicationContext(), p.getType() + " with name " + p.getName(), Toast.LENGTH_LONG).show();
+        } else {
+            Log.d(TAG, "onResponse: Product is unknown or different error");
+            if(response.code() == 404) {
+                Log.d(TAG, "onResponse: Product is unknown");
+                List<String> pathNames = call.request().url().encodedPathSegments();
+                String ean = pathNames.get(pathNames.size() - 1);
+                Log.d(TAG, "onResponse: EAN: " + ean);
+                UnknownFoodDialog newFragment = UnknownFoodDialog.newInstance(ean);
+                newFragment.show(getFragmentManager(), "dialog");
+            } else {
+                Log.d(TAG, "onResponse: Got " + response.code() + " Response");
+            }
+        }
+    }
 
+    /**
+     * Invoked when a network exception occurred talking to the server or when an unexpected
+     * exception occurred creating the request or processing the response.
+     *
+     * @param call
+     * @param t
+     */
+    @Override
+    public void onFailure(Call<Product> call, Throwable t) {
+        Log.d(TAG, "onFailure: Got Failure");
+    }
 }
