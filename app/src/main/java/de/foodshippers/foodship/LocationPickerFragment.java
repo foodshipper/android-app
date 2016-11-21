@@ -3,7 +3,6 @@ package de.foodshippers.foodship;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -12,29 +11,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.Toast;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import de.foodshippers.foodship.api.RestClient;
+import de.foodshippers.foodship.api.service.UserLocationService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 
 /**
  * Creates A Dialog for the User to pick his home location
  */
-public class LocationPickerFragment extends Fragment {
+public class LocationPickerFragment extends Fragment implements Callback {
     private OnFragmentInteractionListener mListener;
     private static final String TAG = "LocationPickerFragment";
     private int PLACE_PICKER_REQUEST = 1;
-    private SendLocationTask mTask;
 
     public LocationPickerFragment() {
         super();
@@ -88,9 +83,10 @@ public class LocationPickerFragment extends Fragment {
                 sharedPreferences = Utils.putDouble(sharedPreferences, "longitude", place.getLatLng().longitude);
                 sharedPreferences.putBoolean("location_sent", false);
                 sharedPreferences.apply();
+                UserLocationService userLocationService = new RestClient().getUserLocationService();
+                Call call = userLocationService.setHomeLocation(CommunicationManager.getUserId(getActivity().getApplicationContext()), place.getLatLng().latitude, place.getLatLng().longitude);
+                call.enqueue(this);
 
-                mTask = new SendLocationTask();
-                mTask.sendLocation(place);
             }
         } else {
 
@@ -118,80 +114,41 @@ public class LocationPickerFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        if(mTask != null) {
-            mTask.stop();
+    }
+
+    /**
+     * Invoked for a received HTTP response.
+     * <p>
+     * Note: An HTTP response may still indicate an application-level failure such as a 404 or 500.
+     * Call {@link Response#isSuccessful()} to determine if the response indicates success.
+     *
+     * @param call
+     * @param response
+     */
+    @Override
+    public void onResponse(Call call, Response response) {
+        if(response.isSuccessful()) {
+            Log.d(TAG, "onResponse: Successfully set location");
+            mListener.onFragmentInteraction();
+        } else {
+            Log.d(TAG, "onResponse: Could not set location");
         }
+    }
+
+    /**
+     * Invoked when a network exception occurred talking to the server or when an unexpected
+     * exception occurred creating the request or processing the response.
+     *
+     * @param call
+     * @param t
+     */
+    @Override
+    public void onFailure(Call call, Throwable t) {
+
     }
 
     interface OnFragmentInteractionListener {
         void onFragmentInteraction();
     }
 
-    private class SendLocationTask {
-        private ProgressBar mProgress = null;
-        private Button mPickBtn = null;
-        private RequestQueue queue;
-
-        void sendLocation(final Place homelocation) {
-            View v = getView();
-            if(v != null) {
-                mPickBtn = (Button) v.findViewById(R.id.pickLocationBtn);
-                mProgress = (ProgressBar) v.findViewById(R.id.sendLocationProgress);
-                mPickBtn.setEnabled(false);
-                mProgress.setVisibility(View.VISIBLE);
-                mProgress.setIndeterminate(true);
-                mProgress.setEnabled(true);
-            }
-
-            queue = Volley.newRequestQueue(getContext());
-            Uri.Builder uriBuilder = new Uri.Builder();
-            uriBuilder.scheme("http")
-                    .authority("api.foodshipper.de")
-                    .appendPath("v1")
-                    .appendPath("home-location")
-                    .appendQueryParameter("user_id", CommunicationManager.getUserId(getContext()))
-                    .appendQueryParameter("lon", String.valueOf(homelocation.getLatLng().longitude))
-                    .appendQueryParameter("lat", String.valueOf(homelocation.getLatLng().latitude));
-
-            StringRequest rq = new StringRequest(Request.Method.PUT, uriBuilder.build().toString(), new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    SharedPreferences.Editor sharedPreferences = PreferenceManager
-                            .getDefaultSharedPreferences(getContext().getApplicationContext()).edit();
-                    sharedPreferences.putBoolean("location_sent", true);
-                    sharedPreferences.apply();
-                    LocationPickerFragment.this.onInitialized();
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e(TAG, "onErrorResponse: " + error);
-                    Toast.makeText(getContext(), R.string.error_set_location, Toast.LENGTH_LONG).show();
-
-                    //Create a Try-Again. Just repeats the same request
-                    if(mProgress != null) {
-                        mProgress.setVisibility(View.GONE);
-                    }
-                    if(mPickBtn != null) {
-                        mPickBtn.setText(R.string.try_again);
-                        mPickBtn.setEnabled(true);
-                        mPickBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                SendLocationTask.this.sendLocation(homelocation);
-                            }
-                        });
-                    }
-                }
-            });
-            queue.add(rq);
-            queue.start();
-        }
-
-        public void stop() {
-            if(queue != null) {
-                queue.stop();
-            }
-        }
-    }
 }
