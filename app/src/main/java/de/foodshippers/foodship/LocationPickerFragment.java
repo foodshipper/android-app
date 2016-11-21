@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
@@ -30,7 +32,9 @@ public class LocationPickerFragment extends Fragment implements Callback {
     private OnFragmentInteractionListener mListener;
     private static final String TAG = "LocationPickerFragment";
     private int PLACE_PICKER_REQUEST = 1;
-
+    private ProgressBar mProgress = null;
+    private Button mPickBtn = null;
+    private Button mLaterBtn;
     public LocationPickerFragment() {
         super();
     }
@@ -46,11 +50,12 @@ public class LocationPickerFragment extends Fragment implements Callback {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_location_picker, container, false);
 
-        Button pickLocationBtn = (Button) v.findViewById(R.id.pickLocationBtn);
-        pickLocationBtn.setOnClickListener(new View.OnClickListener() {
+        mPickBtn = (Button) v.findViewById(R.id.pickLocationBtn);
+        mPickBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Start place picker
+                mLaterBtn.setVisibility(View.GONE);
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                 try {
                     startActivityForResult(builder.build(LocationPickerFragment.this.getActivity()), PLACE_PICKER_REQUEST);
@@ -60,6 +65,14 @@ public class LocationPickerFragment extends Fragment implements Callback {
                     Log.e(TAG, "onClick: Please install Google Play Services");
                     e.printStackTrace();
                 }
+            }
+        });
+        mProgress = (ProgressBar) v.findViewById(R.id.sendLocationProgress);
+        mLaterBtn = (Button) v.findViewById(R.id.pickLocationLaterBtn);
+        mLaterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onFragmentInteraction();
             }
         });
         return v;
@@ -86,6 +99,11 @@ public class LocationPickerFragment extends Fragment implements Callback {
                 UserLocationService userLocationService = new RestClient().getUserLocationService();
                 Call call = userLocationService.setHomeLocation(CommunicationManager.getUserId(getActivity().getApplicationContext()), place.getLatLng().latitude, place.getLatLng().longitude);
                 call.enqueue(this);
+                mPickBtn.setEnabled(false);
+                mProgress.setVisibility(View.VISIBLE);
+                mProgress.setIndeterminate(true);
+                mProgress.setEnabled(true);
+
 
             }
         } else {
@@ -129,9 +147,14 @@ public class LocationPickerFragment extends Fragment implements Callback {
     public void onResponse(Call call, Response response) {
         if(response.isSuccessful()) {
             Log.d(TAG, "onResponse: Successfully set location");
+            SharedPreferences.Editor sharedPreferences = PreferenceManager
+                    .getDefaultSharedPreferences(getContext().getApplicationContext()).edit();
+            sharedPreferences.putBoolean("location_sent", true);
+            sharedPreferences.apply();
             mListener.onFragmentInteraction();
         } else {
-            Log.d(TAG, "onResponse: Could not set location");
+            Log.d(TAG, "onResponse: Could not set location: " + response.code());
+            onFailure(call, new Throwable("Server Error " + response.code()));
         }
     }
 
@@ -143,7 +166,21 @@ public class LocationPickerFragment extends Fragment implements Callback {
      * @param t
      */
     @Override
-    public void onFailure(Call call, Throwable t) {
+    public void onFailure(final Call call, Throwable t) {
+        Toast.makeText(getActivity().getApplicationContext(), "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+        if(mProgress != null) {
+            mProgress.setVisibility(View.GONE);
+        }
+        if(mPickBtn != null) {
+            mPickBtn.setText(R.string.try_again);
+            mPickBtn.setEnabled(true);
+            mPickBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    call.clone().enqueue(LocationPickerFragment.this);
+                }
+            });
+        }
 
     }
 

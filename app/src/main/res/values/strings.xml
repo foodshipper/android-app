@@ -28,4 +28,5 @@
     <string name="alert_dialog_ok">Add</string>
     <string name="alert_dialog_cancel">Cancel</string>
     <string name="set_food_type">This Product is unknown yet, please enter the type!</string>
+    <string name="pick_location_later">Do not set home location</string>
 </resources>
