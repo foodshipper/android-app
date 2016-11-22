@@ -3,6 +3,7 @@ package de.foodshippers.foodship.api;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import de.foodshippers.foodship.api.service.ProductService;
+import de.foodshippers.foodship.api.service.TypeService;
 import de.foodshippers.foodship.api.service.UserLocationService;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -15,6 +16,7 @@ public class RestClient {
     private static final String BASE_URL = "https://api.foodshipper.de/";
     private ProductService productService;
     private UserLocationService userLocationService;
+    private TypeService typeService;
     private static RestClient instance = null;
 
 
@@ -28,8 +30,9 @@ public class RestClient {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
-        productService = retrofit.create(ProductService.class);
-        userLocationService = retrofit.create(UserLocationService.class);
+        this.productService = retrofit.create(ProductService.class);
+        this.userLocationService = retrofit.create(UserLocationService.class);
+        this.typeService = retrofit.create(TypeService.class);
     }
 
     public static RestClient getInstance() {
@@ -45,5 +48,9 @@ public class RestClient {
 
     public UserLocationService getUserLocationService() {
         return userLocationService;
+    }
+
+    public TypeService getTypeService() {
+        return typeService;
     }
 }
