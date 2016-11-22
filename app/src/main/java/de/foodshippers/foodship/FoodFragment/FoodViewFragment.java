@@ -3,6 +3,7 @@ package de.foodshippers.foodship.FoodFragment;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +18,18 @@ import java.util.ArrayList;
 /**
  * Created by hannes on 15.11.16.
  */
-public class FoodViewFragment extends Fragment {
+public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private GridViewAdapter gridAdapter;
+    private SwipeRefreshLayout swipeLayout;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup parent, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.food_view_fragment, parent, false);
+        View view = inflater.inflate(R.layout.fragment_food_view, parent, false);
+        swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
+        swipeLayout.setOnRefreshListener(this);
         GridView gridView = (GridView) view.findViewById(R.id.gridView);
         gridAdapter = new GridViewAdapter(this.getActivity(), R.layout.grid_item_layout, new ArrayList());
         gridView.setAdapter(gridAdapter);
@@ -50,5 +54,12 @@ public class FoodViewFragment extends Fragment {
         UnknownFoodDialog newFragment = UnknownFoodDialog.newInstance("123");
         newFragment.show(getFragmentManager(), "dialog");
     }
+
+    @Override
+    public void onRefresh() {
+        System.out.println("Refresh");
+        swipeLayout.setRefreshing(false);
+    }
+
 
 }
