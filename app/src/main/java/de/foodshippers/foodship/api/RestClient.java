@@ -11,12 +11,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by soenke on 21.11.16.
  */
 public class RestClient {
-    private static final String BASE_URL = "http://api.foodshipper.de/";
+
+    private static final String BASE_URL = "https://api.foodshipper.de/";
     private ProductService productService;
     private UserLocationService userLocationService;
+    private static RestClient instance = null;
 
-    public RestClient()
-    {
+
+    private RestClient() {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'")
                 .create();
@@ -30,8 +32,14 @@ public class RestClient {
         userLocationService = retrofit.create(UserLocationService.class);
     }
 
-    public ProductService getProductService()
-    {
+    public static RestClient getInstance() {
+        if (instance == null) {
+            instance = new RestClient();
+        }
+        return instance;
+    }
+
+    public ProductService getProductService() {
         return productService;
     }
 

@@ -124,7 +124,7 @@ public class UnknownFoodDialog extends DialogFragment implements Callback {
 
     public void doPositiveClick(String type) {
         Log.d(TAG, "doPositiveClick: Add EAN with type " + type);
-        ProductService productService = new RestClient().getProductService();
+        ProductService productService = RestClient.getInstance().getProductService();
         Call<Void> pCall = productService.addProduct(unknownEan, null, type);
         pCall.enqueue(this);
 

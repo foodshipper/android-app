@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity
             if (result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                ProductService pService = new RestClient().getProductService();
+                ProductService pService = RestClient.getInstance().getProductService();
                 Call<Product> getProductCall = pService.getProduct(result.getContents());
                 getProductCall.enqueue(this);
             }
@@ -194,13 +194,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResponse(Call<Product> call, Response<Product> response) {
         Log.d(TAG, "onResponse: Got Response");
-        if(response.isSuccessful()) {
+        if (response.isSuccessful()) {
             Log.d(TAG, "onResponse: Product is known");
             Product p = response.body();
             Toast.makeText(getApplicationContext(), p.getType() + " with name " + p.getName(), Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "onResponse: Product is unknown or different error");
-            if(response.code() == 404) {
+            if (response.code() == 404) {
                 Log.d(TAG, "onResponse: Product is unknown");
                 List<String> pathNames = call.request().url().encodedPathSegments();
                 String ean = pathNames.get(pathNames.size() - 1);

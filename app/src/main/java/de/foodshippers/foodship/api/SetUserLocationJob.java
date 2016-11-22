@@ -50,7 +50,7 @@ public class SetUserLocationJob extends Job {
      */
     @Override
     public void onRun() throws Throwable {
-        Call call = new RestClient().getUserLocationService().setHomeLocation(userId, latitude, longitude);
+        Call call = RestClient.getInstance().getUserLocationService().setHomeLocation(userId, latitude, longitude);
         retrofit2.Response response = call.execute();
         if(!response.isSuccessful()) {
             if(response.code() >= 400 && response.code() < 500) {
