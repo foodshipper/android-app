@@ -9,6 +9,6 @@ import retrofit2.http.Query;
  */
 public interface UserLocationService {
     @PUT("/v1/user/home-location")
-    Call<Void> setHomeLocation(@Query("user_id") String userId, @Query("lat") double latitude, @Query("lon") double longitude);
+    Call<Void> setHomeLocation(@Query("token") String token, @Query("lat") double latitude, @Query("lon") double longitude);
 
 }
