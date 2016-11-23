@@ -47,47 +47,7 @@ public class SplashActivity extends AppCompatActivity implements InitialSetupFra
         finish();
     }
 
-
     public static void downloadFoodTypes(final Context c, boolean initial) {
-//        FoodshipDbHelper helper = new FoodshipDbHelper(c);
-//        RequestQueue que = Volley.newRequestQueue(c);
-//        Uri.Builder uriBuilder = new Uri.Builder().scheme("http")
-//                .authority("api.foodshipper.de")
-//                .appendPath("v1")
-//                .appendPath("types");
-//
-//        StringRequest rq = new StringRequest(Request.Method.GET, uriBuilder.build().toString(), new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                SQLiteDatabase typeDatabase = new FoodshipDbHelper(c).getWritableDatabase();
-//                typeDatabase.execSQL("DELETE From ".concat(FoodshipContract.ProductTypeTable.TABLE_NAME));
-//                try {
-//                    JSONArray arr = new JSONArray(response);
-//                    ContentValues values = new ContentValues();
-//                    for (int i = 0; i < arr.length(); i++) {
-//                        values.put(FoodshipContract.ProductTypeTable.CN_NAME, (String) arr.get(i));
-//                        typeDatabase.insert(FoodshipContract.ProductTypeTable.TABLE_NAME, FoodshipContract.ProductTypeTable.CN_NAME, values);
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                System.out.println("Updated Types");
-////                Cursor query = typeDatabase.query(FoodshipContract.ProductTypeTable.TABLE_NAME, null, null, null, null, null, null);
-////                System.out.println(query.getCount());
-////                while (query.moveToNext()) {
-////                    System.out.println(query.getString(0) + " " + query.getString(1));
-////                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                // TODO - Do somthing on error. Kill or restart as long there is no I-NetConnection
-//
-//            }
-//        });
-//        que.add(rq);
-//        que.start();
-
         TypeService typeService = RestClient.getInstance().getTypeService();
         Call<String[]> gettypes = typeService.gettypes();
         gettypes.enqueue(new Callback<String[]>() {
