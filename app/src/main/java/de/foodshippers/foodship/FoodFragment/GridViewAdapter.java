@@ -41,6 +41,9 @@ public class GridViewAdapter extends BaseAdapter implements FoodViewReFresher.On
 
     @Override
     public Object getItem(int i) {
+        if (data.size() == 0) {
+            return null;
+        }
         return data.get(i);
     }
 
@@ -83,10 +86,7 @@ public class GridViewAdapter extends BaseAdapter implements FoodViewReFresher.On
 
     @Override
     public void onFoodChanges() {
-        List<Product> liste = FoodViewReFresher.getInstance(context).getListe();
-        for (Product p : liste) {
-            System.out.println(p);
-        }
+        List<Product> liste = FoodViewReFresher.getInstance(context).getFoodList();
         data.clear();
         data.addAll(liste);
         notifyDataSetChanged();

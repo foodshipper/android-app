@@ -39,9 +39,13 @@ public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnR
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                Toast.makeText(getActivity(), "" + position + v + "Hannes" + id,
-                        Toast.LENGTH_SHORT).show();
-                showDialog();
+                Object itemAtPosition = parent.getItemAtPosition(position);
+                if (itemAtPosition != null) {
+                    FoodViewReFresher.getInstance(getActivity()).deleteFood((Product) itemAtPosition);
+                }
+//                Toast.makeText(getActivity(), "" + position + v.findViewById(id) + "Hannes" + id,
+//                        Toast.LENGTH_SHORT).show();
+//                showDialog();
             }
 
         });
