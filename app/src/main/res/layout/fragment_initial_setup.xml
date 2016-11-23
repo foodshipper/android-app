@@ -2,9 +2,9 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              tools:context=".LocationPickerFragment"
+              tools:context=".InitialSetupFragment"
               android:orientation="vertical"
-              style="@style/AppLayout">
+              android:theme="@style/AppLayout">
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -16,28 +16,32 @@
             android:text="@string/welcome_text"
             style="@style/TextAppearance.AppCompat.Body1"/>
 
-    <Button
+    <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/pick_location"
-            android:id="@+id/pickLocationBtn"
-            style="@style/Widget.AppCompat.Button"
-            android:layout_gravity="center_horizontal"
-            android:clickable="false"/>
-    <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/pick_location_later"
-            android:id="@+id/pickLocationLaterBtn"
-            style="@style/Widget.AppCompat.Button"
-            android:layout_gravity="center_horizontal"
-            android:clickable="false"/>
+            android:inputType="textPersonName"
+            android:text="@string/name"
+            android:ems="10"
+            android:id="@+id/nameEditText"
+            android:selectAllOnFocus="false"
+            android:maxLines="1"
+            style="@style/Widget.AppCompat.EditText"/>
 
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_firstname"
+            android:id="@+id/initialSetupConfirmBtn"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_gravity="center_horizontal"
+            android:clickable="false"
+            android:elevation="0dp"
+            android:enabled="false"/>
     <ProgressBar
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/sendLocationProgress"
+            android:id="@+id/initialSetupProgress"
             android:layout_gravity="center_horizontal"
             android:visibility="gone"/>
 </LinearLayout>

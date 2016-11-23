@@ -6,9 +6,10 @@
 
     <string name="action_settings">Settings</string>
 
-    <string name="welcome_headline">Welcome to Foodship</string>
-    <string name="welcome_text">Thanks for giving our App a try! To find a dinner in your neighborhood, we have to determine your home location.</string>
+    <string name="welcome_headline">Welcome</string>
+    <string name="welcome_text">Thanks for giving our App a try! To find a dinner in your neighborhood, we have to do a little setup. What\'s your first name?</string>
     <string name="pick_location">Pick Home Location</string>
+    <string name="add_firstname">Next</string>
     <string name="error_set_location">Error while sending location to Server</string>
     <string name="try_again">Try again!</string>
     <string name="nav_groceries">Overview</string>
@@ -28,5 +29,7 @@
     <string name="alert_dialog_ok">Add</string>
     <string name="alert_dialog_cancel">Cancel</string>
     <string name="set_food_type">This Product is unknown yet, please enter the type!</string>
-    <string name="pick_location_later">Do not set home location</string>
+    <string name="not_yet_btn">Not yet</string>
+    <string name="name">Name</string>
+    <string name="thanks_name">Thanks %1$s! Now you just have to add your home location</string>
 </resources>

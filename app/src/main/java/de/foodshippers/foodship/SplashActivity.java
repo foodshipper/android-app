@@ -4,37 +4,22 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import de.foodshippers.foodship.api.RestClient;
-import de.foodshippers.foodship.api.model.Product;
 import de.foodshippers.foodship.api.service.TypeService;
 import de.foodshippers.foodship.db.FoodshipContract;
 import de.foodshippers.foodship.db.FoodshipDbHelper;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
-
-import java.io.IOException;
-import java.util.Iterator;
 
 /**
  * Created by hannes on 15.11.16.
  */
 
-public class SplashActivity extends AppCompatActivity implements LocationPickerFragment.OnFragmentInteractionListener {
+public class SplashActivity extends AppCompatActivity implements InitialSetupFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "SplashActivity";
 
