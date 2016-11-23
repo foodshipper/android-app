@@ -18,7 +18,7 @@ import java.util.ArrayList;
 /**
  * Created by hannes on 15.11.16.
  */
-public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, FoodViewReFresher.OnFoodChangesListener {
 
     private GridViewAdapter gridAdapter;
     private SwipeRefreshLayout swipeLayout;
@@ -58,8 +58,13 @@ public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onRefresh() {
         System.out.println("Refresh");
+        FoodViewReFresher.getInstance(getActivity()).refreshFood();
         swipeLayout.setRefreshing(false);
     }
 
 
+    @Override
+    public void onFoodChanges() {
+        //Refresh View
+    }
 }

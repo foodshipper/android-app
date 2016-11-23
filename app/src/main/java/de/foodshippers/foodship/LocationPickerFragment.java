@@ -29,6 +29,7 @@ public class LocationPickerFragment extends Fragment {
     private static final String TAG = "LocationPickerFragment";
     private int PLACE_PICKER_REQUEST = 1;
     private Button mLaterBtn;
+
     public LocationPickerFragment() {
         super();
     }

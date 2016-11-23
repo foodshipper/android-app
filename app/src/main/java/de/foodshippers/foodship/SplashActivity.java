@@ -49,6 +49,7 @@ public class SplashActivity extends AppCompatActivity implements LocationPickerF
             downloadFoodTypes(getApplicationContext(), true);
             setContentView(R.layout.activity_splash);
         } else {
+            System.out.println(CommunicationManager.getUserId(getApplication()));
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
