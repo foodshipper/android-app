@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import de.foodshippers.foodship.FoodFragment.FoodViewFragment;
+import de.foodshippers.foodship.FoodFragment.FoodViewReFresher;
 import de.foodshippers.foodship.FoodFragment.GridViewAdapter;
 import de.foodshippers.foodship.api.FoodshipJobManager;
 import de.foodshippers.foodship.api.RestClient;
@@ -196,6 +197,7 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "onResponse: Got Response");
         if (call.request().url().toString().contains("items")) {
             Toast.makeText(getApplicationContext(), "und erfolgreich Hinzugefügt", Toast.LENGTH_LONG).show();
+            FoodViewReFresher.getInstance(getApplicationContext()).refreshFood();
         } else if (response.isSuccessful()) {
             Log.d(TAG, "onResponse: Product is known");
             Product p = response.body();
