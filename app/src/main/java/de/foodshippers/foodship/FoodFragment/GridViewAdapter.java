@@ -21,14 +21,14 @@ import java.util.List;
 public class GridViewAdapter extends BaseAdapter implements FoodViewReFresher.OnFoodChangesListener {
     private Context context;
     private int layoutResourceId;
-    private ArrayList<Product> data = new ArrayList();
+    private List<Product> data;
 
-    public GridViewAdapter(Context context, int layoutResourceId, ArrayList data) {
+    public GridViewAdapter(Context context, int layoutResourceId) {
         super();
         FoodViewReFresher.getInstance(context).add(this);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
-        this.data = data;
+        this.data = FoodViewReFresher.getInstance(context).getFoodList();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class GridViewAdapter extends BaseAdapter implements FoodViewReFresher.On
             holder.image.setImageBitmap(bmp);
             return row;
         } else {
-            Product item = (Product) data.get(position);
+            Product item = data.get(position);
             holder.imageTitle.setText(item.getType());
             Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
             Bitmap bmp = Bitmap.createBitmap(100, 100, conf);
@@ -85,10 +85,7 @@ public class GridViewAdapter extends BaseAdapter implements FoodViewReFresher.On
     }
 
     @Override
-    public void onFoodChanges() {
-        List<Product> liste = FoodViewReFresher.getInstance(context).getFoodList();
-        data.clear();
-        data.addAll(liste);
+    public void onFoodChangesNotyfi() {
         notifyDataSetChanged();
     }
 

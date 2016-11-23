@@ -22,6 +22,10 @@ public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnR
     private GridViewAdapter gridAdapter;
     private SwipeRefreshLayout swipeLayout;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Nullable
     @Override
@@ -30,10 +34,8 @@ public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnR
         swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
         swipeLayout.setOnRefreshListener(this);
         GridView gridView = (GridView) view.findViewById(R.id.gridView);
-        gridAdapter = new GridViewAdapter(this.getActivity(), R.layout.grid_item_layout, new ArrayList());
+        gridAdapter = new GridViewAdapter(this.getActivity(), R.layout.grid_item_layout);
         gridView.setAdapter(gridAdapter);
-        System.out.println("Schonwieder");
-
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
@@ -52,6 +54,11 @@ public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     @Override

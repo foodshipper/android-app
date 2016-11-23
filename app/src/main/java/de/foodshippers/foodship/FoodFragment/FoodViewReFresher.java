@@ -76,20 +76,26 @@ public class FoodViewReFresher implements Callback<Product[]> {
 
 
     public interface OnFoodChangesListener {
-        void onFoodChanges();
+        void onFoodChangesNotyfi();
     }
 
     public void add(OnFoodChangesListener me) {
+        //Hack
+        observer.clear();
         observer.add(me);
     }
 
     private void notifyAllListeners() {
+        System.out.println("Notfy" + observer.size());
         for (OnFoodChangesListener list : observer) {
-            list.onFoodChanges();
+            list.onFoodChangesNotyfi();
         }
     }
 
     public List<Product> getFoodList() {
+        if(initialisiert == false){
+            refreshFood();
+        }
         return foodList;
     }
 
