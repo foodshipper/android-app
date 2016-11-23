@@ -2,6 +2,7 @@ package de.foodshippers.foodship.FoodFragment;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import de.foodshippers.foodship.CommunicationManager;
 import de.foodshippers.foodship.api.RestClient;
@@ -27,12 +28,14 @@ public class FoodViewReFresher implements Callback<Product[]> {
     final private Set<OnFoodChangesListener> observer;
     final private List<Product> foodList;
     private static FoodViewReFresher instance;
+    boolean initialisiert = false;
 
     @Override
     public void onResponse(Call<Product[]> call, Response<Product[]> response) {
         SQLiteDatabase typeDatabase = new FoodshipDbHelper(c).getWritableDatabase();
         typeDatabase.execSQL("DELETE From ".concat(FoodshipContract.ProductTable.TABLE_NAME));
         foodList.clear();
+        initialisiert = true;
         ContentValues values = new ContentValues();
         for (Product o : response.body()) {
             values.put(FoodshipContract.ProductTable.CN_TYPE, o.getType());
@@ -42,18 +45,33 @@ public class FoodViewReFresher implements Callback<Product[]> {
             foodList.add(o);
         }
         notifyAllListeners();
-//        Cursor query = typeDatabase.query(FoodshipContract.ProductTable.TABLE_NAME, null, null, null, null, null, null);
-//        System.out.println(query.getCount());
-//        while (query.moveToNext()) {
-//            System.out.println(query.getString(0) + " " + query.getString(1) + " " + query.getString(2) + " " + query.getString(3));
-//        }
-        System.out.println("Updated Types");
+        Cursor query = typeDatabase.query(FoodshipContract.ProductTable.TABLE_NAME, null, null, null, null, null, null);
+        System.out.println(query.getCount());
+        while (query.moveToNext()) {
+            System.out.println(query.getString(0) + " " + query.getString(1) + " " + query.getString(2) + " " + query.getString(3));
+        }
+        System.out.println("Loaded Food from DataBase");
     }
 
     @Override
     public void onFailure(Call<Product[]> call, Throwable t) {
-        System.out.println(":( " + t.getMessage());
+        System.out.println("Kein Internet / anderer Fehler " + t.fillInStackTrace());
+        if (!initialisiert) {
+            SQLiteDatabase typeDatabase = new FoodshipDbHelper(c).getReadableDatabase();
+            Cursor query = typeDatabase.query(FoodshipContract.ProductTable.TABLE_NAME, null, null, null, null, null, null);
+            System.out.println(query.getCount());
+            foodList.clear();
+            initialisiert = true;
+            while (query.moveToNext()) {
+                System.out.println(query.getString(0) + " " + query.getString(1) + " " + query.getString(2) + " " + query.getString(3));
+                Product p = new Product("", query.getString(1), query.getString(2));
+                foodList.add(p);
+            }
+            System.out.println("Loaded Food from DataBase");
+        }
+        notifyAllListeners();
     }
+
 
     public interface OnFoodChangesListener {
         void onFoodChanges();
@@ -83,8 +101,6 @@ public class FoodViewReFresher implements Callback<Product[]> {
         FridgeService frides = RestClient.getInstance().getFridgeService();
         Call<Product[]> items = frides.getItems(CommunicationManager.getUserId(c));
         items.enqueue(this);
-
-
     }
 
     public void deleteFood(Product p) {

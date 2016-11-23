@@ -18,6 +18,17 @@ public class Product {
     @SerializedName("name")
     private String name;
 
+    public Product() {
+
+    }
+
+    public Product(String name, String ean, String type) {
+        setEan(ean);
+        setName(name);
+        setType(type);
+    }
+
+
     public String getType() {
         return type;
     }
