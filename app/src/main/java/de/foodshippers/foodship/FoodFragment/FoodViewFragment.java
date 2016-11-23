@@ -9,13 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 import de.foodshippers.foodship.R;
-import de.foodshippers.foodship.UnknownFoodDialog;
 import de.foodshippers.foodship.api.model.Product;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by hannes on 15.11.16.
@@ -55,11 +52,6 @@ public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-    }
-
-    private void showDialog() {
-        UnknownFoodDialog newFragment = UnknownFoodDialog.newInstance("123");
-        newFragment.show(getFragmentManager(), "dialog");
     }
 
     @Override
