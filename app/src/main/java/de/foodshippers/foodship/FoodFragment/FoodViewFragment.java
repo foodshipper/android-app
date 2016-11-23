@@ -35,6 +35,7 @@ public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnR
         GridView gridView = (GridView) view.findViewById(R.id.gridView);
         gridAdapter = new GridViewAdapter(this.getActivity(), R.layout.grid_item_layout, new ArrayList());
         gridView.setAdapter(gridAdapter);
+        System.out.println("Schonwieder");
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
