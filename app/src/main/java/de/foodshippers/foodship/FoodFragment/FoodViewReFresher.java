@@ -37,12 +37,14 @@ public class FoodViewReFresher implements Callback<Product[]> {
         foodList.clear();
         initialisiert = true;
         ContentValues values = new ContentValues();
-        for (Product o : response.body()) {
-            values.put(FoodshipContract.ProductTable.CN_TYPE, o.getType());
-            values.put(FoodshipContract.ProductTable.CN_EAN, o.getEan());
-            values.put(FoodshipContract.ProductTable.CN_PUSHED, 0);
-            typeDatabase.insert(FoodshipContract.ProductTable.TABLE_NAME, FoodshipContract.ProductTable.CN_EAN, values);
-            foodList.add(o);
+        if (response.body() != null) {
+            for (Product o : response.body()) {
+                values.put(FoodshipContract.ProductTable.CN_TYPE, o.getType());
+                values.put(FoodshipContract.ProductTable.CN_EAN, o.getEan());
+                values.put(FoodshipContract.ProductTable.CN_PUSHED, 0);
+                typeDatabase.insert(FoodshipContract.ProductTable.TABLE_NAME, FoodshipContract.ProductTable.CN_EAN, values);
+                foodList.add(o);
+            }
         }
         notifyAllListeners();
         Cursor query = typeDatabase.query(FoodshipContract.ProductTable.TABLE_NAME, null, null, null, null, null, null);
