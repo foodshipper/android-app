@@ -194,10 +194,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResponse(Call<Product> call, Response<Product> response) {
         Log.d(TAG, "onResponse: Got Response");
-        if (response.isSuccessful()) {
+        if (call.request().url().toString().contains("items")) {
+            Toast.makeText(getApplicationContext(), "und erfolgreich Hinzugefügt", Toast.LENGTH_LONG).show();
+        } else if (response.isSuccessful()) {
             Log.d(TAG, "onResponse: Product is known");
             Product p = response.body();
             Toast.makeText(getApplicationContext(), p.getType() + " with name " + p.getName(), Toast.LENGTH_LONG).show();
+            Call<Product> productCall = RestClient.getInstance().getFridgeService().addItem(p.getEan(), CommunicationManager.getUserId(getApplicationContext()));
+            productCall.enqueue(this);
         } else {
             Log.d(TAG, "onResponse: Product is unknown or different error");
             if (response.code() == 404) {

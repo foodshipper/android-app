@@ -94,7 +94,7 @@ public class UnknownFoodDialog extends DialogFragment implements Callback {
             autoCompleteTextView.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    
+
                 }
 
                 @Override
@@ -104,8 +104,8 @@ public class UnknownFoodDialog extends DialogFragment implements Callback {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    if(adapter.isKnownType(editable.toString())) {
-                        if(mPositiveBtn != null) {
+                    if (adapter.isKnownType(editable.toString())) {
+                        if (mPositiveBtn != null) {
                             mPositiveBtn.setEnabled(true);
                         }
                     }
@@ -150,7 +150,7 @@ public class UnknownFoodDialog extends DialogFragment implements Callback {
      */
     @Override
     public void onResponse(Call call, retrofit2.Response response) {
-        if(response.isSuccessful()) {
+        if (response.isSuccessful()) {
             Log.d(TAG, "onResponse: Added Product!");
         } else {
             Log.d(TAG, "onResponse: Could not add product: " + response.code());
@@ -187,8 +187,7 @@ public class UnknownFoodDialog extends DialogFragment implements Callback {
             String filter = "";
             if (constraint == null) {
                 filter = "";
-            }
-            else {
+            } else {
                 filter = constraint.toString();
             }
             Cursor query = mDb.query(FoodshipContract.ProductTypeTable.TABLE_NAME,

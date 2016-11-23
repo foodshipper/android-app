@@ -10,19 +10,22 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import de.foodshippers.foodship.R;
+import de.foodshippers.foodship.api.model.Product;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by hannes on 09.11.16.
  */
-public class GridViewAdapter extends BaseAdapter {
+public class GridViewAdapter extends BaseAdapter implements FoodViewReFresher.OnFoodChangesListener {
     private Context context;
     private int layoutResourceId;
-    private ArrayList data = new ArrayList();
+    private ArrayList<Product> data = new ArrayList();
 
     public GridViewAdapter(Context context, int layoutResourceId, ArrayList data) {
         super();
+        FoodViewReFresher.getInstance(context).add(this);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = data;
@@ -38,11 +41,12 @@ public class GridViewAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int i) {
-        return null;
+        return data.get(i);
     }
 
     @Override
     public long getItemId(int i) {
+//        return Long.decode(data.get(i).getEan());
         return 0;
     }
 
@@ -68,11 +72,24 @@ public class GridViewAdapter extends BaseAdapter {
             holder.image.setImageBitmap(bmp);
             return row;
         } else {
-            FoodItem item = (FoodItem) data.get(position);
-            holder.imageTitle.setText(item.getTitle());
-            holder.image.setImageBitmap(item.getImage());
+            Product item = (Product) data.get(position);
+            holder.imageTitle.setText(item.getType());
+            Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
+            Bitmap bmp = Bitmap.createBitmap(100, 100, conf);
+            holder.image.setImageBitmap(bmp);
             return row;
         }
+    }
+
+    @Override
+    public void onFoodChanges() {
+        List<Product> liste = FoodViewReFresher.getInstance(context).getListe();
+        for (Product p : liste) {
+            System.out.println(p);
+        }
+        data.clear();
+        data.addAll(liste);
+        notifyDataSetChanged();
     }
 
     static class ViewHolder {

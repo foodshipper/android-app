@@ -12,13 +12,15 @@ import android.widget.GridView;
 import android.widget.Toast;
 import de.foodshippers.foodship.R;
 import de.foodshippers.foodship.UnknownFoodDialog;
+import de.foodshippers.foodship.api.model.Product;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by hannes on 15.11.16.
  */
-public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, FoodViewReFresher.OnFoodChangesListener {
+public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private GridViewAdapter gridAdapter;
     private SwipeRefreshLayout swipeLayout;
@@ -63,8 +65,4 @@ public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
 
-    @Override
-    public void onFoodChanges() {
-        //Refresh View
-    }
 }
