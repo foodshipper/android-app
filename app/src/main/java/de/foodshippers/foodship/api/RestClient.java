@@ -11,6 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class RestClient {
 
+    private static final String TAG = RestClient.class.getSimpleName();
     private static final String BASE_URL = "https://api.foodshipper.de/";
     private ProductService productService;
     private UserLocationService userLocationService;

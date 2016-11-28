@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.util.Log;
 
 /**
  * Created by hannes on 06.11.16.
@@ -17,6 +18,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     private static NetworkChangeReceiver mReceiver = null;
     private static Context mContext = null;
     private boolean isRegistered = false;
+    private static final String TAG = "NetworkChangeReceiver";
 
     private NetworkChangeReceiver() {
         parseChanges(mContext);
@@ -25,7 +27,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     public static NetworkChangeReceiver newInstance(CommunicationManager manager, Context conStartUp) {
         mContext = conStartUp;
         conMan = manager;
-        if(mReceiver == null) {
+        if (mReceiver == null) {
             mReceiver = new NetworkChangeReceiver();
         }
         mReceiver.register(conStartUp);
@@ -33,7 +35,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     }
 
     private void register(Context context) {
-        if(context != null && !isRegistered) {
+        if (context != null && !isRegistered) {
             final IntentFilter filters = new IntentFilter();
             filters.addAction("android.net.wifi.WIFI_STATE_CHANGED");
             filters.addAction("android.net.conn.CONNECTIVITY_CHANGE");
@@ -43,13 +45,13 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     }
 
     public static void unregister() {
-        if(mReceiver != null) {
+        if (mReceiver != null) {
             mReceiver.unregister(mContext);
         }
     }
 
     private void unregister(Context context) {
-        if(isRegistered) {
+        if (isRegistered) {
             context.unregisterReceiver(mReceiver);
             isRegistered = false;
         }
@@ -57,12 +59,12 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-      parseChanges(context);
+        parseChanges(context);
     }
 
-    public void parseChanges(Context con){
+    public void parseChanges(Context con) {
         int status = NetworkUtil.getConnectivityStatusString(con);
-        System.out.println(ProcessNetworkChange(status, this.Internet_Status));
+        Log.d(TAG, ProcessNetworkChange(status, this.Internet_Status));
         this.Internet_Status = status;
     }
 

@@ -51,7 +51,6 @@ public class CommunicationManager {
             return true;
         } else {
             PendingFooIds.add(code);
-            System.out.println();
             return false;
         }
 

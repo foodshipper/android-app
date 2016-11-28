@@ -8,6 +8,7 @@ import com.birbit.android.jobqueue.config.Configuration;
  * Created by soenke on 21.11.16.
  */
 public class FoodshipJobManager extends JobManager {
+    private static final String TAG = FoodshipJobManager.class.getSimpleName();
     private static FoodshipJobManager mManager = null;
 
     /**

@@ -134,7 +134,7 @@ public class UnknownFoodDialog extends DialogFragment implements Callback {
      * Invoked for a received HTTP response.
      * <p>
      * Note: An HTTP response may still indicate an application-level failure such as a 404 or 500.
-     * Call {@link Response#isSuccessful()} to determine if the response indicates success.
+     * Call {@link retrofit2.Response#isSuccessful()} to determine if the response indicates success.
      *
      * @param call
      * @param response

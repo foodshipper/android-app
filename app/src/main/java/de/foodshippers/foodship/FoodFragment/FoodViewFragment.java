@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,6 @@ import android.widget.GridView;
 import de.foodshippers.foodship.R;
 import de.foodshippers.foodship.api.model.Product;
 
-import java.util.ArrayList;
-
 /**
  * Created by hannes on 15.11.16.
  */
@@ -21,6 +20,7 @@ public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     private GridViewAdapter gridAdapter;
     private SwipeRefreshLayout swipeLayout;
+    private static final String TAG = FoodViewFragment.class.getSimpleName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,7 @@ public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onRefresh() {
-        System.out.println("Refresh");
+        Log.d(TAG, "Refresh");
         FoodViewReFresher.getInstance(getActivity()).refreshFood();
         swipeLayout.setRefreshing(false);
     }

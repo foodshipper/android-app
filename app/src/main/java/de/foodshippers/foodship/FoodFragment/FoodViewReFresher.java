@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import de.foodshippers.foodship.CommunicationManager;
 import de.foodshippers.foodship.api.RestClient;
 import de.foodshippers.foodship.api.model.Product;
@@ -29,6 +30,7 @@ public class FoodViewReFresher implements Callback<Product[]> {
     final private List<Product> foodList;
     private static FoodViewReFresher instance;
     boolean initialisiert = false;
+    private static final String TAG = FoodViewReFresher.class.getSimpleName();
 
     @Override
     public void onResponse(Call<Product[]> call, Response<Product[]> response) {
@@ -48,28 +50,26 @@ public class FoodViewReFresher implements Callback<Product[]> {
         }
         notifyAllListeners();
         Cursor query = typeDatabase.query(FoodshipContract.ProductTable.TABLE_NAME, null, null, null, null, null, null);
-        System.out.println(query.getCount());
         while (query.moveToNext()) {
-            System.out.println(query.getString(0) + " " + query.getString(1) + " " + query.getString(2) + " " + query.getString(3));
+            Log.d(TAG, query.getString(0) + " " + query.getString(1) + " " + query.getString(2) + " " + query.getString(3));
         }
-        System.out.println("Loaded Food from DataBase");
+        Log.d(TAG, "Loaded Food from DataBase");
     }
 
     @Override
     public void onFailure(Call<Product[]> call, Throwable t) {
-        System.out.println("Kein Internet / anderer Fehler " + t.fillInStackTrace());
+        Log.d(TAG, "No internet or other error while refreshing: " + t.getMessage());
         if (!initialisiert) {
             SQLiteDatabase typeDatabase = new FoodshipDbHelper(c).getReadableDatabase();
             Cursor query = typeDatabase.query(FoodshipContract.ProductTable.TABLE_NAME, null, null, null, null, null, null);
-            System.out.println(query.getCount());
             foodList.clear();
             initialisiert = true;
             while (query.moveToNext()) {
-                System.out.println(query.getString(0) + " " + query.getString(1) + " " + query.getString(2) + " " + query.getString(3));
+                Log.d(TAG, query.getString(0) + " " + query.getString(1) + " " + query.getString(2) + " " + query.getString(3));
                 Product p = new Product("", query.getString(1), query.getString(2));
                 foodList.add(p);
             }
-            System.out.println("Loaded Food from DataBase");
+            Log.d(TAG, "Loaded Food from DataBase");
         }
         notifyAllListeners();
     }
@@ -86,14 +86,14 @@ public class FoodViewReFresher implements Callback<Product[]> {
     }
 
     private void notifyAllListeners() {
-        System.out.println("Notfy" + observer.size());
+        Log.d(TAG, "Notfy" + observer.size());
         for (OnFoodChangesListener list : observer) {
             list.onFoodChangesNotyfi();
         }
     }
 
     public List<Product> getFoodList() {
-        if(initialisiert == false){
+        if (initialisiert == false) {
             refreshFood();
         }
         return foodList;

@@ -9,6 +9,8 @@ import org.parceler.Parcel;
 @Parcel
 public class Product {
 
+    private static final String TAG = Product.class.getSimpleName();
+
     @SerializedName("type")
     private String type;
 

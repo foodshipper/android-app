@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import de.foodshippers.foodship.api.RestClient;
 import de.foodshippers.foodship.api.service.TypeService;
 import de.foodshippers.foodship.db.FoodshipContract;
@@ -21,7 +22,7 @@ import retrofit2.Callback;
 
 public class SplashActivity extends AppCompatActivity implements InitialSetupFragment.OnFragmentInteractionListener {
 
-    private static final String TAG = "SplashActivity";
+    private static final String TAG = SplashActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,7 @@ public class SplashActivity extends AppCompatActivity implements InitialSetupFra
                     values.put(FoodshipContract.ProductTypeTable.CN_NAME, type);
                     typeDatabase.insert(FoodshipContract.ProductTypeTable.TABLE_NAME, FoodshipContract.ProductTypeTable.CN_NAME, values);
                 }
-                System.out.println("Updated Types");
+                Log.d(TAG, "Types Updated");
 //                Cursor query = typeDatabase.query(FoodshipContract.ProductTypeTable.TABLE_NAME, null, null, null, null, null, null);
 //                System.out.println(query.getCount());
 //                while (query.moveToNext()) {
@@ -70,7 +71,7 @@ public class SplashActivity extends AppCompatActivity implements InitialSetupFra
 
             @Override
             public void onFailure(Call<String[]> call, Throwable t) {
-                System.out.println("No internet or api down :|" + t.getMessage() + t.getStackTrace());
+                Log.d(TAG, "No internet or api down :|" + t.getMessage() + t.getStackTrace());
             }
         });
 

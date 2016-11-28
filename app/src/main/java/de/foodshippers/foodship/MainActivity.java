@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity
         mManager = FoodshipJobManager.getInstance(getApplicationContext());
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        System.out.println("Secure " + CommunicationManager.getUserId(getApplicationContext()));
+        Log.d(TAG, CommunicationManager.getUserId(getApplicationContext()));
 
         //Floating Button
 
