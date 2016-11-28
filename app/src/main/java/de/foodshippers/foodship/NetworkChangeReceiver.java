@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 /**
  * Created by hannes on 06.11.16.
  */
+@Deprecated
 public class NetworkChangeReceiver extends BroadcastReceiver {
 
     private static CommunicationManager conMan;

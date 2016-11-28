@@ -1,18 +1,19 @@
 package de.foodshippers.foodship.FoodFragment;
 
 import android.graphics.Bitmap;
+import de.foodshippers.foodship.api.model.Product;
 
 /**
  * Created by hannes on 09.11.16.
  */
 public class FoodItem {
     private Bitmap image;
-    private String title;
+    private Product p;
 
-    public FoodItem(Bitmap image, String title) {
+    public FoodItem(Bitmap image, Product p) {
         super();
         this.image = image;
-        this.title = title;
+        this.p = p;
     }
 
     public Bitmap getImage() {
@@ -24,10 +25,10 @@ public class FoodItem {
     }
 
     public String getTitle() {
-        return title;
+        return p.getType();
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setP(Product p) {
+        this.p = p;
     }
 }

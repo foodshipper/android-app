@@ -28,3 +28,4 @@ public class FoodshipJobManager extends JobManager {
         return mManager;
     }
 }
+   

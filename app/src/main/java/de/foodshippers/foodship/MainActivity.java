@@ -37,7 +37,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Callback<Product> {
 
-    private CommunicationManager conMan;
     private GridView gridView;
     private GridViewAdapter gridAdapter;
     private FoodshipDbHelper databse;
@@ -83,9 +82,9 @@ public class MainActivity extends AppCompatActivity
         //DateBase
         databse = new FoodshipDbHelper(getApplicationContext());
         //Communication Manager
-        conMan = new CommunicationManager(getApplicationContext());
-        //NetworkReceiver
-        NetworkChangeReceiver.newInstance(conMan, getApplicationContext());
+//        conMan = new CommunicationManager(getApplicationContext());
+//        //NetworkReceiver
+//        NetworkChangeReceiver.newInstance(conMan, getApplicationContext());
 
         //Create initial fragment
         if (savedInstanceState != null) {

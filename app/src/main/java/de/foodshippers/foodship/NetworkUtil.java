@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 /**
  * Created by hannes on 06.11.16.
  */
+@Deprecated
 public class NetworkUtil {
     private static int TYPE_WIFI = 1;
     private static int TYPE_MOBILE = 2;
