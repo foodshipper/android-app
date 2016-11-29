@@ -131,9 +131,14 @@ public class FoodViewDataBase implements Callback<Product[]> {
 
     public static FoodViewDataBase getInstance(Context c) {
         if (instance == null) {
-            instance = new FoodViewDataBase(c);
+            synchronized (FoodViewDataBase.class) {
+                if (instance == null) {
+                    instance = new FoodViewDataBase(c);
+                }
+            }
 
         }
         return instance;
     }
+
 }
