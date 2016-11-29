@@ -7,7 +7,7 @@ import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
 import de.foodshippers.foodship.CommunicationManager;
-import de.foodshippers.foodship.FoodFragment.FoodViewReFresher;
+import de.foodshippers.foodship.FoodFragment.FoodViewDataBase;
 import retrofit2.Call;
 
 /**
@@ -42,7 +42,7 @@ public class AddUserFoodJob extends Job {
             }
         } else {
             Log.d(TAG, "onRun: Call was successfull!");
-            FoodViewReFresher.getInstance(getApplicationContext()).refreshFood();
+            FoodViewDataBase.getInstance(getApplicationContext()).refreshFood();
         }
     }
 

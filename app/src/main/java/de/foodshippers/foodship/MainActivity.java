@@ -228,8 +228,7 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "No Internet while testing if Product is known");
             List<String> pathNames = call.request().url().encodedPathSegments();
             String ean = pathNames.get(pathNames.size() - 1);
-            UnknownFoodDialog newFragment = UnknownFoodDialog.newInstance(ean);
-            newFragment.setNoInternet();
+            UnknownFoodDialog newFragment = UnknownFoodDialog.newInstance(ean, true);
             newFragment.show(getFragmentManager(), "dialog");
         } else {
             Log.d(TAG, "onFailure: Got Failure");

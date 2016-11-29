@@ -30,6 +30,7 @@ public class UnknownFoodDialog extends DialogFragment {
     private static final String ARG_EAN = "unknownEan";
     private static final String TAG = "UnknownFoodDialog";
     private String unknownEan;
+    private boolean noInternet = false;
     Button mPositiveBtn = null;
 
 
@@ -38,6 +39,12 @@ public class UnknownFoodDialog extends DialogFragment {
         Bundle args = new Bundle();
         args.putString(ARG_EAN, ean);
         fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static UnknownFoodDialog newInstance(String ean, boolean nointernnet) {
+        UnknownFoodDialog fragment = newInstance(ean);
+        fragment.setNoInternet(nointernnet);
         return fragment;
     }
 
@@ -52,6 +59,10 @@ public class UnknownFoodDialog extends DialogFragment {
             final AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) v.findViewById(R.id.unknownFoodAutocompleteTextView);
             SQLiteDatabase db = new FoodshipDbHelper(getActivity().getApplicationContext()).getReadableDatabase();
             final FoodTypeFilterAdapter adapter = new FoodTypeFilterAdapter(getActivity().getApplicationContext(), db);
+            if (noInternet) {
+                TextView text = (TextView) v.findViewById(R.id.unknownTextview);
+                text.setText(R.string.set_food_type2);
+            }
             autoCompleteTextView.setAdapter(adapter);
             autoCompleteTextView.setThreshold(0);
             final AlertDialog dialog = new AlertDialog.Builder(getActivity())
@@ -127,9 +138,8 @@ public class UnknownFoodDialog extends DialogFragment {
         super.onStop();
     }
 
-    public void setNoInternet() {
-        TextView text = (TextView) getView().findViewById(R.id.unknownTextview);
-        text.setText(R.string.set_food_type2);
+    public void setNoInternet(boolean noInternet) {
+        this.noInternet = noInternet;
     }
 
     private class FoodTypeFilterAdapter extends SimpleCursorAdapter {

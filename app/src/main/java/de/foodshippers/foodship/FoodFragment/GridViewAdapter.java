@@ -17,17 +17,17 @@ import java.util.List;
 /**
  * Created by hannes on 09.11.16.
  */
-public class GridViewAdapter extends BaseAdapter implements FoodViewReFresher.OnFoodChangesListener {
+public class GridViewAdapter extends BaseAdapter implements FoodViewDataBase.OnFoodChangesListener {
     private Context context;
     private int layoutResourceId;
     private List<Product> data;
 
     public GridViewAdapter(Context context, int layoutResourceId) {
         super();
-        FoodViewReFresher.getInstance(context).add(this);
+        FoodViewDataBase.getInstance(context).add(this);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
-        this.data = FoodViewReFresher.getInstance(context).getFoodList();
+        this.data = FoodViewDataBase.getInstance(context).getFoodList();
     }
 
     @Override

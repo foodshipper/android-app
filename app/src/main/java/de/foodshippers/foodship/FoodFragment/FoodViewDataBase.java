@@ -23,14 +23,14 @@ import java.util.Set;
 /**
  * Created by hannes on 23.11.16.
  */
-public class FoodViewReFresher implements Callback<Product[]> {
+public class FoodViewDataBase implements Callback<Product[]> {
 
     final private Context c;
     final private Set<OnFoodChangesListener> observer;
     final private List<Product> foodList;
-    private static FoodViewReFresher instance;
-    boolean initialisiert = false;
-    private static final String TAG = FoodViewReFresher.class.getSimpleName();
+    private static FoodViewDataBase instance;
+    private boolean initialisiert = false;
+    private static final String TAG = FoodViewDataBase.class.getSimpleName();
 
     @Override
     public void onResponse(Call<Product[]> call, Response<Product[]> response) {
@@ -99,7 +99,7 @@ public class FoodViewReFresher implements Callback<Product[]> {
         return foodList;
     }
 
-    private FoodViewReFresher(Context c) {
+    private FoodViewDataBase(Context c) {
         this.c = c;
         foodList = new ArrayList<>();
         observer = new HashSet<>();
@@ -129,9 +129,10 @@ public class FoodViewReFresher implements Callback<Product[]> {
 
     }
 
-    public static FoodViewReFresher getInstance(Context c) {
+    public static FoodViewDataBase getInstance(Context c) {
         if (instance == null) {
-            instance = new FoodViewReFresher(c);
+            instance = new FoodViewDataBase(c);
+
         }
         return instance;
     }

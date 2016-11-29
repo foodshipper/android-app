@@ -41,7 +41,7 @@ public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnR
                                     int position, long id) {
                 Object itemAtPosition = parent.getItemAtPosition(position);
                 if (itemAtPosition != null) {
-                    FoodViewReFresher.getInstance(getActivity()).deleteFood((Product) itemAtPosition);
+                    FoodViewDataBase.getInstance(getActivity()).deleteFood((Product) itemAtPosition);
                 }
 //                Toast.makeText(getActivity(), "" + position + v.findViewById(id) + "Hannes" + id,
 //                        Toast.LENGTH_SHORT).show();
@@ -64,7 +64,7 @@ public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onRefresh() {
         Log.d(TAG, "Refresh");
-        FoodViewReFresher.getInstance(getActivity()).refreshFood();
+        FoodViewDataBase.getInstance(getActivity()).refreshFood();
         swipeLayout.setRefreshing(false);
     }
 
