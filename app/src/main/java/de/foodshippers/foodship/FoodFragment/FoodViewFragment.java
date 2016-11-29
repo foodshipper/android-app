@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import de.foodshippers.foodship.R;
+import de.foodshippers.foodship.api.DeleteUserFoodJob;
+import de.foodshippers.foodship.api.FoodshipJobManager;
 import de.foodshippers.foodship.api.model.Product;
 
 /**
@@ -35,13 +37,14 @@ public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnR
         swipeLayout.setOnRefreshListener(this);
         GridView gridView = (GridView) view.findViewById(R.id.gridView);
         gridAdapter = new GridViewAdapter(this.getActivity(), R.layout.grid_item_layout);
+        FoodViewDataBase.getInstance(getActivity().getApplicationContext()).add(gridAdapter);
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 Object itemAtPosition = parent.getItemAtPosition(position);
                 if (itemAtPosition != null) {
-                    FoodViewDataBase.getInstance(getActivity()).deleteFood((Product) itemAtPosition);
+                    FoodshipJobManager.getInstance(getActivity().getApplicationContext()).addJobInBackground(new DeleteUserFoodJob((Product) itemAtPosition));
                 }
 //                Toast.makeText(getActivity(), "" + position + v.findViewById(id) + "Hannes" + id,
 //                        Toast.LENGTH_SHORT).show();
@@ -59,6 +62,8 @@ public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onDestroy() {
         super.onDestroy();
+        FoodViewDataBase.getInstance(getActivity().getApplicationContext()).remove(gridAdapter);
+
     }
 
     @Override

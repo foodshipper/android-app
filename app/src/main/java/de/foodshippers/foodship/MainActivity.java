@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "onResponse: Product is known");
             Product p = response.body();
 
-            FoodshipJobManager.getInstance(getApplicationContext()).addJobInBackground(new AddUserFoodJob(p.getEan()));
+            FoodshipJobManager.getInstance(getApplicationContext()).addJobInBackground(new AddUserFoodJob(p));
         } else {
             Log.d(TAG, "onResponse: Product is unknown or different error");
             if (response.code() == 404) {

@@ -6,6 +6,8 @@ import android.util.Log;
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
+import de.foodshippers.foodship.FoodFragment.FoodViewDataBase;
+import de.foodshippers.foodship.api.model.Product;
 import retrofit2.Call;
 
 /**
@@ -26,12 +28,13 @@ public class SendProductTypeJob extends Job {
     @Override
     public void onAdded() {
         Log.d(TAG, "ADDED");
-        //Add in DATABASE
+        //Hack
+       FoodViewDataBase.getInstance(getApplicationContext()).addFood(new Product("",ean,type));
     }
 
     @Override
     public void onRun() throws Throwable {
-        Call call = RestClient.getInstance().getProductService().addProduct(ean, "", this.type);
+        Call call = RestClient.getInstance().getProductService().addProduct(this.ean, "", this.type);
         retrofit2.Response response = call.execute();
         if (!response.isSuccessful()) {
             if (response.code() >= 400 && response.code() < 500) {
@@ -41,7 +44,7 @@ public class SendProductTypeJob extends Job {
             }
         } else {
             Log.d(TAG, "onRun: Call was successfull!");
-            FoodshipJobManager.getInstance(getApplicationContext()).addJobInBackground(new AddUserFoodJob(ean));
+            FoodshipJobManager.getInstance(getApplicationContext()).addJobInBackground(new AddUserFoodJob(new Product("", ean, type)));
         }
     }
 

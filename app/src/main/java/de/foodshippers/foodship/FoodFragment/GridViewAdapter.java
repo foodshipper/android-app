@@ -24,7 +24,6 @@ public class GridViewAdapter extends BaseAdapter implements FoodViewDataBase.OnF
 
     public GridViewAdapter(Context context, int layoutResourceId) {
         super();
-        FoodViewDataBase.getInstance(context).add(this);
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = FoodViewDataBase.getInstance(context).getFoodList();

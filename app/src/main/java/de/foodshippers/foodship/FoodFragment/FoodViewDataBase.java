@@ -14,6 +14,7 @@ import de.foodshippers.foodship.db.FoodshipDbHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import android.app.Activity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -54,24 +55,28 @@ public class FoodViewDataBase implements Callback<Product[]> {
             Log.d(TAG, query.getString(0) + " " + query.getString(1) + " " + query.getString(2) + " " + query.getString(3));
         }
         Log.d(TAG, "Loaded Food from DataBase");
+        typeDatabase.close();
     }
 
     @Override
     public void onFailure(Call<Product[]> call, Throwable t) {
         Log.d(TAG, "No internet or other error while refreshing: " + t.getMessage());
-        if (!initialisiert) {
-            SQLiteDatabase typeDatabase = new FoodshipDbHelper(c).getReadableDatabase();
-            Cursor query = typeDatabase.query(FoodshipContract.ProductTable.TABLE_NAME, null, null, null, null, null, null);
-            foodList.clear();
-            initialisiert = true;
-            while (query.moveToNext()) {
-                Log.d(TAG, query.getString(0) + " " + query.getString(1) + " " + query.getString(2) + " " + query.getString(3));
-                Product p = new Product("", query.getString(1), query.getString(2));
-                foodList.add(p);
-            }
-            Log.d(TAG, "Loaded Food from DataBase");
-        }
+        loadFromDataBase();
         notifyAllListeners();
+    }
+
+    private void loadFromDataBase() {
+        SQLiteDatabase typeDatabase = new FoodshipDbHelper(c).getReadableDatabase();
+        Cursor query = typeDatabase.query(FoodshipContract.ProductTable.TABLE_NAME, null, null, null, null, null, null);
+        foodList.clear();
+        initialisiert = true;
+        while (query.moveToNext()) {
+            Log.d(TAG, query.getString(0) + " " + query.getString(1) + " " + query.getString(2) + " " + query.getString(3));
+            Product p = new Product("", query.getString(1), query.getString(2));
+            foodList.add(p);
+        }
+        Log.d(TAG, "Loaded Food from DataBase");
+        typeDatabase.close();
     }
 
 
@@ -80,16 +85,22 @@ public class FoodViewDataBase implements Callback<Product[]> {
     }
 
     public void add(OnFoodChangesListener me) {
-        //Hack
-        observer.clear();
         observer.add(me);
     }
 
+    public void remove(OnFoodChangesListener me) {
+        observer.remove(me);
+    }
+
     private void notifyAllListeners() {
-        Log.d(TAG, "Notfy" + observer.size());
-        for (OnFoodChangesListener list : observer) {
-            list.onFoodChangesNotyfi();
-        }
+        ((Activity) c).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                for (OnFoodChangesListener list : observer) {
+                    list.onFoodChangesNotyfi();
+                }
+            }
+        });
     }
 
     public List<Product> getFoodList() {
@@ -111,21 +122,39 @@ public class FoodViewDataBase implements Callback<Product[]> {
         items.enqueue(this);
     }
 
-    public void deleteFood(Product p) {
-        Call<Product> productCall = RestClient.getInstance().getFridgeService().removeItem(p.getEan(), CommunicationManager.getUserId(c));
-        productCall.enqueue(new Callback<Product>() {
-            @Override
-            public void onResponse(Call<Product> call, Response<Product> response) {
-                if (response.isSuccessful()) {
-                    refreshFood();
-                }
-            }
+    public boolean addFood(Product p) {
+        SQLiteDatabase typeDatabase = new FoodshipDbHelper(c).getWritableDatabase();
+        Cursor cursor = typeDatabase.rawQuery("SELECT * From ".concat(FoodshipContract.ProductTable.TABLE_NAME).concat(" WHERE ").concat(FoodshipContract.ProductTable.CN_EAN).concat(" = ".concat(p.getEan())), null);
+        System.out.println(cursor.getCount());
+        if (cursor.getCount() != 0) {
+            typeDatabase.close();
+            return false;
+        } else {
+            System.out.println("Hinzu");
+            ContentValues values = new ContentValues();
+            values.put(FoodshipContract.ProductTable.CN_TYPE, p.getType());
+            values.put(FoodshipContract.ProductTable.CN_EAN, p.getEan());
+            values.put(FoodshipContract.ProductTable.CN_PUSHED, 0);
+            typeDatabase.insert(FoodshipContract.ProductTable.TABLE_NAME, FoodshipContract.ProductTable.CN_EAN, values);
+            foodList.add(p);
+            notifyAllListeners();
+            return true;
+        }
+    }
 
-            @Override
-            public void onFailure(Call<Product> call, Throwable t) {
+    public boolean deleteFood(Product p) {
+        SQLiteDatabase typeDatabase = new FoodshipDbHelper(c).getWritableDatabase();
+        Cursor cursor = typeDatabase.rawQuery("SELECT * From ".concat(FoodshipContract.ProductTable.TABLE_NAME).concat(" WHERE ").concat(FoodshipContract.ProductTable.CN_EAN).concat(" = ".concat(p.getEan())), null);
+        System.out.println(cursor.getCount());
+        if (cursor.getCount() != 0) {
+            typeDatabase.execSQL("DELETE From ".concat(FoodshipContract.ProductTable.TABLE_NAME).concat(" WHERE ").concat(FoodshipContract.ProductTable.CN_EAN).concat(" = ".concat(p.getEan())));
+            loadFromDataBase();
+            notifyAllListeners();
+            return true;
+        } else {
+            return false;
+        }
 
-            }
-        });
 
     }
 
@@ -136,7 +165,6 @@ public class FoodViewDataBase implements Callback<Product[]> {
                     instance = new FoodViewDataBase(c);
                 }
             }
-
         }
         return instance;
     }

@@ -14,13 +14,13 @@ import retrofit2.Call;
 /**
  * Created by hannes on 29.11.16.
  */
-public class AddUserFoodJob extends Job {
+public class DeleteUserFoodJob  extends Job {
+
 
     private final Product p;
     private static final String TAG = AddUserFoodJob.class.getSimpleName();
-    private boolean unique;
 
-    public AddUserFoodJob(Product p) {
+    public DeleteUserFoodJob(Product p) {
         super(new Params(0).setPersistent(true).requireNetwork());
         this.p = p;
     }
@@ -28,14 +28,13 @@ public class AddUserFoodJob extends Job {
 
     @Override
     public void onAdded() {
-        Log.d(TAG, "ADDED");
-        this.unique = FoodViewDataBase.getInstance(getApplicationContext()).addFood(p);
-
+        Log.d(TAG, "Deleted");
+        FoodViewDataBase.getInstance(getApplicationContext()).deleteFood(p);
     }
 
     @Override
     public void onRun() throws Throwable {
-        Call call = RestClient.getInstance().getFridgeService().addItem(p.getEan(), CommunicationManager.getUserId(getApplicationContext()));
+        Call call = RestClient.getInstance().getFridgeService().removeItem(p.getEan(), CommunicationManager.getUserId(getApplicationContext()));
         retrofit2.Response response = call.execute();
         if (!response.isSuccessful()) {
             if (response.code() >= 400 && response.code() < 500) {
@@ -45,12 +44,12 @@ public class AddUserFoodJob extends Job {
             }
         } else {
             Log.d(TAG, "onRun: Call was successfull!");
+            FoodViewDataBase.getInstance(getApplicationContext()).refreshFood();
         }
     }
 
     @Override
     protected void onCancel(int cancelReason, @Nullable Throwable throwable) {
-        System.out.println("Cancel");
     }
 
     @Override
@@ -60,7 +59,6 @@ public class AddUserFoodJob extends Job {
                 return RetryConstraint.createExponentialBackoff(runCount, 5000);
             }
         }
-
         return RetryConstraint.RETRY;
     }
 }
