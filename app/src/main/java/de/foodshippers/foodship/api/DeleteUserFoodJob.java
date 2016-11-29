@@ -6,6 +6,7 @@ import android.util.Log;
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
+import com.birbit.android.jobqueue.TagConstraint;
 import de.foodshippers.foodship.CommunicationManager;
 import de.foodshippers.foodship.FoodFragment.FoodViewDataBase;
 import de.foodshippers.foodship.api.model.Product;
@@ -14,14 +15,14 @@ import retrofit2.Call;
 /**
  * Created by hannes on 29.11.16.
  */
-public class DeleteUserFoodJob  extends Job {
+public class DeleteUserFoodJob extends Job {
 
 
     private final Product p;
-    private static final String TAG = AddUserFoodJob.class.getSimpleName();
+    private static final String TAG = DeleteUserFoodJob.class.getSimpleName();
 
     public DeleteUserFoodJob(Product p) {
-        super(new Params(0).setPersistent(true).requireNetwork());
+        super(new Params(0).setPersistent(true).requireNetwork().addTags("DELETE-".concat(p.getEan())));
         this.p = p;
     }
 
@@ -29,6 +30,8 @@ public class DeleteUserFoodJob  extends Job {
     @Override
     public void onAdded() {
         Log.d(TAG, "Deleted");
+        FoodshipJobManager.getInstance(getApplicationContext()).cancelJobsInBackground(null, TagConstraint.ANY, "ADD-".concat(p.getEan()));
+        FoodshipJobManager.getInstance(getApplicationContext()).cancelJobsInBackground(null, TagConstraint.ANY, "TYPE-".concat(p.getEan()));
         FoodViewDataBase.getInstance(getApplicationContext()).deleteFood(p);
     }
 
@@ -50,6 +53,7 @@ public class DeleteUserFoodJob  extends Job {
 
     @Override
     protected void onCancel(int cancelReason, @Nullable Throwable throwable) {
+        Log.d(TAG,"Ich sterbe :| ".concat(p.getEan()));
     }
 
     @Override

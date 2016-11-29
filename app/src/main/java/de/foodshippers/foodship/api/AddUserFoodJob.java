@@ -6,6 +6,7 @@ import android.util.Log;
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
+import com.birbit.android.jobqueue.TagConstraint;
 import de.foodshippers.foodship.CommunicationManager;
 import de.foodshippers.foodship.FoodFragment.FoodViewDataBase;
 import de.foodshippers.foodship.api.model.Product;
@@ -21,7 +22,7 @@ public class AddUserFoodJob extends Job {
     private boolean unique;
 
     public AddUserFoodJob(Product p) {
-        super(new Params(0).setPersistent(true).requireNetwork());
+        super(new Params(0).setPersistent(true).requireNetwork().addTags("ADD-".concat(p.getEan())));
         this.p = p;
     }
 
@@ -29,8 +30,8 @@ public class AddUserFoodJob extends Job {
     @Override
     public void onAdded() {
         Log.d(TAG, "ADDED");
+        FoodshipJobManager.getInstance(getApplicationContext()).cancelJobsInBackground(null, TagConstraint.ANY, "DELETE-".concat(p.getEan()));
         this.unique = FoodViewDataBase.getInstance(getApplicationContext()).addFood(p);
-
     }
 
     @Override
@@ -50,7 +51,7 @@ public class AddUserFoodJob extends Job {
 
     @Override
     protected void onCancel(int cancelReason, @Nullable Throwable throwable) {
-        System.out.println("Cancel");
+        Log.d(TAG, "Ich sterbe :| ".concat(p.getEan()));
     }
 
     @Override
