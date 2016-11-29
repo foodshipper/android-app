@@ -29,6 +29,7 @@
     <string name="alert_dialog_ok">Add</string>
     <string name="alert_dialog_cancel">Cancel</string>
     <string name="set_food_type">This Product is unknown yet, please enter the type!</string>
+    <string name="set_food_type2">Currently no InternetConnection! please enter the type of the Product.</string>
     <string name="not_yet_btn">Not yet</string>
     <string name="name">Name</string>
     <string name="thanks_name">Thanks %1$s! Now you just have to add your home location</string>

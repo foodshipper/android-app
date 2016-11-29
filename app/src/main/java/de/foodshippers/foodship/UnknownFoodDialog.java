@@ -17,21 +17,21 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.SimpleCursorAdapter;
-import de.foodshippers.foodship.api.RestClient;
-import de.foodshippers.foodship.api.service.ProductService;
+import android.widget.TextView;
+import de.foodshippers.foodship.api.FoodshipJobManager;
+import de.foodshippers.foodship.api.SendProductTypeJob;
 import de.foodshippers.foodship.db.FoodshipContract;
 import de.foodshippers.foodship.db.FoodshipDbHelper;
-import retrofit2.Call;
-import retrofit2.Callback;
 
 import static de.foodshippers.foodship.db.FoodshipContract.ProductTypeTable.CN_NAME;
 
 
-public class UnknownFoodDialog extends DialogFragment implements Callback {
+public class UnknownFoodDialog extends DialogFragment {
     private static final String ARG_EAN = "unknownEan";
     private static final String TAG = "UnknownFoodDialog";
     private String unknownEan;
     Button mPositiveBtn = null;
+
 
     public static UnknownFoodDialog newInstance(String ean) {
         UnknownFoodDialog fragment = new UnknownFoodDialog();
@@ -44,7 +44,7 @@ public class UnknownFoodDialog extends DialogFragment implements Callback {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         if (getArguments() != null) {
-            unknownEan = getArguments().getString(ARG_EAN);
+            this.unknownEan = getArguments().getString(ARG_EAN);
             LayoutInflater inflater = getActivity().getLayoutInflater();
             // Inflate and set the layout for the dialog
             // Pass null as the parent view because its going in the dialog layout
@@ -52,7 +52,6 @@ public class UnknownFoodDialog extends DialogFragment implements Callback {
             final AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) v.findViewById(R.id.unknownFoodAutocompleteTextView);
             SQLiteDatabase db = new FoodshipDbHelper(getActivity().getApplicationContext()).getReadableDatabase();
             final FoodTypeFilterAdapter adapter = new FoodTypeFilterAdapter(getActivity().getApplicationContext(), db);
-
             autoCompleteTextView.setAdapter(adapter);
             autoCompleteTextView.setThreshold(0);
             final AlertDialog dialog = new AlertDialog.Builder(getActivity())
@@ -115,9 +114,7 @@ public class UnknownFoodDialog extends DialogFragment implements Callback {
 
     public void doPositiveClick(String type) {
         Log.d(TAG, "doPositiveClick: Add EAN with type " + type);
-        ProductService productService = RestClient.getInstance().getProductService();
-        Call<Void> pCall = productService.addProduct(unknownEan, null, type);
-        pCall.enqueue(this);
+        FoodshipJobManager.getInstance(getActivity().getApplicationContext()).addJobInBackground(new SendProductTypeJob(unknownEan, type));
 
     }
 
@@ -130,34 +127,9 @@ public class UnknownFoodDialog extends DialogFragment implements Callback {
         super.onStop();
     }
 
-    /**
-     * Invoked for a received HTTP response.
-     * <p>
-     * Note: An HTTP response may still indicate an application-level failure such as a 404 or 500.
-     * Call {@link retrofit2.Response#isSuccessful()} to determine if the response indicates success.
-     *
-     * @param call
-     * @param response
-     */
-    @Override
-    public void onResponse(Call call, retrofit2.Response response) {
-        if (response.isSuccessful()) {
-            Log.d(TAG, "onResponse: Added Product!");
-        } else {
-            Log.d(TAG, "onResponse: Could not add product: " + response.code());
-        }
-    }
-
-    /**
-     * Invoked when a network exception occurred talking to the server or when an unexpected
-     * exception occurred creating the request or processing the response.
-     *
-     * @param call
-     * @param t
-     */
-    @Override
-    public void onFailure(Call call, Throwable t) {
-
+    public void setNoInternet() {
+        TextView text = (TextView) getView().findViewById(R.id.unknownTextview);
+        text.setText(R.string.set_food_type2);
     }
 
     private class FoodTypeFilterAdapter extends SimpleCursorAdapter {

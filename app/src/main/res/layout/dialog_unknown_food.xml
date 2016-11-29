@@ -9,6 +9,7 @@
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/unknownTextview"
             android:text="@string/set_food_type"/>
     <AutoCompleteTextView
             android:layout_width="match_parent"

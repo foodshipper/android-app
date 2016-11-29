@@ -12,7 +12,6 @@ import android.widget.TextView;
 import de.foodshippers.foodship.R;
 import de.foodshippers.foodship.api.model.Product;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -69,7 +68,7 @@ public class GridViewAdapter extends BaseAdapter implements FoodViewReFresher.On
             holder = (ViewHolder) row.getTag();
         }
         if (data.size() == 0) {
-            holder.imageTitle.setText("Test");
+            holder.imageTitle.setText("No Element");
             Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
             Bitmap bmp = Bitmap.createBitmap(100, 100, conf);
             holder.image.setImageBitmap(bmp);

@@ -20,8 +20,8 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import de.foodshippers.foodship.FoodFragment.FoodViewFragment;
-import de.foodshippers.foodship.FoodFragment.FoodViewReFresher;
 import de.foodshippers.foodship.FoodFragment.GridViewAdapter;
+import de.foodshippers.foodship.api.AddUserFoodJob;
 import de.foodshippers.foodship.api.FoodshipJobManager;
 import de.foodshippers.foodship.api.RestClient;
 import de.foodshippers.foodship.api.model.Product;
@@ -194,15 +194,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResponse(Call<Product> call, Response<Product> response) {
         Log.d(TAG, "onResponse: Got Response");
-        if (call.request().url().toString().contains("items")) {
-            Toast.makeText(getApplicationContext(), "und erfolgreich Hinzugefügt", Toast.LENGTH_LONG).show();
-            FoodViewReFresher.getInstance(getApplicationContext()).refreshFood();
-        } else if (response.isSuccessful()) {
+        //Hinzufügen
+        if (call.request().url().toString().contains("product") && response.isSuccessful()) {
             Log.d(TAG, "onResponse: Product is known");
             Product p = response.body();
-            Toast.makeText(getApplicationContext(), p.getType() + " with name " + p.getName(), Toast.LENGTH_LONG).show();
-            Call<Product> productCall = RestClient.getInstance().getFridgeService().addItem(p.getEan(), CommunicationManager.getUserId(getApplicationContext()));
-            productCall.enqueue(this);
+
+            FoodshipJobManager.getInstance(getApplicationContext()).addJobInBackground(new AddUserFoodJob(p.getEan()));
         } else {
             Log.d(TAG, "onResponse: Product is unknown or different error");
             if (response.code() == 404) {
@@ -227,6 +224,15 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void onFailure(Call<Product> call, Throwable t) {
-        Log.d(TAG, "onFailure: Got Failure");
+        if (call.request().url().toString().contains("product")) {
+            Log.d(TAG, "No Internet while testing if Product is known");
+            List<String> pathNames = call.request().url().encodedPathSegments();
+            String ean = pathNames.get(pathNames.size() - 1);
+            UnknownFoodDialog newFragment = UnknownFoodDialog.newInstance(ean);
+            newFragment.setNoInternet();
+            newFragment.show(getFragmentManager(), "dialog");
+        } else {
+            Log.d(TAG, "onFailure: Got Failure");
+        }
     }
 }
