@@ -3,11 +3,13 @@ package de.foodshippers.foodship.api.model;
 import com.google.gson.annotations.SerializedName;
 import org.parceler.Parcel;
 
+import java.io.Serializable;
+
 /**
  * Created by soenke on 21.11.16.
  */
 @Parcel
-public class Product {
+public class Product implements Serializable{
 
     private static final String TAG = Product.class.getSimpleName();
 
