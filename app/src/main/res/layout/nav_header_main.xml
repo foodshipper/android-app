@@ -19,10 +19,17 @@
         android:id="@+id/imageView" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Foodship"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/nav_header_vertical_spacing"
+            android:id="@+id/hello_x"
+            android:text="@string/hello_x"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
 </LinearLayout>

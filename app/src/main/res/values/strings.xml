@@ -23,8 +23,6 @@
 
     <string name="reset_location">Reset Location</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="unknown_food_dialog_title">Add Food</string>
     <string name="alert_dialog_ok">Add</string>
     <string name="alert_dialog_cancel">Cancel</string>
@@ -33,4 +31,5 @@
     <string name="not_yet_btn">Not yet</string>
     <string name="name">Name</string>
     <string name="thanks_name">Thanks %1$s! Now you just have to add your home location</string>
+    <string name="hello_x">Welcome %1$s</string>
 </resources>

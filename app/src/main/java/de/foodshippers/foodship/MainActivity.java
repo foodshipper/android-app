@@ -2,7 +2,9 @@ package de.foodshippers.foodship;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -16,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -67,6 +70,15 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+
+
+        //Set name
+        View headerLayout = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0); // 0-index header#
+        TextView helloUser = (TextView) headerLayout.findViewById(R.id.hello_x);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        helloUser.setText(getString(R.string.hello_x, sharedPreferences.getString("name", "")));
+
 
         // DrawerToggle
 
