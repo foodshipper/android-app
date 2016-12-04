@@ -1,11 +1,12 @@
 package de.foodshippers.foodship.FoodFragment;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import de.foodshippers.foodship.CommunicationManager;
+import de.foodshippers.foodship.Utils;
 import de.foodshippers.foodship.api.RestClient;
 import de.foodshippers.foodship.api.model.Product;
 import de.foodshippers.foodship.api.service.FridgeService;
@@ -14,7 +15,6 @@ import de.foodshippers.foodship.db.FoodshipDbHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import android.app.Activity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -118,7 +118,7 @@ public class FoodViewDataBase implements Callback<Product[]> {
 
     public void refreshFood() {
         FridgeService frides = RestClient.getInstance().getFridgeService();
-        Call<Product[]> items = frides.getItems(CommunicationManager.getUserId(c));
+        Call<Product[]> items = frides.getItems(Utils.getUserId(c));
         items.enqueue(this);
     }
 
