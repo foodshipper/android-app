@@ -6,17 +6,21 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import com.google.firebase.iid.FirebaseInstanceId;
+import de.foodshippers.foodship.api.FoodshipJobManager;
+import de.foodshippers.foodship.api.SetUserFirebaseTokenJob;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class DeveloperFragment extends Fragment {
-
+    private static final String TAG = "DeveloperFragment";
 
     public DeveloperFragment() {
         // Required empty public constructor
@@ -50,6 +54,18 @@ public class DeveloperFragment extends Fragment {
                 SplashActivity.downloadFoodTypes(getActivity().getApplicationContext(),false);
             }
         });
+
+        Button sendFirebaseToken = (Button) v.findViewById(R.id.sendFirebaseToken);
+        sendFirebaseToken.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String token = FirebaseInstanceId.getInstance().getToken();
+                Log.d(TAG, "onClick: Token: " + token);
+                FoodshipJobManager.getInstance(getActivity()).addJobInBackground(new SetUserFirebaseTokenJob(CommunicationManager.getUserId(getActivity()), token));
+
+            }
+        });
+
         return v;
     }
 
