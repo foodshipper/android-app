@@ -17,12 +17,12 @@ public abstract class SimpleNetworkJob extends Job {
     protected final String TAG;
 
 
-    private SimpleNetworkJob(Params param, Class TagClass) {
+    protected SimpleNetworkJob(Params param, Class TagClass) {
         super(param);
         TAG = TagClass.getSimpleName();
     }
 
-    private SimpleNetworkJob(Class TagClass) {
+    protected SimpleNetworkJob(Class TagClass) {
         this(new Params(0).setRequiresNetwork(true).setPersistent(true), TagClass);
     }
 
