@@ -15,9 +15,9 @@ import retrofit2.Call;
  */
 public class SendProductTypeJob extends SimpleNetworkJob {
     private final String ean;
-    private final String type;
+    private final int type;
 
-    public SendProductTypeJob(String ean, String Type) {
+    public SendProductTypeJob(String ean, int Type) {
         super(new Params(0).setPersistent(true).requireNetwork().addTags("TYPE-".concat(ean)), SendProductTypeJob.class);
         this.ean = ean;
         this.type = Type;

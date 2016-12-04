@@ -14,15 +14,15 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
+import android.widget.*;
 import de.foodshippers.foodship.api.FoodshipJobManager;
 import de.foodshippers.foodship.api.jobs.SendProductTypeJob;
+import de.foodshippers.foodship.api.model.Type;
 import de.foodshippers.foodship.db.FoodshipContract;
 import de.foodshippers.foodship.db.FoodshipDbHelper;
 
+import static android.provider.BaseColumns._ID;
+import static de.foodshippers.foodship.db.FoodshipContract.ProductTypeTable.CN_ID;
 import static de.foodshippers.foodship.db.FoodshipContract.ProductTypeTable.CN_NAME;
 
 
@@ -33,8 +33,7 @@ public class UnknownFoodDialog extends DialogFragment {
     private boolean noInternet = false;
     private Button mPositiveBtn = null;
 
-
-    public static UnknownFoodDialog newInstance(String ean) {
+    static UnknownFoodDialog newInstance(String ean) {
         UnknownFoodDialog fragment = new UnknownFoodDialog();
         Bundle args = new Bundle();
         args.putString(ARG_EAN, ean);
@@ -42,7 +41,7 @@ public class UnknownFoodDialog extends DialogFragment {
         return fragment;
     }
 
-    public static UnknownFoodDialog newInstance(String ean, boolean nointernnet) {
+    static UnknownFoodDialog newInstance(String ean, boolean nointernnet) {
         UnknownFoodDialog fragment = newInstance(ean);
         fragment.setNoInternet(nointernnet);
         return fragment;
@@ -125,7 +124,13 @@ public class UnknownFoodDialog extends DialogFragment {
 
     public void doPositiveClick(String type) {
         Log.d(TAG, "doPositiveClick: Add EAN with type " + type);
-        FoodshipJobManager.getInstance(getActivity().getApplicationContext()).addJobInBackground(new SendProductTypeJob(unknownEan, type));
+        Type t = Type.getTypeFromName(getActivity(), type);
+        if (t == null) {
+            Log.e(TAG, "doPositiveClick: Invalid type");
+            Toast.makeText(getActivity(), R.string.invalidType, Toast.LENGTH_LONG).show();
+            return;
+        }
+        FoodshipJobManager.getInstance(getActivity().getApplicationContext()).addJobInBackground(new SendProductTypeJob(unknownEan, t.getId()));
 
     }
 
@@ -140,6 +145,10 @@ public class UnknownFoodDialog extends DialogFragment {
 
     public void setNoInternet(boolean noInternet) {
         this.noInternet = noInternet;
+    }
+
+    private void onFoodTypeSent() {
+        Log.d(TAG, "onFoodTypeSent: Type sent successfully");
     }
 
     private class FoodTypeFilterAdapter extends SimpleCursorAdapter {
@@ -164,7 +173,7 @@ public class UnknownFoodDialog extends DialogFragment {
                 filter = constraint.toString();
             }
             Cursor query = mDb.query(FoodshipContract.ProductTypeTable.TABLE_NAME,
-                    new String[]{FoodshipContract.ProductTypeTable._ID, CN_NAME},
+                    new String[]{_ID, CN_ID, CN_NAME},
                     CN_NAME + " LIKE '%' || ? || '%' OR " + CN_NAME + " = ? ",
                     new String[]{filter, "undefined"},
                     null,
@@ -176,7 +185,7 @@ public class UnknownFoodDialog extends DialogFragment {
 
         public boolean isKnownType(String type) {
             Cursor query = mDb.query(FoodshipContract.ProductTypeTable.TABLE_NAME,
-                    new String[]{FoodshipContract.ProductTypeTable._ID, CN_NAME},
+                    new String[]{_ID, CN_NAME},
                     CN_NAME + " = ? ",
                     new String[]{type},
                     null,
@@ -186,9 +195,5 @@ public class UnknownFoodDialog extends DialogFragment {
             query.close();
             return result;
         }
-    }
-
-    private void onFoodTypeSent() {
-        Log.d(TAG, "onFoodTypeSent: Type sent successfully");
     }
 }

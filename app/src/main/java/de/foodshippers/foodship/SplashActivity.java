@@ -10,11 +10,14 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import de.foodshippers.foodship.api.RestClient;
+import de.foodshippers.foodship.api.model.Type;
 import de.foodshippers.foodship.api.service.TypeService;
 import de.foodshippers.foodship.db.FoodshipContract;
 import de.foodshippers.foodship.db.FoodshipDbHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
+
+import java.util.Arrays;
 
 /**
  * Created by hannes on 15.11.16.
@@ -50,15 +53,18 @@ public class SplashActivity extends AppCompatActivity implements InitialSetupFra
 
     public static void downloadFoodTypes(final Context c, boolean initial) {
         TypeService typeService = RestClient.getInstance().getTypeService();
-        Call<String[]> gettypes = typeService.gettypes();
-        gettypes.enqueue(new Callback<String[]>() {
+        Call<Type[]> gettypes = typeService.gettypes();
+        gettypes.enqueue(new Callback<Type[]>() {
             @Override
-            public void onResponse(Call<String[]> call, retrofit2.Response<String[]> response) {
+            public void onResponse(Call<Type[]> call, retrofit2.Response<Type[]> response) {
                 SQLiteDatabase typeDatabase = new FoodshipDbHelper(c).getWritableDatabase();
-                typeDatabase.execSQL("DELETE From ".concat(FoodshipContract.ProductTypeTable.TABLE_NAME));
+                typeDatabase.execSQL("DELETE FROM " + FoodshipContract.ProductTypeTable.TABLE_NAME);
                 ContentValues values = new ContentValues();
-                for (String type : response.body()) {
-                    values.put(FoodshipContract.ProductTypeTable.CN_NAME, type);
+                for (Type t : response.body()) {
+                    values.put(FoodshipContract.ProductTypeTable.CN_ID, t.getId());
+                    values.put(FoodshipContract.ProductTypeTable.CN_NAME, t.getName());
+                    values.put(FoodshipContract.ProductTypeTable.CN_CATEGORY, t.getCategory());
+                    values.put(FoodshipContract.ProductTypeTable.CN_IMAGEURL, t.getImageUrl());
                     typeDatabase.insert(FoodshipContract.ProductTypeTable.TABLE_NAME, FoodshipContract.ProductTypeTable.CN_NAME, values);
                 }
                 Log.d(TAG, "Types Updated");
@@ -70,8 +76,8 @@ public class SplashActivity extends AppCompatActivity implements InitialSetupFra
             }
 
             @Override
-            public void onFailure(Call<String[]> call, Throwable t) {
-                Log.d(TAG, "No internet or api down :|" + t.getMessage() + t.getStackTrace());
+            public void onFailure(Call<Type[]> call, Throwable t) {
+                Log.d(TAG, "No internet or api down :|" + t.getMessage() + Arrays.toString(t.getStackTrace()));
             }
         });
 
