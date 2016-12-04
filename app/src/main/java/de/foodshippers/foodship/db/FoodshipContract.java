@@ -28,10 +28,17 @@ public final class FoodshipContract {
     public static final class ProductTypeTable implements BaseColumns {
         public static final String TABLE_NAME = "product_types";
         public static final String CN_NAME = "name";
+        public static final String CN_ID = "id";
+        public static final String CN_CATEGORY = "category";
+        public static final String CN_IMAGEURL = "imageurl";
 
         public static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + " (" +
                 ProductTypeTable._ID + " INTEGER PRIMARY KEY," +
-                ProductTypeTable.CN_NAME + " TEXT)";
+                ProductTypeTable.CN_ID + " INTEGER," +
+                ProductTypeTable.CN_NAME + " TEXT," +
+                ProductTypeTable.CN_CATEGORY + " TEXT," +
+                ProductTypeTable.CN_IMAGEURL + " TEXT" +
+                ")";
 
         public static final String SQL_DELETE = "DROP TABLE " + TABLE_NAME;
 

@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import de.foodshippers.foodship.R;
 import de.foodshippers.foodship.api.model.Product;
+import de.foodshippers.foodship.api.model.Type;
 
 import java.util.List;
 
@@ -74,7 +75,8 @@ public class GridViewAdapter extends BaseAdapter implements FoodViewDataBase.OnF
             return row;
         } else {
             Product item = data.get(position);
-            holder.imageTitle.setText(item.getType());
+            Type t = Type.getTypeFromId(context, item.getType());
+            holder.imageTitle.setText(String.valueOf(t.getName()));
             Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
             Bitmap bmp = Bitmap.createBitmap(100, 100, conf);
             holder.image.setImageBitmap(bmp);

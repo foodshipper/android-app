@@ -14,7 +14,7 @@ public class Product implements Serializable{
     private static final String TAG = Product.class.getSimpleName();
 
     @SerializedName("type")
-    private String type;
+    private int type;
 
     @SerializedName("ean")
     private String ean;
@@ -26,18 +26,18 @@ public class Product implements Serializable{
 
     }
 
-    public Product(String name, String ean, String type) {
+    public Product(String name, String ean, int type) {
         setEan(ean);
         setName(name);
         setType(type);
     }
 
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 

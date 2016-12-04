@@ -25,7 +25,7 @@ public class FoodItem {
     }
 
     public String getTitle() {
-        return p.getType();
+        return String.valueOf(p.getType());
     }
 
     public void setP(Product p) {

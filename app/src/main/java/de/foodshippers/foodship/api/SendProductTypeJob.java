@@ -15,13 +15,13 @@ import retrofit2.Call;
  */
 public class SendProductTypeJob extends Job {
     private final String ean;
-    private final String type;
-    private static final String TAG = AddUserFoodJob.class.getSimpleName();
+    private final int type;
+    private static final String TAG = SendProductTypeJob.class.getSimpleName();
 
-    public SendProductTypeJob(String ean, String Type) {
+    public SendProductTypeJob(String ean, int type) {
         super(new Params(0).setPersistent(true).requireNetwork());
         this.ean = ean;
-        this.type = Type;
+        this.type = type;
     }
 
 

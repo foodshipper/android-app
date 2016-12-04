@@ -16,5 +16,5 @@ public interface ProductService {
     Call<Product> getProduct(@Path("ean") String ean);
 
     @PUT("/v1/product/{ean}")
-    Call<Void> addProduct(@Path("ean") String ean, @Query("name") String name, @Query("type") String type);
+    Call<Void> addProduct(@Path("ean") String ean, @Query("name") String name, @Query("type") int type);
 }
