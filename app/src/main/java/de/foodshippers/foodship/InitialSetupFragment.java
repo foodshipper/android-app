@@ -22,8 +22,8 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import de.foodshippers.foodship.api.FoodshipJobManager;
-import de.foodshippers.foodship.api.SetUserLocationJob;
-import de.foodshippers.foodship.api.SetUserNameJob;
+import de.foodshippers.foodship.api.jobs.SetUserLocationJob;
+import de.foodshippers.foodship.api.jobs.SetUserNameJob;
 
 import static android.app.Activity.RESULT_OK;
 

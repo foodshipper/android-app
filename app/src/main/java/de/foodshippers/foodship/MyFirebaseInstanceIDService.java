@@ -4,7 +4,7 @@ import android.util.Log;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import de.foodshippers.foodship.api.FoodshipJobManager;
-import de.foodshippers.foodship.api.SetUserFirebaseTokenJob;
+import de.foodshippers.foodship.api.jobs.SetUserFirebaseTokenJob;
 
 /**
  * Created by soenke on 04.12.16.

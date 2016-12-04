@@ -19,7 +19,7 @@ import android.widget.Button;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import de.foodshippers.foodship.api.FoodshipJobManager;
-import de.foodshippers.foodship.api.SendProductTypeJob;
+import de.foodshippers.foodship.api.jobs.SendProductTypeJob;
 import de.foodshippers.foodship.db.FoodshipContract;
 import de.foodshippers.foodship.db.FoodshipDbHelper;
 
@@ -31,7 +31,7 @@ public class UnknownFoodDialog extends DialogFragment {
     private static final String TAG = "UnknownFoodDialog";
     private String unknownEan;
     private boolean noInternet = false;
-    Button mPositiveBtn = null;
+    private Button mPositiveBtn = null;
 
 
     public static UnknownFoodDialog newInstance(String ean) {

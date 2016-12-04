@@ -1,4 +1,4 @@
-package de.foodshippers.foodship.api;
+package de.foodshippers.foodship.api.jobs;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -6,37 +6,34 @@ import android.util.Log;
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
-import com.birbit.android.jobqueue.TagConstraint;
-import de.foodshippers.foodship.FoodFragment.FoodViewDataBase;
-import de.foodshippers.foodship.api.model.Product;
+import de.foodshippers.foodship.api.ServerErrorThrowable;
 import retrofit2.Call;
 
 /**
- * Created by hannes on 29.11.16.
+ * Created by hannes on 04.12.16.
  */
-public class SendProductTypeJob extends Job {
-    private final String ean;
-    private final String type;
-    private static final String TAG = SendProductTypeJob.class.getSimpleName();
+public abstract class SimpleNetworkJob extends Job {
 
-    public SendProductTypeJob(String ean, String Type) {
-        super(new Params(0).setPersistent(true).requireNetwork().addTags("TYPE-".concat(ean)));
-        this.ean = ean;
-        this.type = Type;
+    protected final String TAG;
+
+
+    private SimpleNetworkJob(Params param, Class TagClass) {
+        super(param);
+        TAG = TagClass.getSimpleName();
     }
 
+    private SimpleNetworkJob(Class TagClass) {
+        this(new Params(0).setRequiresNetwork(true).setPersistent(true), TagClass);
+    }
 
     @Override
     public void onAdded() {
-        Log.d(TAG, "ADDED");
-        FoodshipJobManager.getInstance(getApplicationContext()).cancelJobsInBackground(null, TagConstraint.ANY, "DELETE-".concat(ean));
-        //Hack
-        FoodViewDataBase.getInstance(getApplicationContext()).addFood(new Product("", ean, type));
+
     }
 
     @Override
     public void onRun() throws Throwable {
-        Call call = RestClient.getInstance().getProductService().addProduct(this.ean, "", this.type);
+        Call call = getAPICall();
         retrofit2.Response response = call.execute();
         if (!response.isSuccessful()) {
             if (response.code() >= 400 && response.code() < 500) {
@@ -46,14 +43,21 @@ public class SendProductTypeJob extends Job {
             }
         } else {
             Log.d(TAG, "onRun: Call was successfull!");
-            FoodshipJobManager.getInstance(getApplicationContext()).addJobInBackground(new AddUserFoodJob(new Product("", ean, type)));
+            onSuccessFullRun();
         }
+    }
+
+    protected abstract Call getAPICall();
+
+    protected void onSuccessFullRun() {
+
     }
 
     @Override
     protected void onCancel(int cancelReason, @Nullable Throwable throwable) {
-        Log.d(TAG, "Ich sterbe :| ".concat(ean));
+        Log.d(TAG, "Ich sterbe :| ");
     }
+
 
     @Override
     protected RetryConstraint shouldReRunOnThrowable(@NonNull Throwable throwable, int runCount, int maxRunCount) {
