@@ -61,7 +61,7 @@ public class DeveloperFragment extends Fragment {
             public void onClick(View view) {
                 String token = FirebaseInstanceId.getInstance().getToken();
                 Log.d(TAG, "onClick: Token: " + token);
-                FoodshipJobManager.getInstance(getActivity()).addJobInBackground(new SetUserFirebaseTokenJob(CommunicationManager.getUserId(getActivity()), token));
+                FoodshipJobManager.getInstance(getActivity()).addJobInBackground(new SetUserFirebaseTokenJob(Utils.getUserId(getActivity()), token));
 
             }
         });

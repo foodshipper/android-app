@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity
         mManager = FoodshipJobManager.getInstance(getApplicationContext());
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        Log.d(TAG, CommunicationManager.getUserId(getApplicationContext()));
+        Log.d(TAG, Utils.getUserId(getApplicationContext()));
 
         //Floating Button
 
@@ -190,7 +190,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        NetworkChangeReceiver.unregister();
     }
 
 

@@ -6,8 +6,8 @@ import android.util.Log;
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
-import de.foodshippers.foodship.CommunicationManager;
 import de.foodshippers.foodship.FoodFragment.FoodViewDataBase;
+import de.foodshippers.foodship.Utils;
 import de.foodshippers.foodship.api.model.Product;
 import retrofit2.Call;
 
@@ -35,7 +35,7 @@ public class AddUserFoodJob extends Job {
 
     @Override
     public void onRun() throws Throwable {
-        Call call = RestClient.getInstance().getFridgeService().addItem(p.getEan(), CommunicationManager.getUserId(getApplicationContext()));
+        Call call = RestClient.getInstance().getFridgeService().addItem(p.getEan(), Utils.getUserId(getApplicationContext()));
         retrofit2.Response response = call.execute();
         if (!response.isSuccessful()) {
             if (response.code() >= 400 && response.code() < 500) {

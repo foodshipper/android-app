@@ -1,6 +1,8 @@
 package de.foodshippers.foodship;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.provider.Settings;
 
 /**
  * Created by soenke on 19.11.16.
@@ -18,4 +20,7 @@ public class Utils {
         return Double.longBitsToDouble(prefs.getLong(key, Double.doubleToLongBits(defaultValue)));
     }
 
+    public static String getUserId(Context c) {
+        return Settings.Secure.getString(c.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
 }

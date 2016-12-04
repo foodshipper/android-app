@@ -21,6 +21,6 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
-        FoodshipJobManager.getInstance(getApplicationContext()).addJobInBackground(new SetUserFirebaseTokenJob(CommunicationManager.getUserId(getApplicationContext()), refreshedToken));
+        FoodshipJobManager.getInstance(getApplicationContext()).addJobInBackground(new SetUserFirebaseTokenJob(Utils.getUserId(getApplicationContext()), refreshedToken));
     }
 }
