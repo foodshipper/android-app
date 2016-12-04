@@ -64,7 +64,7 @@ public class InitialSetupFragment extends Fragment {
                         .getDefaultSharedPreferences(getContext().getApplicationContext()).edit();
                 sharedPreferences.putString("name", name);
                 sharedPreferences.apply();
-                FoodshipJobManager.getInstance(getActivity()).addJobInBackground(new SetUserNameJob(CommunicationManager.getUserId(getActivity()), name));
+                FoodshipJobManager.getInstance(getActivity()).addJobInBackground(new SetUserNameJob(Utils.getUserId(getActivity()), name));
 
 
                 Toast.makeText(getActivity(), getString(R.string.thanks_name, name), Toast.LENGTH_LONG).show();
@@ -131,7 +131,7 @@ public class InitialSetupFragment extends Fragment {
                 sharedPreferences.apply();
 
                 Context context = getActivity().getApplicationContext();
-                FoodshipJobManager.getInstance(context).addJobInBackground(new SetUserLocationJob(CommunicationManager.getUserId(context), latLng.latitude, latLng.longitude));
+                FoodshipJobManager.getInstance(context).addJobInBackground(new SetUserLocationJob(Utils.getUserId(context), latLng.latitude, latLng.longitude));
                 mListener.onFragmentInteraction();
             }
         } else {

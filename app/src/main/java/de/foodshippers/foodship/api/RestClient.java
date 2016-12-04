@@ -15,6 +15,7 @@ public class RestClient {
     private static final String BASE_URL = "https://api.foodshipper.de/";
     private ProductService productService;
     private UserLocationService userLocationService;
+    private UserFirebaseTokenService userFirebaseTokenService;
     private UserNameService userNameService;
     private TypeService typeService;
     private FridgeService fridgeService;
@@ -36,6 +37,7 @@ public class RestClient {
         this.typeService = retrofit.create(TypeService.class);
         this.fridgeService = retrofit.create(FridgeService.class);
         this.userNameService = retrofit.create(UserNameService.class);
+        this.userFirebaseTokenService = retrofit.create(UserFirebaseTokenService.class);
     }
 
     public static RestClient getInstance() {
@@ -63,5 +65,9 @@ public class RestClient {
 
     public UserNameService getUserNameService() {
         return userNameService;
+    }
+
+    public UserFirebaseTokenService getUserFirebaseTokenService() {
+        return userFirebaseTokenService;
     }
 }
