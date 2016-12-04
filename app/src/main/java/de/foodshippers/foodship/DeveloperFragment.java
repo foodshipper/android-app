@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import com.google.firebase.iid.FirebaseInstanceId;
 import de.foodshippers.foodship.api.FoodshipJobManager;
-import de.foodshippers.foodship.api.SetUserFirebaseTokenJob;
+import de.foodshippers.foodship.api.jobs.SetUserFirebaseTokenJob;
 
 
 /**

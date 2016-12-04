@@ -24,7 +24,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import de.foodshippers.foodship.FoodFragment.FoodViewFragment;
 import de.foodshippers.foodship.FoodFragment.GridViewAdapter;
-import de.foodshippers.foodship.api.AddUserFoodJob;
+import de.foodshippers.foodship.api.jobs.AddUserFoodJobSimple;
 import de.foodshippers.foodship.api.FoodshipJobManager;
 import de.foodshippers.foodship.api.RestClient;
 import de.foodshippers.foodship.api.model.Product;
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "onResponse: Product is known");
             Product p = response.body();
 
-            FoodshipJobManager.getInstance(getApplicationContext()).addJobInBackground(new AddUserFoodJob(p));
+            FoodshipJobManager.getInstance(getApplicationContext()).addJobInBackground(new AddUserFoodJobSimple(p));
         } else {
             Log.d(TAG, "onResponse: Product is unknown or different error");
             if (response.code() == 404) {

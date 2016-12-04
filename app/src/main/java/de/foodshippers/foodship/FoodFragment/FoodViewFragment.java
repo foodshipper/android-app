@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import de.foodshippers.foodship.R;
-import de.foodshippers.foodship.api.DeleteUserFoodJob;
+import de.foodshippers.foodship.api.jobs.DeleteUserFoodJobSimple;
 import de.foodshippers.foodship.api.FoodshipJobManager;
 import de.foodshippers.foodship.api.model.Product;
 
@@ -44,7 +44,7 @@ public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnR
                                     int position, long id) {
                 Object itemAtPosition = parent.getItemAtPosition(position);
                 if (itemAtPosition != null) {
-                    FoodshipJobManager.getInstance(getActivity().getApplicationContext()).addJobInBackground(new DeleteUserFoodJob((Product) itemAtPosition));
+                    FoodshipJobManager.getInstance(getActivity().getApplicationContext()).addJobInBackground(new DeleteUserFoodJobSimple((Product) itemAtPosition));
                 }
 //                Toast.makeText(getActivity(), "" + position + v.findViewById(id) + "Hannes" + id,
 //                        Toast.LENGTH_SHORT).show();
