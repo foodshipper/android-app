@@ -3,6 +3,7 @@ package de.foodshippers.foodship.api.model;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import com.google.gson.annotations.SerializedName;
 import de.foodshippers.foodship.db.FoodshipContract;
 import de.foodshippers.foodship.db.FoodshipDbHelper;
 
@@ -15,6 +16,7 @@ public class Type {
     int id;
     String name;
     String category;
+    @SerializedName("image")
     String imageUrl;
 
     public Type(int id, String name, String category, String imageUrl) {
@@ -73,6 +75,11 @@ public class Type {
                     c.getString(c.getColumnIndex(CN_CATEGORY)),
                     c.getString(c.getColumnIndex(CN_IMAGEURL)));
         }
+    }
+
+    @Override
+    public String toString() {
+        return " id:" + id + " name: " + name + " cat: " + category + " url: " + imageUrl;
     }
 
     public static Type getTypeFromId(Context context, int id) {
