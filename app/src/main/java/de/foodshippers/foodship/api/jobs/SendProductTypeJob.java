@@ -32,6 +32,10 @@ public class SendProductTypeJob extends SimpleNetworkJob {
         FoodViewDataBase.getInstance(getApplicationContext()).addFood(new Product("", ean, type));
     }
 
+    @Override
+    protected void onSuccessFullRun() {
+        FoodshipJobManager.getInstance(getApplicationContext()).addJobInBackground(new AddUserFoodJobSimple(new Product("", ean, type)));
+    }
 
     @Override
     protected Call getAPICall() {
