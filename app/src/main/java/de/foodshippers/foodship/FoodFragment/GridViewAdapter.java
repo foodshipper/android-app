@@ -22,12 +22,14 @@ public class GridViewAdapter extends BaseAdapter implements FoodViewDataBase.OnF
     private Context context;
     private int layoutResourceId;
     private List<Product> data;
+    private ImageManager imagman;
 
     public GridViewAdapter(Context context, int layoutResourceId) {
         super();
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = FoodViewDataBase.getInstance(context).getFoodList();
+        this.imagman = ImageManager.getInstance(context);
     }
 
     @Override
@@ -79,7 +81,7 @@ public class GridViewAdapter extends BaseAdapter implements FoodViewDataBase.OnF
             holder.imageTitle.setText(String.valueOf(t.getName()));
             Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
             Bitmap bmp = Bitmap.createBitmap(100, 100, conf);
-            holder.image.setImageBitmap(bmp);
+            holder.image.setImageBitmap(imagman.loadImageFromStorage(Type.getTypeFromId(context, item.getType())));
             return row;
         }
     }
@@ -89,8 +91,8 @@ public class GridViewAdapter extends BaseAdapter implements FoodViewDataBase.OnF
         notifyDataSetChanged();
     }
 
-    static class ViewHolder {
-        TextView imageTitle;
-        ImageView image;
+    public static class ViewHolder {
+        public TextView imageTitle;
+        public ImageView image;
     }
 }

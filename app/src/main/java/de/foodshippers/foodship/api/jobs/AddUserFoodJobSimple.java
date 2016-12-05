@@ -5,10 +5,12 @@ import android.util.Log;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.TagConstraint;
 import de.foodshippers.foodship.FoodFragment.FoodViewDataBase;
+import de.foodshippers.foodship.FoodFragment.ImageManager;
 import de.foodshippers.foodship.Utils;
 import de.foodshippers.foodship.api.FoodshipJobManager;
 import de.foodshippers.foodship.api.RestClient;
 import de.foodshippers.foodship.api.model.Product;
+import de.foodshippers.foodship.api.model.Type;
 import retrofit2.Call;
 
 /**
@@ -27,8 +29,8 @@ public class AddUserFoodJobSimple extends SimpleNetworkJob {
 
     @Override
     public void onAdded() {
-        Log.d(TAG, "ADDED");
         FoodshipJobManager.getInstance(getApplicationContext()).cancelJobsInBackground(null, TagConstraint.ANY, "DELETE-".concat(p.getEan()));
+        ImageManager.getInstance(getApplicationContext()).downloadifNeeded(Type.getTypeFromId(getApplicationContext(), p.getType()));
         this.unique = FoodViewDataBase.getInstance(getApplicationContext()).addFood(p);
     }
 

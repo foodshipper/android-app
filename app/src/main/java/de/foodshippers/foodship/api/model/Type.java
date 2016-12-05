@@ -7,12 +7,14 @@ import com.google.gson.annotations.SerializedName;
 import de.foodshippers.foodship.db.FoodshipContract;
 import de.foodshippers.foodship.db.FoodshipDbHelper;
 
+import java.io.Serializable;
+
 import static de.foodshippers.foodship.db.FoodshipContract.ProductTypeTable.*;
 
 /**
  * Created by soenke on 04.12.16.
  */
-public class Type {
+public class Type implements Serializable{
     int id;
     String name;
     String category;

@@ -43,4 +43,5 @@ public final class FoodshipContract {
         public static final String SQL_DELETE = "DROP TABLE " + TABLE_NAME;
 
     }
+
 }
