@@ -1,6 +1,7 @@
 package de.foodshippers.foodship;
 
 import android.app.Fragment;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -75,7 +76,6 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-
         // DrawerToggle
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -88,7 +88,12 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         //Create initial fragment
-        if (savedInstanceState != null) {
+        System.out.println(getIntent().getStringExtra("Fragment"));
+        if (getIntent().getStringExtra("Fragment") != null) {
+            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            manager.cancel(getIntent().getIntExtra("Noti_ID", -1));
+            this.onNavigationItemSelected(R.id.nav_group);
+        } else if (savedInstanceState != null) {
             this.onNavigationItemSelected(savedInstanceState.getInt(CURRENT_VIEW_KEY, R.id.nav_groceries));
         } else {
             this.onNavigationItemSelected(R.id.nav_groceries);

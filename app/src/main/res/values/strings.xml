@@ -38,4 +38,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="triggerNotif">Trigger Notification</string>
     <string name="nav_group">Group</string>
+    <string name="accept_Invitation">Jop</string>
+    <string name="disline_Invation">Nope</string>
 </resources>
