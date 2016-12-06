@@ -2,10 +2,12 @@ package de.foodshippers.foodship;
 
 
 import android.app.Fragment;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import de.foodshippers.foodship.api.FoodshipJobManager;
 import de.foodshippers.foodship.api.jobs.SetUserFirebaseTokenJob;
 import de.foodshippers.foodship.api.jobs.TriggerInvitationJob;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 
 /**
@@ -52,7 +56,7 @@ public class DeveloperFragment extends Fragment {
         refreshFoodTypes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SplashActivity.downloadFoodTypes(getActivity().getApplicationContext(),false);
+                SplashActivity.downloadFoodTypes(getActivity().getApplicationContext(), false);
             }
         });
 
@@ -72,6 +76,23 @@ public class DeveloperFragment extends Fragment {
                 Log.d(TAG, "onClick: Token: " + token);
                 FoodshipJobManager.getInstance(getActivity()).addJobInBackground(new SetUserFirebaseTokenJob(Utils.getUserId(getActivity()), token));
 
+            }
+        });
+
+        Button sendTestNotification = (Button) v.findViewById(R.id.sendTestNotification);
+        sendTestNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(getActivity().getApplicationContext())
+                                .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark_normal)
+                                .setContentTitle("My notification")
+                                .setContentText("Hello World!");
+                NotificationManager mNotifyMgr =
+                        (NotificationManager) getActivity().getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+                int mNotificationId = 001;
+// Builds the notification and issues it.
+                mNotifyMgr.notify(mNotificationId, mBuilder.build());
             }
         });
 

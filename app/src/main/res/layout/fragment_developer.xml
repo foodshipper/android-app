@@ -32,6 +32,10 @@
             android:layout_height="wrap_content"
             android:text="Send Firebase Token"
             android:id="@+id/sendFirebaseToken"/>
+    <Button
+            android:text="sendTestNotification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/sendTestNotification"/>
 
 
 </LinearLayout>
