@@ -20,7 +20,7 @@ import java.net.HttpURLConnection;
  */
 public class DownloadImageJob extends Job {
 
-    private final Type typep;
+    private final Type ImageType;
 
 //    Problem:
 //    Was passiert wenn hier kein Internet ist?
@@ -28,8 +28,8 @@ public class DownloadImageJob extends Job {
 
 
     public DownloadImageJob(Type p) {
-        super(new Params(0).requireNetwork().requireNetwork());
-        this.typep = p;
+        super(new Params(0).singleInstanceBy(p.getImageUrl()).requireNetwork().requireNetwork());
+        this.ImageType = p;
     }
 
     @Override
@@ -39,13 +39,12 @@ public class DownloadImageJob extends Job {
 
     @Override
     public void onRun() throws Throwable {
-        ImageManager.getInstance(getApplicationContext()).saveToInternalStorage(typep, getBitmapFromURL(typep.getImageUrl()));
+        ImageManager.getInstance(getApplicationContext()).saveToInternalStorage(ImageType, getBitmapFromURL(ImageType.getImageUrl()));
 
     }
 
     @Override
     protected void onCancel(int cancelReason, @Nullable Throwable throwable) {
-
     }
 
     public Bitmap getBitmapFromURL(String src) {
