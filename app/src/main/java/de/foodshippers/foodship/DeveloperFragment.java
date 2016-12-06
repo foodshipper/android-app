@@ -14,6 +14,7 @@ import android.widget.Button;
 import com.google.firebase.iid.FirebaseInstanceId;
 import de.foodshippers.foodship.api.FoodshipJobManager;
 import de.foodshippers.foodship.api.jobs.SetUserFirebaseTokenJob;
+import de.foodshippers.foodship.api.jobs.TriggerInvitationJob;
 
 
 /**
@@ -52,6 +53,14 @@ public class DeveloperFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 SplashActivity.downloadFoodTypes(getActivity().getApplicationContext(),false);
+            }
+        });
+
+        Button triggerNotifBtn = (Button) v.findViewById(R.id.triggerInvitation);
+        triggerNotifBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FoodshipJobManager.getInstance(getActivity()).addJobInBackground(new TriggerInvitationJob(Utils.getUserId(getActivity()), true));
             }
         });
 

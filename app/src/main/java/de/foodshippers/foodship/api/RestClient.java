@@ -19,6 +19,12 @@ public class RestClient {
     private UserNameService userNameService;
     private TypeService typeService;
     private FridgeService fridgeService;
+
+    public TriggerInvitationService getTriggerInvitationService() {
+        return triggerInvitationService;
+    }
+
+    private TriggerInvitationService triggerInvitationService;
     private static RestClient instance = null;
 
 
@@ -38,6 +44,7 @@ public class RestClient {
         this.fridgeService = retrofit.create(FridgeService.class);
         this.userNameService = retrofit.create(UserNameService.class);
         this.userFirebaseTokenService = retrofit.create(UserFirebaseTokenService.class);
+        this.triggerInvitationService = retrofit.create(TriggerInvitationService.class);
     }
 
     public static RestClient getInstance() {

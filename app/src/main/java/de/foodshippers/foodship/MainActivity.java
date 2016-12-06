@@ -73,11 +73,15 @@ public class MainActivity extends AppCompatActivity
 
 
         //Set name
-        View headerLayout = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0); // 0-index header#
-        TextView helloUser = (TextView) headerLayout.findViewById(R.id.hello_x);
+        View headerLayout = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0); // 0-index header
+        if (headerLayout != null) {
+            TextView helloUser = (TextView) headerLayout.findViewById(R.id.hello_x);
+            if (helloUser != null) {
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                helloUser.setText(getString(R.string.hello_x, sharedPreferences.getString("name", "")));
+            }
+        }
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        helloUser.setText(getString(R.string.hello_x, sharedPreferences.getString("name", "")));
 
 
         // DrawerToggle
