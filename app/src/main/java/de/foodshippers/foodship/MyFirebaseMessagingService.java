@@ -49,10 +49,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(c)
-                        .addAction(R.drawable.ic_menu_camera, getString(R.string.accept_Invitation), pendingyes)
-                        .addAction(R.drawable.ic_menu_camera, getString(R.string.disline_Invation), pendingno)
+                        .addAction(R.drawable.ic_thumb_up_black_24dp, getString(R.string.accept_Invitation), pendingyes)
+                        .addAction(R.drawable.ic_do_not_disturb_black_24dp, getString(R.string.disline_Invation), pendingno)
                         .setDeleteIntent(pendingno)
-                        .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark_normal)
+                        .setSmallIcon(R.drawable.ic_restaurant_menu_white_24dp)
                         .setContentTitle("My notification")
                         .setContentText("Hello World!").setAutoCancel(true);
 
