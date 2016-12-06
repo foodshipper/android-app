@@ -43,9 +43,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         intendno,
                         PendingIntent.FLAG_CANCEL_CURRENT
                 );
-        intendno.putExtra("Noti_ID", mNotificationId);
-        intendyes.putExtra("Noti_ID", mNotificationId);
-        intendyes.putExtra("Fragment", "DinnerGroup");
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(c)
