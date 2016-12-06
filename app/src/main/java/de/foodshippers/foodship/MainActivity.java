@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity
     private final String CURRENT_VIEW_KEY = "currentView";
     private Fragment currentFragment;
     private static final String TAG = "MainActivity";
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity
 
         //Floating Button
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -164,16 +165,31 @@ public class MainActivity extends AppCompatActivity
         if (currentView != id) {
             currentView = id;
             if (id == R.id.nav_groceries) {
+                if (fab != null) {
+                    fab.setVisibility(View.VISIBLE);
+                }
                 Log.d(TAG, "onNavigationItemSelected: Selected Grocery View");
                 currentFragment = new FoodViewFragment();
             } else if (id == R.id.nav_dev) {
                 Log.d(TAG, "onNavigationItemSelected: Selected Developer View");
+                if (fab != null) {
+                    fab.setVisibility(View.GONE);
+                }
+
                 currentFragment = new DeveloperFragment();
             } else if (id == R.id.nav_group) {
                 Log.d(TAG, "onNavigationItemSelected: Selected Group View");
+                if (fab != null) {
+                    fab.setVisibility(View.GONE);
+                }
+
                 currentFragment = DinnerGroupFragment.newInstance(1);
             } else if (id == R.id.nav_contact) {
                 Log.d(TAG, "onNavigationItemSelected: Selected Contact View");
+                if (fab != null) {
+                    fab.setVisibility(View.GONE);
+                }
+
                 currentFragment = new ContactFragment();
             }
             getFragmentManager().beginTransaction().replace(R.id.main_placeholder, currentFragment).commit();
