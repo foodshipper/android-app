@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
-import de.foodshippers.foodship.FoodFragment.ImageManager;
+import de.foodshippers.foodship.Bilder.FoodImageManager;
 import de.foodshippers.foodship.api.ServerErrorThrowable;
 import de.foodshippers.foodship.api.model.Type;
 
@@ -39,7 +39,7 @@ public class DownloadImageJob extends Job {
 
     @Override
     public void onRun() throws Throwable {
-        ImageManager.getInstance(getApplicationContext()).saveToInternalStorage(ImageType, getBitmapFromURL(ImageType.getImageUrl()));
+        FoodImageManager.getInstance(getApplicationContext()).saveToInternalStorage(ImageType, getBitmapFromURL(ImageType.getImageUrl()));
 
     }
 

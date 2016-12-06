@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import de.foodshippers.foodship.Bilder.FoodImageManager;
 import de.foodshippers.foodship.R;
 import de.foodshippers.foodship.api.model.Product;
 import de.foodshippers.foodship.api.model.Type;
@@ -22,14 +23,14 @@ public class GridViewAdapter extends BaseAdapter implements FoodViewDataBase.OnF
     private Context context;
     private int layoutResourceId;
     private List<Product> data;
-    private ImageManager imagman;
+    private FoodImageManager imagman;
 
     public GridViewAdapter(Context context, int layoutResourceId) {
         super();
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.data = FoodViewDataBase.getInstance(context).getFoodList();
-        this.imagman = ImageManager.getInstance(context);
+        this.imagman = FoodImageManager.getInstance(context);
     }
 
     @Override

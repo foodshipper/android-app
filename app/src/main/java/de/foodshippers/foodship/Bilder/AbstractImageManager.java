@@ -1,4 +1,4 @@
-package de.foodshippers.foodship.FoodFragment;
+package de.foodshippers.foodship.Bilder;
 
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -13,27 +13,16 @@ import java.io.*;
 /**
  * Created by hannes on 05.12.16.
  */
-public class ImageManager {
+public abstract class AbstractImageManager {
 
-    private static ImageManager instance;
     private final Context AppContext;
     private final File ordner;
 
-    public static ImageManager getInstance(Context c) {
-        if (instance == null) {
-            synchronized (ImageManager.class) {
-                if (instance == null) {
-                    instance = new ImageManager(c);
-                }
-            }
-        }
-        return instance;
-    }
 
-    public ImageManager(Context c) {
+    public AbstractImageManager(Context c, String Ordner) {
         this.AppContext = c;
         ContextWrapper cw = new ContextWrapper(AppContext);
-        this.ordner = cw.getDir("foodpics", Context.MODE_PRIVATE);
+        this.ordner = cw.getDir(Ordner, Context.MODE_PRIVATE);
     }
 
     public void downloadifNeeded(Type p) {
