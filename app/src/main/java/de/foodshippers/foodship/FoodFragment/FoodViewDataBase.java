@@ -52,7 +52,6 @@ public class FoodViewDataBase implements Callback<Product[]> {
         notifyAllListeners();
         Cursor query = typeDatabase.query(FoodshipContract.ProductTable.TABLE_NAME, null, null, null, null, null, null);
         while (query.moveToNext()) {
-            Log.d(TAG, query.getString(0) + " " + query.getString(1) + " " + query.getString(2) + " " + query.getString(3));
         }
         Log.d(TAG, "Loaded Food from DataBase");
         query.close();
@@ -72,7 +71,6 @@ public class FoodViewDataBase implements Callback<Product[]> {
         foodList.clear();
         initialisiert = true;
         while (query.moveToNext()) {
-            Log.d(TAG, query.getString(0) + " " + query.getString(1) + " " + query.getString(2) + " " + query.getString(3));
             Product p = new Product("", query.getString(1), query.getInt(2));
             foodList.add(p);
         }
@@ -142,6 +140,7 @@ public class FoodViewDataBase implements Callback<Product[]> {
             foodList.add(p);
             notifyAllListeners();
             cursor.close();
+            typeDatabase.close();
             return true;
         }
     }
@@ -154,8 +153,12 @@ public class FoodViewDataBase implements Callback<Product[]> {
             typeDatabase.execSQL("DELETE From " + FoodshipContract.ProductTable.TABLE_NAME + " WHERE " + FoodshipContract.ProductTable.CN_EAN + " = " + p.getEan());
             loadFromDataBase();
             notifyAllListeners();
+            cursor.close();
+            typeDatabase.close();
             return true;
         } else {
+            cursor.close();
+            typeDatabase.close();
             return false;
         }
 

@@ -82,10 +82,12 @@ public class ImageManager {
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
             return b;
         } catch (FileNotFoundException e) {
+        } catch (Exception ex) {
+        } finally {
+            Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
+            Bitmap bmp = Bitmap.createBitmap(100, 100, conf);
+            return bmp;
         }
-        Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
-        Bitmap bmp = Bitmap.createBitmap(100, 100, conf);
-        return bmp;
     }
 
     private String getFileName(Type File) {
