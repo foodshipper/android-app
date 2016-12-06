@@ -40,12 +40,15 @@ public class ImageManager {
         if (p.getImageUrl() == null || p.getImageUrl().equals("")) {
             return;
         }
-        System.out.println(p.toString());
         File mypath = new File(this.ordner, getFileName(p));
         if (!mypath.exists()) {
-            FoodshipJobManager.getInstance(AppContext)
-                    .addJobInBackground(new DownloadImageJob(p));
+            togglNewJob(p);
         }
+    }
+
+    private void togglNewJob(Type p) {
+        FoodshipJobManager.getInstance(AppContext)
+                .addJobInBackground(new DownloadImageJob(p));
     }
 
     public void saveToInternalStorage(Type p, Bitmap bitmapImage) {
@@ -83,11 +86,12 @@ public class ImageManager {
             return b;
         } catch (FileNotFoundException e) {
         } catch (Exception ex) {
-        } finally {
-            Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
-            Bitmap bmp = Bitmap.createBitmap(100, 100, conf);
-            return bmp;
         }
+        togglNewJob(p);
+        Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
+        Bitmap bmp = Bitmap.createBitmap(100, 100, conf);
+        return bmp;
+
     }
 
     private String getFileName(Type File) {
