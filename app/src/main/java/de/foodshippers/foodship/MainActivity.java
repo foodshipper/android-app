@@ -17,19 +17,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import de.foodshippers.foodship.FoodFragment.FoodViewFragment;
-import de.foodshippers.foodship.FoodFragment.GridViewAdapter;
 import de.foodshippers.foodship.api.FoodshipJobManager;
 import de.foodshippers.foodship.api.RestClient;
 import de.foodshippers.foodship.api.jobs.AddUserFoodJobSimple;
 import de.foodshippers.foodship.api.model.Product;
 import de.foodshippers.foodship.api.service.ProductService;
-import de.foodshippers.foodship.db.FoodshipDbHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,20 +37,15 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Callback<Product> {
 
-    private GridView gridView;
-    private GridViewAdapter gridAdapter;
-    private FoodshipDbHelper databse;
     private int currentView;
     private final String CURRENT_VIEW_KEY = "currentView";
     private Fragment currentFragment;
     private static final String TAG = "MainActivity";
-    private FoodshipJobManager mManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mManager = FoodshipJobManager.getInstance(getApplicationContext());
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Log.d(TAG, Utils.getUserId(getApplicationContext()));
@@ -94,13 +86,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        //DateBase
-        databse = new FoodshipDbHelper(getApplicationContext());
-        //Communication Manager
-//        conMan = new CommunicationManager(getApplicationContext());
-//        //NetworkReceiver
-//        NetworkChangeReceiver.newInstance(conMan, getApplicationContext());
 
         //Create initial fragment
         if (savedInstanceState != null) {
@@ -179,6 +164,9 @@ public class MainActivity extends AppCompatActivity
             } else if (id == R.id.nav_dev) {
                 Log.d(TAG, "onNavigationItemSelected: Selected Developer View");
                 currentFragment = new DeveloperFragment();
+            } else if (id == R.id.nav_group) {
+                Log.d(TAG, "onNavigationItemSelected: Selected Group View");
+                currentFragment = DinnerGroupFragment.newInstance(1);
             } else if (id == R.id.nav_contact) {
                 Log.d(TAG, "onNavigationItemSelected: Selected Contact View");
                 currentFragment = new ContactFragment();

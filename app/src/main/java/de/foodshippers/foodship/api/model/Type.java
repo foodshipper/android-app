@@ -69,14 +69,17 @@ public class Type implements Serializable{
                 null,
                 null,
                 null);
-        if (!c.moveToFirst()) {
-            return null;
-        } else {
-            return new Type(c.getInt(c.getColumnIndex(CN_ID)),
+        Type result = null;
+        if (c.moveToFirst()) {
+            result = new Type(c.getInt(c.getColumnIndex(CN_ID)),
                     c.getString(c.getColumnIndex(CN_NAME)),
                     c.getString(c.getColumnIndex(CN_CATEGORY)),
                     c.getString(c.getColumnIndex(CN_IMAGEURL)));
+
         }
+        c.close();
+        db.close();
+        return result;
     }
 
     @Override
@@ -93,13 +96,16 @@ public class Type implements Serializable{
                 null,
                 null,
                 null);
-        if (!c.moveToFirst()) {
-            return null;
-        } else {
-            return new Type(c.getInt(c.getColumnIndex(CN_ID)),
+        Type result = null;
+        if (c.moveToFirst()) {
+            result = new Type(c.getInt(c.getColumnIndex(CN_ID)),
                     c.getString(c.getColumnIndex(CN_NAME)),
                     c.getString(c.getColumnIndex(CN_CATEGORY)),
                     c.getString(c.getColumnIndex(CN_IMAGEURL)));
+
         }
+        c.close();
+        db.close();
+        return result;
     }
 }

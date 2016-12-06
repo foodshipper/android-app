@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_margin="5dp"
+        app:cardBackgroundColor="@color/cardview_light_background">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+        <TextView
+                android:id="@+id/recipeBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="A really nice pizza with fresh champiogns and onions. Best made with rye flour!"
+                android:layout_below="@+id/recipeTitle"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/recipeImage"
+                android:layout_toLeftOf="@+id/recipeImage"/>
+
+        <TextView
+                android:id="@+id/recipeTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pizza Funghi"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+
+        <com.android.volley.toolbox.NetworkImageView
+                android:id="@+id/recipeImage"
+                android:layout_height="100dp"
+                android:layout_width="100dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"/>
+
+        <ImageButton
+                android:id="@+id/vetoBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_block_black_24dp"
+                android:layout_below="@+id/recipeImage"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+
+        <ImageButton
+                android:id="@+id/upvoteBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_thumb_up_black_24dp"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_below="@id/recipeImage"
+                android:layout_toLeftOf="@+id/vetoBtn"
+                android:layout_toStartOf="@+id/vetoBtn"/>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

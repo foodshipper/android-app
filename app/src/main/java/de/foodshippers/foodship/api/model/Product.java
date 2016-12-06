@@ -14,13 +14,13 @@ public class Product implements Serializable{
     private static final String TAG = Product.class.getSimpleName();
 
     @SerializedName("type")
-    private int type;
+    int type;
 
     @SerializedName("ean")
-    private String ean;
+    String ean;
 
     @SerializedName("name")
-    private String name;
+    String name;
 
     public Product() {
 

@@ -67,12 +67,8 @@ public class SplashActivity extends AppCompatActivity implements InitialSetupFra
                     values.put(FoodshipContract.ProductTypeTable.CN_IMAGEURL, t.getImageUrl());
                     typeDatabase.insert(FoodshipContract.ProductTypeTable.TABLE_NAME, FoodshipContract.ProductTypeTable.CN_NAME, values);
                 }
+                typeDatabase.close();
                 Log.d(TAG, "Types Updated");
-//                Cursor query = typeDatabase.query(FoodshipContract.ProductTypeTable.TABLE_NAME, null, null, null, null, null, null);
-//                System.out.println(query.getCount());
-//                while (query.moveToNext()) {
-//                    System.out.println(query.getString(0) + " " + query.getString(1));
-//                }
             }
 
             @Override

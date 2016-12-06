@@ -1,13 +1,37 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="de.foodshippers.foodship.DinnerGroupFragment">
-
-    <!-- TODO: Update blank fragment layout -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:paddingTop="@dimen/activity_vertical_margin">
     <TextView
+            android:id="@+id/invitationsInfoHeadline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="4 Invitations"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:paddingLeft="@dimen/activity_horizontal_margin"/>
+
+    <TextView
+            android:id="@+id/invitationsInfoBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3 accepted, 1 open"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:paddingLeft="@dimen/activity_horizontal_margin"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recipes"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"/>
+
+    <android.support.v7.widget.RecyclerView
+            android:id="@+id/recipeList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment"/>
-
-</FrameLayout>
+            android:scrollbars="none"
+            tools:listitem="@layout/recipe_item"/>
+</LinearLayout>
