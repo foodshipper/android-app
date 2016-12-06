@@ -17,6 +17,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
+        System.out.println(remoteMessage.getData());
 //        Log.d(TAG, "onMessageReceived: Received Message!");
 //        Log.d(TAG, "onMessageReceived: FROM: " + remoteMessage.getFrom());
 //        for (Map.Entry<String, String> e : remoteMessage.getData().entrySet()) {
@@ -24,7 +25,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Context c = getApplicationContext();
         int mNotificationId = (int) System.currentTimeMillis();
         Intent intendyes = new Intent(c, MainActivity.class);
-        Intent intendno = new Intent(c, NotificationActivity.class);
+        Intent intendno = new Intent(c, NotificationService.class);
         intendno.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intendno.putExtra("Noti_ID", mNotificationId);
         intendyes.putExtra("Noti_ID", mNotificationId);
@@ -37,7 +38,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         PendingIntent.FLAG_CANCEL_CURRENT
                 );
         PendingIntent pendingno =
-                PendingIntent.getActivity(
+                PendingIntent.getService(
                         c,
                         1,
                         intendno,
@@ -50,8 +51,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .addAction(R.drawable.ic_do_not_disturb_black_24dp, getString(R.string.disline_Invation), pendingno)
                         .setDeleteIntent(pendingno)
                         .setSmallIcon(R.drawable.ic_restaurant_menu_white_24dp)
-                        .setContentTitle("My notification")
-                        .setContentText("Hello World!").setAutoCancel(true);
+                        .setContentTitle("Troll")
+                        .setContentText("Essen?").setAutoCancel(true);
 
 
         NotificationManager mNotifyMgr =

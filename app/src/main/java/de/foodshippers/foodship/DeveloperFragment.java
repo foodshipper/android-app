@@ -4,6 +4,7 @@ package de.foodshippers.foodship;
 import android.app.Fragment;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -84,40 +85,41 @@ public class DeveloperFragment extends Fragment {
         sendTestNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Context c = getActivity().getApplicationContext();
                 int mNotificationId = (int) System.currentTimeMillis();
-                Intent intendyes = new Intent(getActivity().getApplicationContext(), MainActivity.class);
-                Intent intendno = new Intent(getActivity().getApplicationContext(), NotificationActivity.class);
+                Intent intendyes = new Intent(c, MainActivity.class);
+                Intent intendno = new Intent(c, NotificationService.class);
                 intendno.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intendno.putExtra("Noti_ID", mNotificationId);
                 intendyes.putExtra("Noti_ID", mNotificationId);
                 intendyes.putExtra("Fragment", "DinnerGroup");
                 PendingIntent pendingyes =
                         PendingIntent.getActivity(
-                                getActivity().getApplicationContext(),
+                                c,
                                 0,
                                 intendyes,
                                 PendingIntent.FLAG_CANCEL_CURRENT
                         );
                 PendingIntent pendingno =
                         PendingIntent.getActivity(
-                                getActivity().getApplicationContext(),
+                                c,
                                 1,
                                 intendno,
                                 PendingIntent.FLAG_CANCEL_CURRENT
                         );
 
                 NotificationCompat.Builder mBuilder =
-                        new NotificationCompat.Builder(getActivity().getApplicationContext())
-                                .addAction(R.drawable.ic_menu_camera, getString(R.string.accept_Invitation), pendingyes)
-                                .addAction(R.drawable.ic_menu_camera, getString(R.string.disline_Invation), pendingno)
+                        new NotificationCompat.Builder(c)
+                                .addAction(R.drawable.ic_thumb_up_black_24dp, getString(R.string.accept_Invitation), pendingyes)
+                                .addAction(R.drawable.ic_do_not_disturb_black_24dp, getString(R.string.disline_Invation), pendingno)
                                 .setDeleteIntent(pendingno)
-                                .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark_normal)
-                                .setContentTitle("My notification")
-                                .setContentText("Hello World!").setAutoCancel(true);
+                                .setSmallIcon(R.drawable.ic_restaurant_menu_white_24dp)
+                                .setContentTitle("Troll")
+                                .setContentText("Essen?").setAutoCancel(true);
 
 
                 NotificationManager mNotifyMgr =
-                        (NotificationManager) getActivity().getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+                        (NotificationManager) c.getSystemService(NOTIFICATION_SERVICE);
 // Builds the notification and issues it.
                 mNotifyMgr.notify(mNotificationId, mBuilder.build());
             }
