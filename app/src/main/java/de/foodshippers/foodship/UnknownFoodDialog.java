@@ -32,6 +32,7 @@ public class UnknownFoodDialog extends DialogFragment {
     private String unknownEan;
     private boolean noInternet = false;
     private Button mPositiveBtn = null;
+    SQLiteDatabase db;
 
     static UnknownFoodDialog newInstance(String ean) {
         UnknownFoodDialog fragment = new UnknownFoodDialog();
@@ -56,7 +57,7 @@ public class UnknownFoodDialog extends DialogFragment {
             // Pass null as the parent view because its going in the dialog layout
             View v = inflater.inflate(R.layout.dialog_unknown_food, null);
             final AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) v.findViewById(R.id.unknownFoodAutocompleteTextView);
-            SQLiteDatabase db = new FoodshipDbHelper(getActivity().getApplicationContext()).getReadableDatabase();
+            db = new FoodshipDbHelper(getActivity().getApplicationContext()).getReadableDatabase();
             final FoodTypeFilterAdapter adapter = new FoodTypeFilterAdapter(getActivity().getApplicationContext(), db);
             if (noInternet) {
                 TextView text = (TextView) v.findViewById(R.id.unknownTextview);
@@ -141,14 +142,13 @@ public class UnknownFoodDialog extends DialogFragment {
     @Override
     public void onStop() {
         super.onStop();
+        if (db != null) {
+            db.close();
+        }
     }
 
     public void setNoInternet(boolean noInternet) {
         this.noInternet = noInternet;
-    }
-
-    private void onFoodTypeSent() {
-        Log.d(TAG, "onFoodTypeSent: Type sent successfully");
     }
 
     private class FoodTypeFilterAdapter extends SimpleCursorAdapter {
@@ -166,7 +166,7 @@ public class UnknownFoodDialog extends DialogFragment {
 
         @Override
         public Cursor runQueryOnBackgroundThread(CharSequence constraint) {
-            String filter = "";
+            String filter;
             if (constraint == null) {
                 filter = "";
             } else {
