@@ -146,7 +146,7 @@ public class DinnerGroupFragment extends Fragment {
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             Recipe recipe = dataSource.get(position);
-            holder.recipeBody.setText("Lorem ipsum");
+            holder.recipeBody.setText("It's a very tasty dish: " + recipe.getTitle());
             holder.recipeTitle.setText(recipe.getTitle());
 
             holder.recipeImage.setLocalImageBitmap(imagman.loadImageFromStorage(recipe.getImage()));

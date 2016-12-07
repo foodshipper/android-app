@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -35,7 +34,6 @@ public class InitialSetupFragment extends Fragment {
     private static final String TAG = "InitialSetupFragment";
     private int PLACE_PICKER_REQUEST = 1;
     private EditText mName;
-    private ProgressBar mProgress;
 
     public InitialSetupFragment() {
         super();
@@ -51,7 +49,6 @@ public class InitialSetupFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_initial_setup, container, false);
-        mProgress = (ProgressBar) v.findViewById(R.id.initialSetupProgress);
 
         final Button mPickBtn = (Button) v.findViewById(R.id.initialSetupConfirmBtn);
         mPickBtn.setOnClickListener(new View.OnClickListener() {
@@ -68,8 +65,6 @@ public class InitialSetupFragment extends Fragment {
 
 
                 Toast.makeText(getActivity(), getString(R.string.thanks_name, name), Toast.LENGTH_LONG).show();
-                mProgress.setEnabled(true);
-                mProgress.setVisibility(View.VISIBLE);
                 //Start place picker
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                 try {
@@ -119,8 +114,6 @@ public class InitialSetupFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_PICKER_REQUEST && data != null) {
-            mProgress.setEnabled(false);
-            mProgress.setVisibility(View.GONE);
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(getContext(), data);
                 LatLng latLng = place.getLatLng();

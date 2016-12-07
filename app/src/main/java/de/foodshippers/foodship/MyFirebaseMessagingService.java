@@ -50,8 +50,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .addAction(R.drawable.ic_do_not_disturb_black_24dp, getString(R.string.disline_Invation), pendingno)
                         .setDeleteIntent(pendingno)
                         .setSmallIcon(R.drawable.ic_restaurant_menu_white_24dp)
-                        .setContentTitle("Troll")
-                        .setContentText("Essen?").setAutoCancel(true);
+                        .setContentTitle("Joint Dinner?")
+                        .setContentText("I don't want to eat alone").setAutoCancel(true);
 
 
         NotificationManager mNotifyMgr =
