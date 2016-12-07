@@ -13,12 +13,12 @@ import retrofit2.http.Query;
  */
 public interface DinnerService {
 
-    @GET("/v1//dinner/{dinner}")
-    Call<GroupInformations> getGroupInformation(@Path("dinner") int groupid, @Query("token") String token);
+    @GET("/v1/dinner/{group_id}")
+    Call<GroupInformations> getGroupInformation(@Path("group_id") int groupid, @Query("token") String token);
 
-    @PUT("/v1//dinner/{dinner}")
-    Call<Void> acceptInvite(@Path("dinner") int groupid, @Query("token") String token, @Query("token") boolean accept);
+    @PUT("/v1/dinner/{group_id}")
+    Call<Void> acceptInvite(@Path("group_id") int groupid, @Query("token") String token, @Query("accept") boolean accept);
 
-    @GET("/v1//dinner/{dinner}/recipes")
-    Call<Recipe[]> putReinvite(@Path("dinner") int groupid, @Query("token") String token);
+    @GET("/v1/dinner/{group_id}/recipes")
+    Call<Recipe[]> getRecipes(@Path("group_id") int groupid, @Query("token") String token);
 }

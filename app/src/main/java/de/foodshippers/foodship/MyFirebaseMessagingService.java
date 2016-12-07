@@ -59,6 +59,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 (NotificationManager) c.getSystemService(NOTIFICATION_SERVICE);
 // Builds the notification and issues it.
         mNotifyMgr.notify(mNotificationId, mBuilder.build());
+
+        GroupDataManager instance = GroupDataManager.getInstance(getApplicationContext());
+        instance.setGroupId(Integer.decode(remoteMessage.getData().get("group_id")));
+        instance.prefetch();
     }
 
 }

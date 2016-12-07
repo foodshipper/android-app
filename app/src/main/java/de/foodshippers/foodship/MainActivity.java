@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity
         //Create initial fragment
         System.out.println(getIntent().getStringExtra("Fragment"));
         if (getIntent().getStringExtra("Fragment") != null) {
+            GroupDataManager.getInstance(getApplicationContext()).acceptGroup();
             NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             manager.cancel(getIntent().getIntExtra("Noti_ID", -1));
             this.onNavigationItemSelected(R.id.nav_group);
@@ -183,7 +184,7 @@ public class MainActivity extends AppCompatActivity
                     fab.setVisibility(View.GONE);
                 }
 
-                currentFragment = DinnerGroupFragment.newInstance(1);
+                currentFragment = DinnerGroupFragment2.getInstance();
             } else if (id == R.id.nav_contact) {
                 Log.d(TAG, "onNavigationItemSelected: Selected Contact View");
                 if (fab != null) {

@@ -8,8 +8,8 @@ import com.birbit.android.jobqueue.Job;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.RetryConstraint;
 import de.foodshippers.foodship.Bilder.FoodImageManager;
+import de.foodshippers.foodship.Bilder.GroupImageManager;
 import de.foodshippers.foodship.api.ServerErrorThrowable;
-import de.foodshippers.foodship.api.model.Type;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,16 +20,16 @@ import java.net.HttpURLConnection;
  */
 public class DownloadImageJob extends Job {
 
-    private final Type ImageType;
+    private final String URL;
 
 //    Problem:
 //    Was passiert wenn hier kein Internet ist?
 //    Der Job bricht womöglich ab und wird nie wieder gestartet
 
 
-    public DownloadImageJob(Type p) {
-        super(new Params(0).singleInstanceBy(p.getImageUrl()).requireNetwork().requireNetwork());
-        this.ImageType = p;
+    public DownloadImageJob(String url) {
+        super(new Params(0).singleInstanceBy(url).requireNetwork().requireNetwork());
+        this.URL = url;
     }
 
     @Override
@@ -39,7 +39,11 @@ public class DownloadImageJob extends Job {
 
     @Override
     public void onRun() throws Throwable {
-        FoodImageManager.getInstance(getApplicationContext()).saveToInternalStorage(ImageType, getBitmapFromURL(ImageType.getImageUrl()));
+        if (URL.contains("recipeImages")) {
+            System.out.println("Write in Group");
+            GroupImageManager.getInstance(getApplicationContext()).saveToInternalStorage(URL, getBitmapFromURL(URL));
+        } else
+            FoodImageManager.getInstance(getApplicationContext()).saveToInternalStorage(URL, getBitmapFromURL(URL));
 
     }
 

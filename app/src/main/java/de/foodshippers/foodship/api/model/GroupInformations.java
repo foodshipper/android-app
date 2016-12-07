@@ -13,7 +13,7 @@ public class GroupInformations implements Serializable {
     @SerializedName("accepted")
     int accepted;
     @SerializedName("day")
-    int String;
+    String day;
 
     public int getAccepted() {
         return accepted;
@@ -23,7 +23,7 @@ public class GroupInformations implements Serializable {
         return invitetd;
     }
 
-    public int getString() {
-        return String;
+    public String getString() {
+        return day;
     }
 }

@@ -34,7 +34,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"/>
 
-        <com.android.volley.toolbox.NetworkImageView
+        <de.foodshippers.foodship.CustomNetworkImageView
                 android:id="@+id/recipeImage"
                 android:layout_height="100dp"
                 android:layout_width="100dp"

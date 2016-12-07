@@ -8,19 +8,19 @@ import com.google.gson.annotations.SerializedName;
 public class Recipe {
 
     @SerializedName("image")
-    int image;
+    String image;
     @SerializedName("desc")
-    int desc;
+    String desc;
     @SerializedName("title")
-    int title;
+    String title;
     @SerializedName("upvotes")
     int upvotes;
     @SerializedName("veto")
-    int veto;
+    boolean veto;
     @SerializedName("id")
     int id;
 
-    public int getDesc() {
+    public String getDesc() {
         return desc;
     }
 
@@ -28,11 +28,11 @@ public class Recipe {
         return id;
     }
 
-    public int getImage() {
+    public String getImage() {
         return image;
     }
 
-    public int getTitle() {
+    public String getTitle() {
         return title;
     }
 
@@ -40,7 +40,7 @@ public class Recipe {
         return upvotes;
     }
 
-    public int getVeto() {
+    public boolean getVeto() {
         return veto;
     }
 

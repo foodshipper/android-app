@@ -25,28 +25,30 @@ public abstract class AbstractImageManager {
         this.ordner = cw.getDir(Ordner, Context.MODE_PRIVATE);
     }
 
-    public void downloadifNeeded(Type p) {
-        if (p.getImageUrl() == null || p.getImageUrl().equals("")) {
+    public void downloadifNeeded(String url) {
+        if (url == null || url.equals("")) {
             return;
         }
-        File mypath = new File(this.ordner, getFileName(p));
+        File mypath = new File(this.ordner, getFileName(url));
+        System.out.println(mypath);
         if (!mypath.exists()) {
-            togglNewJob(p);
+            togglNewJob(url);
         }
     }
 
-    private void togglNewJob(Type p) {
+    private void togglNewJob(String url) {
         FoodshipJobManager.getInstance(AppContext)
-                .addJobInBackground(new DownloadImageJob(p));
+                .addJobInBackground(new DownloadImageJob(url));
     }
 
-    public void saveToInternalStorage(Type p, Bitmap bitmapImage) {
-        if (p.getImageUrl() == null || p.getImageUrl().equals("")) {
+    public void saveToInternalStorage(String url, Bitmap bitmapImage) {
+        if (url == null || url.equals("")) {
             return;
         }
         ContextWrapper cw = new ContextWrapper(AppContext);
         // path to /data/data/yourapp/app_data/imageDir
-        File mypath = new File(this.ordner, getFileName(p));
+        File mypath = new File(this.ordner, getFileName(url));
+        System.out.println(mypath);
 
         FileOutputStream fos = null;
         try {
@@ -63,20 +65,24 @@ public abstract class AbstractImageManager {
         }
     }
 
-    public Bitmap loadImageFromStorage(Type p) {
-        if (p.getImageUrl() == null || p.getImageUrl().equals("")) {
+    public Bitmap loadImageFromStorage(String url) {
+        if (url == null || url.equals("")) {
             Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
             Bitmap bmp = Bitmap.createBitmap(100, 100, conf);
             return bmp;
         }
         try {
-            File f = new File(this.ordner, getFileName(p));
+            File f = new File(this.ordner, getFileName(url));
+            System.out.println("load " + f);
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
             return b;
         } catch (FileNotFoundException e) {
+            System.out.println(e);
         } catch (Exception ex) {
+            System.out.println(ex);
         }
-        togglNewJob(p);
+        System.out.println("Hey");
+        togglNewJob(url);
         Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
         Bitmap bmp = Bitmap.createBitmap(100, 100, conf);
         return bmp;
@@ -84,7 +90,11 @@ public abstract class AbstractImageManager {
     }
 
     private String getFileName(Type File) {
-        String fileName = File.getImageUrl().substring(File.getImageUrl().lastIndexOf('/') + 1, File.getImageUrl().length());
+        return getFileName(File.getImageUrl());
+    }
+
+    private String getFileName(String File) {
+        String fileName = File.substring(File.lastIndexOf('/') + 1, File.length());
         return fileName;
     }
 }

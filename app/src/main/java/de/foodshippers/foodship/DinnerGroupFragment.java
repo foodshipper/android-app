@@ -69,7 +69,7 @@ public class DinnerGroupFragment extends Fragment {
         return v;
     }
 
-    private class RecipeAdater extends RecyclerView.Adapter<RecipeAdater.ViewHolder> {
+    public class RecipeAdater extends RecyclerView.Adapter<RecipeAdater.ViewHolder> {
 
         private List<String> dataSource = new LinkedList<>();
 
