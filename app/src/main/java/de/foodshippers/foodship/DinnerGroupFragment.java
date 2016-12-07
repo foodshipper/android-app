@@ -28,7 +28,7 @@ public class DinnerGroupFragment extends Fragment {
     private static final String GROUP_ID = "groupID";
 
     private int groupID;
-    private goupDataController manager;
+    private GroupDataController manager;
 
     public DinnerGroupFragment() {
         // Required empty public constructor
@@ -55,7 +55,7 @@ public class DinnerGroupFragment extends Fragment {
             groupID = getArguments().getInt(GROUP_ID);
         }
 
-        manager = goupDataController.getInstance(getActivity().getApplicationContext());
+        manager = GroupDataController.getInstance(getActivity().getApplicationContext());
 
 
     }

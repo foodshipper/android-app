@@ -20,7 +20,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         //Send Notification to User
         sendNotificationtoUser();
         //Gets the dataController
-        goupDataController dataController = goupDataController.getInstance(getApplicationContext());
+        GroupDataController dataController = GroupDataController.getInstance(getApplicationContext());
         //Sets new GroupID
         dataController.setGroupId(Integer.decode(firebaseMassage.getData().get("group_id")));
         //Starts Prefetching of GroupData

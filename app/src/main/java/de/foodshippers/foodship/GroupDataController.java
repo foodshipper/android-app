@@ -14,16 +14,16 @@ import java.util.List;
 /**
  * Created by hannes on 06.12.16.
  */
-public class goupDataController {
+public class GroupDataController {
 
     private boolean inActivGroup;
-    private static goupDataController instance;
+    private static GroupDataController instance;
     private GroupInformations infos;
     private int groupId;
     private List<Recipe> possibleRecipies;
     private final Context c;
 
-    public goupDataController(Context c) {
+    public GroupDataController(Context c) {
         this.c = c;
     }
 
@@ -46,9 +46,9 @@ public class goupDataController {
         inActivGroup = false;
     }
 
-    public static goupDataController getInstance(Context c) {
+    public static GroupDataController getInstance(Context c) {
         if (instance == null) {
-            instance = new goupDataController(c);
+            instance = new GroupDataController(c);
         }
         return instance;
     }

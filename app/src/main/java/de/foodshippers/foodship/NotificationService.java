@@ -21,6 +21,6 @@ public class NotificationService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         manager.cancel(intent.getIntExtra("Noti_ID", -1));
-        goupDataController.getInstance(getApplicationContext()).cancel();
+        GroupDataController.getInstance(getApplicationContext()).cancel();
     }
 }
