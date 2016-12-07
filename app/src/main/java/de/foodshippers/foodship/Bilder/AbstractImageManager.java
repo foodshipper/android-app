@@ -30,7 +30,6 @@ public abstract class AbstractImageManager {
             return;
         }
         File mypath = new File(this.ordner, getFileName(url));
-        System.out.println(mypath);
         if (!mypath.exists()) {
             togglNewJob(url);
         }
@@ -48,7 +47,6 @@ public abstract class AbstractImageManager {
         ContextWrapper cw = new ContextWrapper(AppContext);
         // path to /data/data/yourapp/app_data/imageDir
         File mypath = new File(this.ordner, getFileName(url));
-        System.out.println(mypath);
 
         FileOutputStream fos = null;
         try {
@@ -73,15 +71,11 @@ public abstract class AbstractImageManager {
         }
         try {
             File f = new File(this.ordner, getFileName(url));
-            System.out.println("load " + f);
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
             return b;
         } catch (FileNotFoundException e) {
-            System.out.println(e);
         } catch (Exception ex) {
-            System.out.println(ex);
         }
-        System.out.println("Hey");
         togglNewJob(url);
         Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
         Bitmap bmp = Bitmap.createBitmap(100, 100, conf);

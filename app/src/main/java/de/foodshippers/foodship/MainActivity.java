@@ -89,7 +89,6 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         //Create initial fragment
-        System.out.println(getIntent().getStringExtra("Fragment"));
         if (getIntent().getStringExtra("Fragment") != null) {
             GroupDataManager.getInstance(getApplicationContext()).acceptGroup();
             NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);

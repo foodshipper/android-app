@@ -125,13 +125,11 @@ public class FoodViewDataBase implements Callback<Product[]> {
     public boolean addFood(Product p) {
         SQLiteDatabase typeDatabase = new FoodshipDbHelper(c).getWritableDatabase();
         Cursor cursor = typeDatabase.rawQuery("SELECT * From ".concat(FoodshipContract.ProductTable.TABLE_NAME).concat(" WHERE ").concat(FoodshipContract.ProductTable.CN_EAN).concat(" = ".concat(p.getEan())), null);
-        System.out.println(cursor.getCount());
         if (cursor.getCount() != 0) {
             cursor.close();
             typeDatabase.close();
             return false;
         } else {
-            System.out.println("Hinzu");
             ContentValues values = new ContentValues();
             values.put(FoodshipContract.ProductTable.CN_TYPE, p.getType());
             values.put(FoodshipContract.ProductTable.CN_EAN, p.getEan());
@@ -148,7 +146,6 @@ public class FoodViewDataBase implements Callback<Product[]> {
     public boolean deleteFood(Product p) {
         SQLiteDatabase typeDatabase = new FoodshipDbHelper(c).getWritableDatabase();
         Cursor cursor = typeDatabase.rawQuery("SELECT * From ".concat(FoodshipContract.ProductTable.TABLE_NAME).concat(" WHERE ").concat(FoodshipContract.ProductTable.CN_EAN).concat(" = ".concat(p.getEan())), null);
-        System.out.println(cursor.getCount());
         if (cursor.getCount() != 0) {
             typeDatabase.execSQL("DELETE From " + FoodshipContract.ProductTable.TABLE_NAME + " WHERE " + FoodshipContract.ProductTable.CN_EAN + " = " + p.getEan());
             loadFromDataBase();

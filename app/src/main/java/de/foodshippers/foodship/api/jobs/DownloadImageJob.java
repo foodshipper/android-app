@@ -40,7 +40,6 @@ public class DownloadImageJob extends Job {
     @Override
     public void onRun() throws Throwable {
         if (URL.contains("recipeImages")) {
-            System.out.println("Write in Group");
             GroupImageManager.getInstance(getApplicationContext()).saveToInternalStorage(URL, getBitmapFromURL(URL));
         } else
             FoodImageManager.getInstance(getApplicationContext()).saveToInternalStorage(URL, getBitmapFromURL(URL));

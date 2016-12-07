@@ -70,15 +70,9 @@ public class GroupDataManager {
             Response<GroupInformations> execute = RestClient.getInstance().getDinnerService().getGroupInformation(getGroupId(), Utils.getUserId(c)).execute();
             infos = execute.body();
             Response<Recipe[]> execute1 = RestClient.getInstance().getDinnerService().getRecipes(groupId, Utils.getUserId(c)).execute();
-            System.out.println(execute1.message());
-            System.out.println(execute1.code());
-            System.out.println(execute1.errorBody());
-            System.out.println(execute1.raw().request().url());
-            System.out.println(execute1.body().length);
             possibleRecipies = Arrays.asList(execute1.body());
             final GroupImageManager grouppics = GroupImageManager.getInstance(c);
             for (Recipe r : possibleRecipies) {
-                System.out.println(r);
                 grouppics.downloadifNeeded(r.getImage());
             }
         } catch (IOException e) {
