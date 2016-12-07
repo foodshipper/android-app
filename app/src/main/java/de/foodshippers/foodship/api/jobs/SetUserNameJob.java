@@ -11,7 +11,7 @@ public class SetUserNameJob extends SimpleNetworkJob {
     private String token;
 
     public SetUserNameJob(String token, String name) {
-        super(SetUserLocationJob.class);
+        super(SetUserNameJob.class);
         this.name = name;
         this.token = token;
     }

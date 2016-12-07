@@ -32,7 +32,10 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"/>
+                android:layout_alignParentStart="true"
+                android:layout_toLeftOf="@+id/recipeImage"
+                android:layout_toStartOf="@+id/recipeImage"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
         <de.foodshippers.foodship.CustomNetworkImageView
                 android:id="@+id/recipeImage"
