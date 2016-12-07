@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity
                     fab.setVisibility(View.GONE);
                 }
 
-                currentFragment = DinnerGroupFragment2.getInstance();
+                currentFragment = DinnerGroupFragment.newInstance(0);
             } else if (id == R.id.nav_contact) {
                 Log.d(TAG, "onNavigationItemSelected: Selected Contact View");
                 if (fab != null) {

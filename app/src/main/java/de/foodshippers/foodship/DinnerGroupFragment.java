@@ -5,13 +5,14 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.android.volley.toolbox.NetworkImageView;
+import de.foodshippers.foodship.Bilder.AbstractImageManager;
+import de.foodshippers.foodship.Bilder.GroupImageManager;
+import de.foodshippers.foodship.api.model.Recipe;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class DinnerGroupFragment extends Fragment {
     private static final String GROUP_ID = "groupID";
 
     private int groupID;
-
+    private GroupDataManager manager;
 
     public DinnerGroupFragment() {
         // Required empty public constructor
@@ -53,7 +54,12 @@ public class DinnerGroupFragment extends Fragment {
         if (getArguments() != null) {
             groupID = getArguments().getInt(GROUP_ID);
         }
+
+        manager = GroupDataManager.getInstance(getActivity().getApplicationContext());
+
+
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,21 +72,27 @@ public class DinnerGroupFragment extends Fragment {
         recipeList.setLayoutManager(mLayoutManager);
         recipeList.setAdapter(new RecipeAdater());
 
+        recipeList.setAdapter(new RecipeAdater());
+        if (!manager.isInGroup()) {
+            ((TextView) v.findViewById(R.id.recipieText)).setText("Aktuell in keiner Gruppe! DummyData");
+        }
+
         return v;
     }
 
     public class RecipeAdater extends RecyclerView.Adapter<RecipeAdater.ViewHolder> {
 
-        private List<String> dataSource = new LinkedList<>();
+        private List<Recipe> dataSource = new LinkedList<>();
+        private AbstractImageManager imagman;
 
         RecipeAdater() {
             super();
 
-            dataSource.add("Pizza Funghi");
-            dataSource.add("Spaghetti");
-            dataSource.add("Lasagne");
-            dataSource.add("Kohlrübensuppe");
-            this.notifyDataSetChanged();
+            imagman = GroupImageManager.getInstance(getActivity().getApplicationContext());
+            if (manager.isInGroup()) {
+                dataSource.addAll(manager.getPossibleRecipies());
+                this.notifyDataSetChanged();
+            }
         }
 
         /**
@@ -133,11 +145,11 @@ public class DinnerGroupFragment extends Fragment {
          */
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            String p = dataSource.get(position);
-            holder.recipeBody.setText(p);
-            holder.recipeTitle.setText(p);
-            holder.recipeImage.setImageUrl("https://images.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.viveredonna.it%2Fwp-content%2Fuploads%2F2011%2F07%2Fpizza-funghi-calorie.jpg&f=1",
-                    VolleyToolbox.getInstance(getActivity()).getImageLoader());
+            Recipe recipe = dataSource.get(position);
+            holder.recipeBody.setText("Lorem ipsum");
+            holder.recipeTitle.setText(recipe.getTitle());
+
+            holder.recipeImage.setLocalImageBitmap(imagman.loadImageFromStorage(recipe.getImage()));
         }
 
         /**
@@ -154,14 +166,14 @@ public class DinnerGroupFragment extends Fragment {
 
             public final TextView recipeTitle;
             public final TextView recipeBody;
-            final NetworkImageView recipeImage;
+            final CustomNetworkImageView recipeImage;
 
             public ViewHolder(View itemView) {
                 super(itemView);
 
                 recipeTitle = (TextView) itemView.findViewById(R.id.recipeTitle);
                 recipeBody = (TextView) itemView.findViewById(R.id.recipeBody);
-                recipeImage = (NetworkImageView) itemView.findViewById(R.id.recipeImage);
+                recipeImage = (CustomNetworkImageView) itemView.findViewById(R.id.recipeImage);
             }
         }
 
