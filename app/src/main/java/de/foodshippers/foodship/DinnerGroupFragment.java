@@ -149,7 +149,7 @@ public class DinnerGroupFragment extends Fragment {
             holder.recipeBody.setText("It's a very tasty dish: " + recipe.getTitle());
             holder.recipeTitle.setText(recipe.getTitle());
 
-            holder.recipeImage.setLocalImageBitmap(imagman.loadImageFromStorage(recipe.getImage()));
+            holder.recipeImage.setLocalImageBitmap(imagman.loadImage(recipe.getImage()));
         }
 
         /**

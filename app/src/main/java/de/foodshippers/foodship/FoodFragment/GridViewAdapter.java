@@ -80,7 +80,7 @@ public class GridViewAdapter extends BaseAdapter implements FoodViewDataBase.OnF
             Product item = data.get(position);
             Type t = Type.getTypeFromId(context, item.getType());
             holder.imageTitle.setText(String.valueOf(t.getName()));
-            holder.image.setImageBitmap(imagman.loadImageFromStorage(Type.getTypeFromId(context, item.getType()).getImageUrl()));
+            holder.image.setImageBitmap(imagman.loadImage(Type.getTypeFromId(context, item.getType()).getImageUrl()));
             return row;
         }
     }

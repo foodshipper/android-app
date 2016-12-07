@@ -17,12 +17,15 @@ public abstract class AbstractImageManager {
 
     private final Context AppContext;
     private final File ordner;
+    private final Bitmap Weiß;
 
 
     public AbstractImageManager(Context c, String Ordner) {
         this.AppContext = c;
         ContextWrapper cw = new ContextWrapper(AppContext);
         this.ordner = cw.getDir(Ordner, Context.MODE_PRIVATE);
+        Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
+        this.Weiß = Bitmap.createBitmap(100, 100, conf);
     }
 
     public void downloadifNeeded(String url) {
@@ -63,12 +66,18 @@ public abstract class AbstractImageManager {
         }
     }
 
-    public Bitmap loadImageFromStorage(String url) {
+    public Bitmap loadImage(String url) {
         if (url == null || url.equals("")) {
-            Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
-            Bitmap bmp = Bitmap.createBitmap(100, 100, conf);
-            return bmp;
+            return null;
         }
+        Bitmap bitmap = loadImageFromStorage(url);
+        if (bitmap == null) {
+            return Weiß;
+        }
+        return bitmap;
+    }
+
+    protected Bitmap loadImageFromStorage(String url) {
         try {
             File f = new File(this.ordner, getFileName(url));
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
@@ -77,17 +86,14 @@ public abstract class AbstractImageManager {
         } catch (Exception ex) {
         }
         togglNewJob(url);
-        Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
-        Bitmap bmp = Bitmap.createBitmap(100, 100, conf);
-        return bmp;
-
+        return null;
     }
 
-    private String getFileName(Type File) {
+    protected String getFileName(Type File) {
         return getFileName(File.getImageUrl());
     }
 
-    private String getFileName(String File) {
+    protected String getFileName(String File) {
         String fileName = File.substring(File.lastIndexOf('/') + 1, File.length());
         return fileName;
     }

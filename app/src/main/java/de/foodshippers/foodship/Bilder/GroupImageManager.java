@@ -5,12 +5,13 @@ import android.content.Context;
 /**
  * Created by hannes on 05.12.16.
  */
-public class GroupImageManager extends AbstractImageManager {
+public class GroupImageManager extends CachedImageManager {
 
     private static GroupImageManager instance;
 
+
     public GroupImageManager(Context c, String Ordner) {
-        super(c, Ordner);
+        super(c, Ordner, 20);
     }
 
     public static GroupImageManager getInstance(Context c) {
@@ -23,5 +24,6 @@ public class GroupImageManager extends AbstractImageManager {
         }
         return instance;
     }
+
 
 }
