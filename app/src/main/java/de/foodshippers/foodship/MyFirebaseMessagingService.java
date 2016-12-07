@@ -15,12 +15,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMessagingServ";
 
     @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
-        super.onMessageReceived(remoteMessage);
-//        Log.d(TAG, "onMessageReceived: Received Message!");
-//        Log.d(TAG, "onMessageReceived: FROM: " + remoteMessage.getFrom());
-//        for (Map.Entry<String, String> e : remoteMessage.getData().entrySet()) {
-//            Log.d(TAG, "onMessageReceived: " + e.getKey() + ": " + e.getValue());
+    public void onMessageReceived(RemoteMessage firebaseMassage) {
+        super.onMessageReceived(firebaseMassage);
+        //Send Notification to User
+        sendNotificationtoUser();
+        //Gets the dataController
+        goupDataController dataController = goupDataController.getInstance(getApplicationContext());
+        //Sets new GroupID
+        dataController.setGroupId(Integer.decode(firebaseMassage.getData().get("group_id")));
+        //Starts Prefetching of GroupData
+        dataController.prefetch();
+    }
+
+    private void sendNotificationtoUser() {
         Context c = getApplicationContext();
         int mNotificationId = (int) System.currentTimeMillis();
         Intent intendyes = new Intent(c, MainActivity.class);
@@ -58,10 +65,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 (NotificationManager) c.getSystemService(NOTIFICATION_SERVICE);
 // Builds the notification and issues it.
         mNotifyMgr.notify(mNotificationId, mBuilder.build());
-
-        GroupDataManager instance = GroupDataManager.getInstance(getApplicationContext());
-        instance.setGroupId(Integer.decode(remoteMessage.getData().get("group_id")));
-        instance.prefetch();
     }
 
 }

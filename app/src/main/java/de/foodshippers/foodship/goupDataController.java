@@ -14,16 +14,16 @@ import java.util.List;
 /**
  * Created by hannes on 06.12.16.
  */
-public class GroupDataManager {
+public class goupDataController {
 
     private boolean inActivGroup;
-    private static GroupDataManager instance;
+    private static goupDataController instance;
     private GroupInformations infos;
     private int groupId;
     private List<Recipe> possibleRecipies;
     private final Context c;
 
-    public GroupDataManager(Context c) {
+    public goupDataController(Context c) {
         this.c = c;
     }
 
@@ -46,9 +46,9 @@ public class GroupDataManager {
         inActivGroup = false;
     }
 
-    public static GroupDataManager getInstance(Context c) {
+    public static goupDataController getInstance(Context c) {
         if (instance == null) {
-            instance = new GroupDataManager(c);
+            instance = new goupDataController(c);
         }
         return instance;
     }

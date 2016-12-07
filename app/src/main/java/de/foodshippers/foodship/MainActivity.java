@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity
         //Create initial fragment
         if (getIntent().getStringExtra("Fragment") != null) {
             Log.d(TAG, "onCreate: Open Group");
-            GroupDataManager.getInstance(getApplicationContext()).acceptGroup();
+            goupDataController.getInstance(getApplicationContext()).acceptGroup();
             NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             manager.cancel(getIntent().getIntExtra("Noti_ID", -1));
             this.onNavigationItemSelected(R.id.nav_group);
