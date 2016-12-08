@@ -1,6 +1,6 @@
 package de.foodshippers.foodship.api.service;
 
-import de.foodshippers.foodship.api.model.GroupInformations;
+import de.foodshippers.foodship.api.model.GroupInformation;
 import de.foodshippers.foodship.api.model.Recipe;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -14,7 +14,7 @@ import retrofit2.http.Query;
 public interface DinnerService {
 
     @GET("/v1/dinner/{group_id}")
-    Call<GroupInformations> getGroupInformation(@Path("group_id") int groupid, @Query("token") String token);
+    Call<GroupInformation> getGroupInformation(@Path("group_id") int groupid, @Query("token") String token);
 
     @PUT("/v1/dinner/{group_id}")
     Call<Void> acceptInvite(@Path("group_id") int groupid, @Query("token") String token, @Query("accept") boolean accept);

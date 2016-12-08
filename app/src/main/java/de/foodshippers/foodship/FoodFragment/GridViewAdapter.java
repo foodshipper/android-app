@@ -71,7 +71,7 @@ public class GridViewAdapter extends BaseAdapter implements FoodViewDataBase.OnF
             holder = (ViewHolder) row.getTag();
         }
         if (data.size() == 0) {
-            holder.imageTitle.setText("No Element");
+            holder.imageTitle.setText(R.string.empty_products);
             Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
             Bitmap bmp = Bitmap.createBitmap(100, 100, conf);
             holder.image.setImageBitmap(bmp);

@@ -25,6 +25,23 @@ public final class FoodshipContract {
         public static final String SQL_DELETE = "DROP TABLE " + TABLE_NAME;
     }
 
+    public static final class GroupTable implements BaseColumns {
+        public static final String TABLE_NAME = "groups";
+        public static final String CN_ID = "id";
+        public static final String CN_INVITED = "invited";
+        public static final String CN_ACCEPTED = "accepted";
+        public static final String CN_DAY = "day";
+
+        public static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + " (" +
+                GroupTable._ID + " INTEGER PRIMARY KEY," +
+                GroupTable.CN_ID + " INTEGER," +
+                GroupTable.CN_INVITED + " INTEGER," +
+                GroupTable.CN_ACCEPTED + " INTEGER," +
+                GroupTable.CN_DAY + " DATE)";
+
+        public static final String SQL_DELETE = "DROP TABLE " + TABLE_NAME;
+    }
+
     public static final class ProductTypeTable implements BaseColumns {
         public static final String TABLE_NAME = "product_types";
         public static final String CN_NAME = "name";

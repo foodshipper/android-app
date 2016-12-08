@@ -12,7 +12,7 @@ import retrofit2.Call;
 /**
  * Created by hannes on 04.12.16.
  */
-public abstract class SimpleNetworkJob extends Job {
+public abstract class SimpleNetworkJob<T> extends Job {
 
     protected final String TAG;
 
@@ -33,8 +33,8 @@ public abstract class SimpleNetworkJob extends Job {
 
     @Override
     public void onRun() throws Throwable {
-        Call call = getAPICall();
-        retrofit2.Response response = call.execute();
+        Call<T> call = getAPICall();
+        retrofit2.Response<T> response = call.execute();
         if (!response.isSuccessful()) {
             if (response.code() >= 400 && response.code() < 500) {
                 Log.d(TAG, "onRun: Server returned invalid arguments or similar: " + response.code());
@@ -43,11 +43,15 @@ public abstract class SimpleNetworkJob extends Job {
             }
         } else {
             Log.d(TAG, "onRun: Call was successfull!");
-            onSuccessFullRun();
+            onSuccessFullRun(response.body());
         }
     }
 
-    protected abstract Call getAPICall();
+    protected abstract Call<T> getAPICall();
+
+    protected void onSuccessFullRun(T result) {
+
+    }
 
     protected void onSuccessFullRun() {
 

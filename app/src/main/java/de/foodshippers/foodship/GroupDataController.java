@@ -2,8 +2,10 @@ package de.foodshippers.foodship;
 
 import android.content.Context;
 import de.foodshippers.foodship.Bilder.GroupImageManager;
+import de.foodshippers.foodship.api.FoodshipJobManager;
 import de.foodshippers.foodship.api.RestClient;
-import de.foodshippers.foodship.api.model.GroupInformations;
+import de.foodshippers.foodship.api.jobs.GetGroupInformationJob;
+import de.foodshippers.foodship.api.model.GroupInformation;
 import de.foodshippers.foodship.api.model.Recipe;
 import retrofit2.Response;
 
@@ -18,7 +20,7 @@ public class GroupDataController {
 
     private boolean inActivGroup;
     private static GroupDataController instance;
-    private GroupInformations infos;
+    private GroupInformation infos;
     private int groupId;
     private List<Recipe> possibleRecipies;
     private final Context c;
@@ -57,7 +59,7 @@ public class GroupDataController {
         return inActivGroup;
     }
 
-    public GroupInformations getInfos() {
+    public GroupInformation getInfos() {
         return infos;
     }
 
@@ -67,7 +69,8 @@ public class GroupDataController {
 
     public void prefetch() {
         try {
-            Response<GroupInformations> execute = RestClient.getInstance().getDinnerService().getGroupInformation(getGroupId(), Utils.getUserId(c)).execute();
+            FoodshipJobManager.getInstance(c).addJobInBackground(new GetGroupInformationJob(groupId, c));
+            Response<GroupInformation> execute = RestClient.getInstance().getDinnerService().getGroupInformation(getGroupId(), Utils.getUserId(c)).execute();
             infos = execute.body();
             Response<Recipe[]> execute1 = RestClient.getInstance().getDinnerService().getRecipes(groupId, Utils.getUserId(c)).execute();
             possibleRecipies = Arrays.asList(execute1.body());

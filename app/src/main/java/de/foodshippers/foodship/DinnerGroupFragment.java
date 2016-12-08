@@ -2,9 +2,11 @@ package de.foodshippers.foodship;
 
 
 import android.app.Fragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +14,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import de.foodshippers.foodship.Bilder.AbstractImageManager;
 import de.foodshippers.foodship.Bilder.GroupImageManager;
+import de.foodshippers.foodship.api.model.GroupInformation;
 import de.foodshippers.foodship.api.model.Recipe;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,8 +30,8 @@ import java.util.List;
  */
 public class DinnerGroupFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String GROUP_ID = "groupID";
-
+    public static final String GROUP_ID = "groupID";
+    private static final String TAG = "DinnerGroupFragment";
     private int groupID;
     private GroupDataController manager;
 
@@ -53,7 +58,10 @@ public class DinnerGroupFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             groupID = getArguments().getInt(GROUP_ID);
+        } else {
+            throw new IllegalArgumentException("DinnerGroupFragment has to get Group ID as argument");
         }
+        new GetGroupInfoTask().execute();
 
         manager = GroupDataController.getInstance(getActivity().getApplicationContext());
 
@@ -159,6 +167,7 @@ public class DinnerGroupFragment extends Fragment {
          */
         @Override
         public int getItemCount() {
+            if (dataSource == null) return 0;
             return dataSource.size();
         }
 
@@ -177,5 +186,34 @@ public class DinnerGroupFragment extends Fragment {
             }
         }
 
+    }
+
+    private class GetGroupInfoTask extends AsyncTask<Void, Void, GroupInformation> {
+
+        @Override
+        protected GroupInformation doInBackground(Void... voids) {
+            return GroupInformation.getGroupInfoFromId(getActivity(), groupID);
+        }
+
+        @Override
+        protected void onPostExecute(GroupInformation groupInformation) {
+            View v = getView();
+            if (v != null && groupInformation != null) {
+                TextView dinnerDay = (TextView) v.findViewById(R.id.dinnerDate);
+                try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    dinnerDay.setText(getString(R.string.dinnerTitle, dateFormat.parse(groupInformation.getDay())));
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                TextView body = (TextView) v.findViewById(R.id.invitationsInfoBody);
+                body.setText(getString(R.string.invitationsBody, groupInformation.getAccepted(), groupInformation.getInvited() - groupInformation.getAccepted()));
+                TextView title = (TextView) v.findViewById(R.id.invitationsInfoHeadline);
+                title.setText(getString(R.string.invitationsTitle, groupInformation.getInvited()));
+            } else {
+                Log.w(TAG, "onPostExecute: Could not fetch Group Information");
+            }
+        }
     }
 }

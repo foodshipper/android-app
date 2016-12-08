@@ -40,4 +40,8 @@
     <string name="nav_group">Group</string>
     <string name="accept_Invitation">Yes</string>
     <string name="disline_Invation">No</string>
+    <string name="empty_products">Your fridge is empty! Start by adding products</string>
+    <string name="invitationsTitle">%1$d Invitations</string>
+    <string name="invitationsBody">%1$d accepted, %2$d open</string>
+    <string name="dinnerTitle">Dinner on %1$tA</string>
 </resources>

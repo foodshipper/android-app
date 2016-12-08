@@ -35,6 +35,8 @@ import retrofit2.Response;
 import java.util.Arrays;
 import java.util.List;
 
+import static de.foodshippers.foodship.DinnerGroupFragment.GROUP_ID;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Callback<Product> {
 
@@ -43,6 +45,9 @@ public class MainActivity extends AppCompatActivity
     private Fragment currentFragment;
     private static final String TAG = "MainActivity";
     private FloatingActionButton fab;
+    public final static String DINNER_FRAGMENT = "DinnerFragment";
+    public final static String ARG_FRAGMENT = "Fragment";
+    public final static String ARG_NOTIFICATION_ID = "NotificationId";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +94,12 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         //Create initial fragment
-        if (getIntent().getStringExtra("Fragment") != null) {
+        String fragmentArg = getIntent().getStringExtra(ARG_FRAGMENT);
+        if (fragmentArg != null && fragmentArg.equals(DINNER_FRAGMENT)) {
             Log.d(TAG, "onCreate: Open Group");
             GroupDataController.getInstance(getApplicationContext()).acceptGroup();
             NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            manager.cancel(getIntent().getIntExtra("Noti_ID", -1));
+            manager.cancel(getIntent().getIntExtra(ARG_NOTIFICATION_ID, -1));
             this.onNavigationItemSelected(R.id.nav_group);
         } else if (savedInstanceState != null) {
             this.onNavigationItemSelected(savedInstanceState.getInt(CURRENT_VIEW_KEY, R.id.nav_groceries));
@@ -183,8 +189,8 @@ public class MainActivity extends AppCompatActivity
                 if (fab != null) {
                     fab.setVisibility(View.GONE);
                 }
-
-                currentFragment = DinnerGroupFragment.newInstance(0);
+                int groupId = getIntent().getIntExtra(GROUP_ID, 0);
+                currentFragment = DinnerGroupFragment.newInstance(groupId);
             } else if (id == R.id.nav_contact) {
                 Log.d(TAG, "onNavigationItemSelected: Selected Contact View");
                 if (fab != null) {

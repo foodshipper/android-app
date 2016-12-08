@@ -4,11 +4,20 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:paddingTop="@dimen/activity_vertical_margin">
+
+    <TextView
+            android:id="@+id/dinnerDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/dinnerTitle"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:paddingLeft="@dimen/activity_horizontal_margin"/>
+
     <TextView
             android:id="@+id/invitationsInfoHeadline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="4 Invitations"
+            android:text="@string/invitationsTitle"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
             android:paddingLeft="@dimen/activity_horizontal_margin"/>
 
@@ -16,15 +25,15 @@
             android:id="@+id/invitationsInfoBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="3 accepted, 1 open"
+            android:text="@string/invitationsBody"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:paddingLeft="@dimen/activity_horizontal_margin"/>
 
     <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Recipes"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin" android:id="@+id/recipieText"/>
 

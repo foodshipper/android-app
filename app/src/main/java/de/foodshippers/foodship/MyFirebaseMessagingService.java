@@ -8,6 +8,9 @@ import android.support.v4.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import static de.foodshippers.foodship.DinnerGroupFragment.GROUP_ID;
+import static de.foodshippers.foodship.MainActivity.*;
+
 /**
  * Created by soenke on 04.12.16.
  */
@@ -18,8 +21,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage firebaseMassage) {
         super.onMessageReceived(firebaseMassage);
+        int groupId = Integer.decode(firebaseMassage.getData().get("group_id"));
         //Send Notification to User
-        sendNotificationtoUser();
+        sendNotificationtoUser(groupId);
         //Gets the dataController
         GroupDataController dataController = GroupDataController.getInstance(getApplicationContext());
         //Sets new GroupID
@@ -28,15 +32,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         dataController.prefetch();
     }
 
-    private void sendNotificationtoUser() {
+    private void sendNotificationtoUser(int groupId) {
         Context c = getApplicationContext();
         int mNotificationId = (int) System.currentTimeMillis();
         Intent intendyes = new Intent(c, MainActivity.class);
         Intent intendno = new Intent(c, NotificationService.class);
         intendno.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intendno.putExtra("Noti_ID", mNotificationId);
-        intendyes.putExtra("Noti_ID", mNotificationId);
-        intendyes.putExtra("Fragment", "DinnerGroup");
+        intendno.putExtra(ARG_NOTIFICATION_ID, mNotificationId);
+        intendyes.putExtra(ARG_NOTIFICATION_ID, mNotificationId);
+        intendyes.putExtra(GROUP_ID, groupId);
+        intendyes.putExtra(ARG_FRAGMENT, DINNER_FRAGMENT);
         PendingIntent pendingyes =
                 PendingIntent.getActivity(
                         c,

@@ -23,5 +23,4 @@ public class SetUserLocationJob extends SimpleNetworkJob {
     protected Call getAPICall() {
         return RestClient.getInstance().getUserLocationService().setHomeLocation(userId, latitude, longitude);
     }
-
 }
