@@ -73,7 +73,7 @@ public class GroupDataController {
             possibleRecipies = Arrays.asList(execute1.body());
             final GroupImageManager grouppics = GroupImageManager.getInstance(c);
             for (Recipe r : possibleRecipies) {
-                grouppics.downloadifNeeded(r.getImage());
+                grouppics.downloadImage(r.getImage());
             }
         } catch (IOException e) {
             e.printStackTrace();

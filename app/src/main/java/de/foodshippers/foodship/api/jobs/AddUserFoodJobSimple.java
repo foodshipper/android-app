@@ -30,7 +30,7 @@ public class AddUserFoodJobSimple extends SimpleNetworkJob {
     @Override
     public void onAdded() {
         FoodshipJobManager.getInstance(getApplicationContext()).cancelJobsInBackground(null, TagConstraint.ANY, "DELETE-".concat(p.getEan()));
-        FoodImageManager.getInstance(getApplicationContext()).downloadifNeeded(Type.getTypeFromId(getApplicationContext(), p.getType()).getImageUrl());
+        FoodImageManager.getInstance(getApplicationContext()).downloadImage(Type.getTypeFromId(getApplicationContext(), p.getType()).getImageUrl());
         this.unique = FoodViewDataBase.getInstance(getApplicationContext()).addFood(p);
     }
 
