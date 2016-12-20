@@ -105,6 +105,7 @@ public class FoodViewDataBase implements Callback<Product[]> {
 
     public List<Product> getFoodList() {
         if (!initialisiert) {
+            loadFromDataBase();
             refreshFood();
         }
         return foodList;
