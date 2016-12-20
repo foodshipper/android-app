@@ -9,6 +9,8 @@ import com.birbit.android.jobqueue.RetryConstraint;
 import de.foodshippers.foodship.api.ServerErrorThrowable;
 import retrofit2.Call;
 
+import java.net.SocketException;
+
 /**
  * Created by hannes on 04.12.16.
  */
@@ -29,6 +31,11 @@ public abstract class SimpleNetworkJob<T> extends Job {
     @Override
     public void onAdded() {
 
+    }
+
+    @Override
+    protected int getRetryLimit() {
+        return 1337;
     }
 
     @Override
@@ -65,10 +72,10 @@ public abstract class SimpleNetworkJob<T> extends Job {
 
     @Override
     protected RetryConstraint shouldReRunOnThrowable(@NonNull Throwable throwable, int runCount, int maxRunCount) {
-        if (throwable instanceof ServerErrorThrowable) {
-            if (((ServerErrorThrowable) throwable).getResponseCode() >= 500 && ((ServerErrorThrowable) throwable).getResponseCode() < 600) {
-                return RetryConstraint.createExponentialBackoff(runCount, 5000);
-            }
+        if (throwable instanceof ServerErrorThrowable||throwable instanceof SocketException) {
+        //    if (((ServerErrorThrowable) throwable).getResponseCode() >= 500 && ((ServerErrorThrowable) throwable).getResponseCode() < 600) {
+//                return RetryConstraint.createExponentialBackoff(runCount, 5000);
+                return RetryConstraint.createExponentialBackoff(1, 5000);
         }
         return RetryConstraint.RETRY;
     }

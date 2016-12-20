@@ -14,6 +14,7 @@ import de.foodshippers.foodship.api.ServerErrorThrowable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.SocketException;
 
 /**
  * Created by hannes on 05.12.16.
@@ -50,27 +51,28 @@ public class DownloadImageJob extends Job {
     protected void onCancel(int cancelReason, @Nullable Throwable throwable) {
     }
 
-    public Bitmap getBitmapFromURL(String src) {
-        try {
-            java.net.URL url = new java.net.URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url
-                    .openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (IOException e) {
-            return null;
-        }
+    public Bitmap getBitmapFromURL(String src) throws IOException {
+        java.net.URL url = new java.net.URL(src);
+        HttpURLConnection connection = (HttpURLConnection) url
+                .openConnection();
+        connection.setDoInput(true);
+        connection.connect();
+        InputStream input = connection.getInputStream();
+        Bitmap myBitmap = BitmapFactory.decodeStream(input);
+        return myBitmap;
+
     }
 
     @Override
+    protected int getRetryLimit() {
+        return 10;
+    }
+
+
+    @Override
     protected RetryConstraint shouldReRunOnThrowable(@NonNull Throwable throwable, int runCount, int maxRunCount) {
-        if (throwable instanceof ServerErrorThrowable) {
-            if (((ServerErrorThrowable) throwable).getResponseCode() >= 500 && ((ServerErrorThrowable) throwable).getResponseCode() < 600) {
-                return RetryConstraint.createExponentialBackoff(runCount, 5000);
-            }
+        if (throwable instanceof ServerErrorThrowable || throwable instanceof SocketException) {
+            return RetryConstraint.createExponentialBackoff(1, 5000);
         }
         return RetryConstraint.RETRY;
     }
