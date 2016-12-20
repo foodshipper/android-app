@@ -21,4 +21,7 @@ public interface DinnerService {
 
     @GET("/v1/dinner/{group_id}/recipes")
     Call<Recipe[]> getRecipes(@Path("group_id") int groupid, @Query("token") String token);
+
+    @PUT("/v1/dinner/{group_id}/recipes")
+    Call<Void> voteRecipe(@Path("group_id") int groupid, @Query("token") String token, @Query("recipe_id") int recipe_id, @Query("action") String action);
 }

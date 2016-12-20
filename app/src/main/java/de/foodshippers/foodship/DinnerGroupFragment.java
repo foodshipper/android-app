@@ -10,10 +10,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import de.foodshippers.foodship.Bilder.AbstractImageManager;
 import de.foodshippers.foodship.Bilder.GroupImageManager;
+import de.foodshippers.foodship.api.FoodshipJobManager;
+import de.foodshippers.foodship.api.jobs.RecipeVoteJob;
 import de.foodshippers.foodship.api.model.GroupInformation;
 import de.foodshippers.foodship.api.model.Recipe;
 
@@ -154,11 +157,24 @@ public class DinnerGroupFragment extends Fragment {
          */
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            Recipe recipe = dataSource.get(position);
+            final Recipe recipe = dataSource.get(position);
             holder.recipeBody.setText("It's a very tasty dish: " + recipe.getTitle());
             holder.recipeTitle.setText(recipe.getTitle());
-
             holder.recipeImage.setLocalImageBitmap(imagman.loadImage(recipe.getImage()));
+
+            holder.vetoBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FoodshipJobManager.getInstance(getActivity()).addJobInBackground(new RecipeVoteJob(groupID, recipe.getId(), "veto"));
+                }
+            });
+
+            holder.upvoteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FoodshipJobManager.getInstance(getActivity()).addJobInBackground(new RecipeVoteJob(groupID, recipe.getId(), "upvote"));
+                }
+            });
         }
 
         /**
@@ -176,11 +192,15 @@ public class DinnerGroupFragment extends Fragment {
 
             final TextView recipeTitle;
             final TextView recipeBody;
+            final ImageButton upvoteBtn;
+            final ImageButton vetoBtn;
             final CustomNetworkImageView recipeImage;
 
             ViewHolder(View itemView) {
                 super(itemView);
 
+                upvoteBtn = (ImageButton) itemView.findViewById(R.id.upvoteBtn);
+                vetoBtn = (ImageButton) itemView.findViewById(R.id.vetoBtn);
                 recipeTitle = (TextView) itemView.findViewById(R.id.recipeTitle);
                 recipeBody = (TextView) itemView.findViewById(R.id.recipeBody);
                 recipeImage = (CustomNetworkImageView) itemView.findViewById(R.id.recipeImage);
