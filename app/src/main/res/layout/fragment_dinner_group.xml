@@ -11,15 +11,32 @@
             android:layout_height="wrap_content"
             android:text="@string/dinnerTitle"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:paddingLeft="@dimen/activity_horizontal_margin"/>
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"/>
 
-    <TextView
-            android:id="@+id/invitationsInfoHeadline"
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/invitationsTitle"
-            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-            android:paddingLeft="@dimen/activity_horizontal_margin"/>
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin">
+
+        <ImageView
+                android:contentDescription="@string/group_symbol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_group_black_24dp"/>
+
+        <TextView
+                android:id="@+id/invitationsInfoHeadline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/invitationsTitle"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
+    </LinearLayout>
 
     <TextView
             android:id="@+id/invitationsInfoBody"
@@ -27,15 +44,23 @@
             android:layout_height="wrap_content"
             android:text="@string/invitationsBody"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:paddingLeft="@dimen/activity_horizontal_margin"/>
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            />
 
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Recipes"
+            android:text="@string/recipesTitle"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin" android:id="@+id/recipieText"/>
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            android:id="@+id/recipeText"/>
 
     <android.support.v7.widget.RecyclerView
             android:id="@+id/recipeList"

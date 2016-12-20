@@ -11,7 +11,7 @@ public class TriggerInvitationJob extends SimpleNetworkJob {
     private String token;
 
     public TriggerInvitationJob(String token, boolean resend_all) {
-        super(SetUserLocationJob.class);
+        super(TriggerInvitationJob.class);
         this.resend_all = resend_all;
         this.token = token;
     }

@@ -30,6 +30,7 @@ public final class FoodshipContract {
         public static final String CN_ID = "id";
         public static final String CN_INVITED = "invited";
         public static final String CN_ACCEPTED = "accepted";
+        public static final String CN_SELF_ACCEPTED = "self_accepted";
         public static final String CN_DAY = "day";
 
         public static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + " (" +
@@ -37,6 +38,7 @@ public final class FoodshipContract {
                 GroupTable.CN_ID + " INTEGER," +
                 GroupTable.CN_INVITED + " INTEGER," +
                 GroupTable.CN_ACCEPTED + " INTEGER," +
+                GroupTable.CN_SELF_ACCEPTED + " INTEGER," +
                 GroupTable.CN_DAY + " DATE)";
 
         public static final String SQL_DELETE = "DROP TABLE " + TABLE_NAME;

@@ -21,6 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -30,7 +31,7 @@ import java.util.List;
  */
 public class DinnerGroupFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    public static final String GROUP_ID = "groupID";
+    static final String GROUP_ID = "groupID";
     private static final String TAG = "DinnerGroupFragment";
     private int groupID;
     private GroupDataController manager;
@@ -45,7 +46,7 @@ public class DinnerGroupFragment extends Fragment {
      *
      * @return A new instance of fragment DinnerGroupFragment.
      */
-    public static DinnerGroupFragment newInstance(int groupId) {
+    static DinnerGroupFragment newInstance(int groupId) {
         DinnerGroupFragment fragment = new DinnerGroupFragment();
         Bundle args = new Bundle();
         args.putInt(GROUP_ID, groupId);
@@ -78,22 +79,22 @@ public class DinnerGroupFragment extends Fragment {
         RecyclerView recipeList = (RecyclerView) v.findViewById(R.id.recipeList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recipeList.setLayoutManager(mLayoutManager);
-        recipeList.setAdapter(new RecipeAdater());
+        recipeList.setAdapter(new RecipeAdapter());
 
-        recipeList.setAdapter(new RecipeAdater());
+        recipeList.setAdapter(new RecipeAdapter());
         if (!manager.isInGroup()) {
-            ((TextView) v.findViewById(R.id.recipieText)).setText("Aktuell in keiner Gruppe! DummyData");
+            ((TextView) v.findViewById(R.id.recipeText)).setText("Aktuell in keiner Gruppe! DummyData");
         }
 
         return v;
     }
 
-    public class RecipeAdater extends RecyclerView.Adapter<RecipeAdater.ViewHolder> {
+    public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
 
         private List<Recipe> dataSource = new LinkedList<>();
         private AbstractImageManager imagman;
 
-        RecipeAdater() {
+        RecipeAdapter() {
             super();
 
             imagman = GroupImageManager.getInstance(getActivity().getApplicationContext());
@@ -171,13 +172,13 @@ public class DinnerGroupFragment extends Fragment {
             return dataSource.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends RecyclerView.ViewHolder {
 
-            public final TextView recipeTitle;
-            public final TextView recipeBody;
+            final TextView recipeTitle;
+            final TextView recipeBody;
             final CustomNetworkImageView recipeImage;
 
-            public ViewHolder(View itemView) {
+            ViewHolder(View itemView) {
                 super(itemView);
 
                 recipeTitle = (TextView) itemView.findViewById(R.id.recipeTitle);
@@ -201,7 +202,7 @@ public class DinnerGroupFragment extends Fragment {
             if (v != null && groupInformation != null) {
                 TextView dinnerDay = (TextView) v.findViewById(R.id.dinnerDate);
                 try {
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     dinnerDay.setText(getString(R.string.dinnerTitle, dateFormat.parse(groupInformation.getDay())));
 
                 } catch (ParseException e) {

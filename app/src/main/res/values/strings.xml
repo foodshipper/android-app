@@ -45,4 +45,5 @@
     <string name="invitationsBody">%1$d accepted, %2$d open</string>
     <string name="dinnerTitle">Dinner on %1$tA</string>
     <string name="recipesTitle">Recipes</string>
+    <string name="group_symbol">Group Symbol</string>
 </resources>

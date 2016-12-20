@@ -1,9 +1,11 @@
 package de.foodshippers.foodship;
 
 import android.content.Context;
+import android.util.Log;
 import de.foodshippers.foodship.Bilder.GroupImageManager;
 import de.foodshippers.foodship.api.FoodshipJobManager;
 import de.foodshippers.foodship.api.RestClient;
+import de.foodshippers.foodship.api.jobs.DinnerResponseJob;
 import de.foodshippers.foodship.api.jobs.GetGroupInformationJob;
 import de.foodshippers.foodship.api.model.GroupInformation;
 import de.foodshippers.foodship.api.model.Recipe;
@@ -24,6 +26,7 @@ public class GroupDataController {
     private int groupId;
     private List<Recipe> possibleRecipies;
     private final Context c;
+    private static final String TAG = "GroupDataController";
 
     public GroupDataController(Context c) {
         this.c = c;
@@ -31,6 +34,8 @@ public class GroupDataController {
 
     public void acceptGroup() {
         inActivGroup = true;
+        Log.d(TAG, "acceptGroup: Accept Group");
+        FoodshipJobManager.getInstance(c).addJobInBackground(new DinnerResponseJob(groupId, true));
         RestClient.getInstance().getDinnerService().acceptInvite(groupId, Utils.getUserId(c), true);
     }
 
@@ -44,7 +49,7 @@ public class GroupDataController {
     }
 
     public void cancel() {
-        RestClient.getInstance().getDinnerService().acceptInvite(groupId, Utils.getUserId(c), false);
+        FoodshipJobManager.getInstance(c).addJobInBackground(new DinnerResponseJob(groupId, false));
         inActivGroup = false;
     }
 
