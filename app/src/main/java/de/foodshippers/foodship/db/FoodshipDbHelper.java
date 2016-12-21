@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class FoodshipDbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 6;
     private static final String DATABASE_NAME = "Foodship.db";
 
     public FoodshipDbHelper(Context context) {
@@ -29,6 +29,10 @@ public class FoodshipDbHelper extends SQLiteOpenHelper {
             db.execSQL(FoodshipContract.GroupTable.SQL_CREATE);
         } else if (oldVersion < 4 && newVersion >= 4) {
             db.execSQL("ALTER TABLE groups ADD COLUMN " + FoodshipContract.GroupTable.CN_SELF_ACCEPTED + " INTEGER");
+        } else if (oldVersion < 5 && newVersion >= 5) {
+            db.execSQL(FoodshipContract.RecipeTable.SQL_CREATE);
+        } else if (oldVersion < 6 && newVersion >= 6) {
+            db.execSQL("ALTER TABLE recipes ADD COLUMN " + FoodshipContract.RecipeTable.CN_GROUP + " INTEGER");
         } else {
             dropAll(db);
             onCreate(db);
@@ -39,5 +43,6 @@ public class FoodshipDbHelper extends SQLiteOpenHelper {
         db.execSQL(FoodshipContract.ProductTable.SQL_DELETE);
         db.execSQL(FoodshipContract.ProductTypeTable.SQL_DELETE);
         db.execSQL(FoodshipContract.GroupTable.SQL_DELETE);
+        db.execSQL(FoodshipContract.RecipeTable.SQL_DELETE);
     }
 }

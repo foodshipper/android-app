@@ -7,6 +7,7 @@ import de.foodshippers.foodship.api.FoodshipJobManager;
 import de.foodshippers.foodship.api.RestClient;
 import de.foodshippers.foodship.api.jobs.DinnerResponseJob;
 import de.foodshippers.foodship.api.jobs.GetGroupInformationJob;
+import de.foodshippers.foodship.api.jobs.GetGroupRecipes;
 import de.foodshippers.foodship.api.model.GroupInformation;
 import de.foodshippers.foodship.api.model.Recipe;
 import retrofit2.Response;
@@ -76,6 +77,7 @@ public class GroupDataController {
         try {
             FoodshipJobManager.getInstance(c).addJobInBackground(new GetGroupInformationJob(groupId, c));
             Response<GroupInformation> execute = RestClient.getInstance().getDinnerService().getGroupInformation(getGroupId(), Utils.getUserId(c)).execute();
+            FoodshipJobManager.getInstance(c).addJobInBackground(new GetGroupRecipes(groupId, c));
             infos = execute.body();
             Response<Recipe[]> execute1 = RestClient.getInstance().getDinnerService().getRecipes(groupId, Utils.getUserId(c)).execute();
             if (execute1.isSuccessful()) {

@@ -35,19 +35,17 @@ import retrofit2.Response;
 import java.util.Arrays;
 import java.util.List;
 
-import static de.foodshippers.foodship.DinnerGroupFragment.GROUP_ID;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Callback<Product> {
 
-    private int currentView;
-    private final String CURRENT_VIEW_KEY = "currentView";
-    private Fragment currentFragment;
-    private static final String TAG = "MainActivity";
-    private FloatingActionButton fab;
     public final static String DINNER_FRAGMENT = "DinnerFragment";
     public final static String ARG_FRAGMENT = "Fragment";
     public final static String ARG_NOTIFICATION_ID = "NotificationId";
+    private static final String TAG = "MainActivity";
+    private final String CURRENT_VIEW_KEY = "currentView";
+    private int currentView;
+    private Fragment currentFragment;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,8 +187,7 @@ public class MainActivity extends AppCompatActivity
                 if (fab != null) {
                     fab.setVisibility(View.GONE);
                 }
-                int groupId = getIntent().getIntExtra(GROUP_ID, 0);
-                currentFragment = DinnerGroupFragment.newInstance(groupId);
+                currentFragment = DinnerGroupFragment.newInstance();
             } else if (id == R.id.nav_contact) {
                 Log.d(TAG, "onNavigationItemSelected: Selected Contact View");
                 if (fab != null) {

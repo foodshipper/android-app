@@ -20,6 +20,15 @@ public class Recipe {
     @SerializedName("id")
     int id;
 
+    public Recipe(String image, String desc, String title, int upvotes, boolean veto, int id) {
+        this.image = image;
+        this.desc = desc;
+        this.title = title;
+        this.upvotes = upvotes;
+        this.veto = veto;
+        this.id = id;
+    }
+
     public String getDesc() {
         return desc;
     }
@@ -43,5 +52,4 @@ public class Recipe {
     public boolean getVeto() {
         return veto;
     }
-
 }

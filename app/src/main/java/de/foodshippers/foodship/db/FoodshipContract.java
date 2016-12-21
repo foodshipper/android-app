@@ -44,6 +44,30 @@ public final class FoodshipContract {
         public static final String SQL_DELETE = "DROP TABLE " + TABLE_NAME;
     }
 
+    public static final class RecipeTable implements BaseColumns {
+        public static final String TABLE_NAME = "recipes";
+        public static final String CN_ID = "id";
+        public static final String CN_IMG = "img";
+        public static final String CN_DESC = "desc";
+        public static final String CN_TITLE = "title";
+        public static final String CN_UPVOTES = "upvotes";
+        public static final String CN_VETO = "veto";
+        public static final String CN_GROUP = "group_id";
+
+        public static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + " (" +
+                RecipeTable._ID + " INTEGER PRIMARY KEY," +
+                RecipeTable.CN_ID + " INTEGER," +
+                RecipeTable.CN_IMG + " TEXT," +
+                RecipeTable.CN_DESC + " TEXT," +
+                RecipeTable.CN_TITLE + " TEXT," +
+                RecipeTable.CN_UPVOTES + " INTEGER," +
+                RecipeTable.CN_VETO + " INTEGER," +
+                RecipeTable.CN_GROUP + " INTEGER)";
+
+        public static final String SQL_DELETE = "DROP TABLE " + TABLE_NAME;
+
+    }
+
     public static final class ProductTypeTable implements BaseColumns {
         public static final String TABLE_NAME = "product_types";
         public static final String CN_NAME = "name";

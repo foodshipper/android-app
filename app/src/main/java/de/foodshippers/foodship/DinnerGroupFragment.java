@@ -2,6 +2,9 @@ package de.foodshippers.foodship;
 
 
 import android.app.Fragment;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +22,9 @@ import de.foodshippers.foodship.api.FoodshipJobManager;
 import de.foodshippers.foodship.api.jobs.RecipeVoteJob;
 import de.foodshippers.foodship.api.model.GroupInformation;
 import de.foodshippers.foodship.api.model.Recipe;
+import de.foodshippers.foodship.db.FoodshipContract;
+import de.foodshippers.foodship.db.FoodshipContract.RecipeTable;
+import de.foodshippers.foodship.db.FoodshipDbHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,8 +42,8 @@ public class DinnerGroupFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     static final String GROUP_ID = "groupID";
     private static final String TAG = "DinnerGroupFragment";
-    private int groupID;
-    private GroupDataController manager;
+    private int groupID = 0;
+    private RecipeAdapter adapter;
 
     public DinnerGroupFragment() {
         // Required empty public constructor
@@ -57,19 +63,21 @@ public class DinnerGroupFragment extends Fragment {
         return fragment;
     }
 
+    static DinnerGroupFragment newInstance() {
+        DinnerGroupFragment fragment = new DinnerGroupFragment();
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        adapter = new RecipeAdapter();
         if (getArguments() != null) {
-            groupID = getArguments().getInt(GROUP_ID);
+            changeGroupID(getArguments().getInt(GROUP_ID));
         } else {
-            throw new IllegalArgumentException("DinnerGroupFragment has to get Group ID as argument");
+            new FindLatestGroupTask().execute();
         }
         new GetGroupInfoTask().execute();
-
-        manager = GroupDataController.getInstance(getActivity().getApplicationContext());
-
-
     }
 
 
@@ -82,29 +90,32 @@ public class DinnerGroupFragment extends Fragment {
         RecyclerView recipeList = (RecyclerView) v.findViewById(R.id.recipeList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recipeList.setLayoutManager(mLayoutManager);
-        recipeList.setAdapter(new RecipeAdapter());
 
-        recipeList.setAdapter(new RecipeAdapter());
-        if (!manager.isInGroup()) {
-            ((TextView) v.findViewById(R.id.recipeText)).setText("Aktuell in keiner Gruppe! DummyData");
-        }
+        recipeList.setAdapter(adapter);
 
         return v;
     }
 
-    public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
+    public void changeGroupID(int groupID) {
+        Log.d(TAG, "changeGroupID: Got new Group ID: " + groupID);
+        this.groupID = groupID;
+        new GetGroupInfoTask().execute();
+        adapter.reloadData();
 
+    }
+
+    public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
+        private static final String TAG = "RecipeAdapter";
         private List<Recipe> dataSource = new LinkedList<>();
         private AbstractImageManager imagman;
 
         RecipeAdapter() {
             super();
-
             imagman = GroupImageManager.getInstance(getActivity().getApplicationContext());
-            if (manager.isInGroup()) {
-                dataSource.addAll(manager.getPossibleRecipies());
-                this.notifyDataSetChanged();
-            }
+        }
+
+        void reloadData() {
+            new LoadGroupRecipesTask().execute();
         }
 
         /**
@@ -116,7 +127,7 @@ public class DinnerGroupFragment extends Fragment {
          * layout file.
          * <p>
          * The new ViewHolder will be used to display items of the adapter using
-         * {@link #onBindViewHolder(ViewHolder, int, List)}. Since it will be re-used to display
+         * . Since it will be re-used to display
          * different items in the data set, it is a good idea to cache references to sub views of
          * the View to avoid unnecessary {@link View#findViewById(int)} calls.
          *
@@ -148,7 +159,7 @@ public class DinnerGroupFragment extends Fragment {
          * on (e.g. in a click listener), use {@link ViewHolder#getAdapterPosition()} which will
          * have the updated adapter position.
          * <p>
-         * Override {@link #onBindViewHolder(ViewHolder, int, List)} instead if Adapter can
+         * Override  instead if Adapter can
          * handle efficient partial bind.
          *
          * @param holder   The ViewHolder which should be updated to represent the contents of the
@@ -161,13 +172,20 @@ public class DinnerGroupFragment extends Fragment {
             holder.recipeBody.setText("It's a very tasty dish: " + recipe.getTitle());
             holder.recipeTitle.setText(recipe.getTitle());
             holder.recipeImage.setLocalImageBitmap(imagman.loadImage(recipe.getImage()));
-
             holder.vetoBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     FoodshipJobManager.getInstance(getActivity()).addJobInBackground(new RecipeVoteJob(groupID, recipe.getId(), "veto"));
                 }
             });
+
+
+            holder.upvoteBtn.setEnabled(!recipe.getVeto());
+            if (recipe.getVeto()) {
+                holder.upvoteBtn.setColorFilter(Color.GRAY);
+            } else {
+                holder.upvoteBtn.setColorFilter(null);
+            }
 
             holder.upvoteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -207,10 +225,41 @@ public class DinnerGroupFragment extends Fragment {
             }
         }
 
+
+        private class LoadGroupRecipesTask extends AsyncTask<Void, Void, List<Recipe>> {
+            private static final String TAG = "LoadGroupRecipesTask";
+
+            @Override
+            protected List<Recipe> doInBackground(Void... voids) {
+                SQLiteDatabase db = new FoodshipDbHelper(getActivity()).getReadableDatabase();
+                Cursor cursor = db.query(RecipeTable.TABLE_NAME,
+                        new String[]{RecipeTable.CN_ID, RecipeTable.CN_IMG, RecipeTable.CN_DESC, RecipeTable.CN_TITLE, RecipeTable.CN_UPVOTES, RecipeTable.CN_VETO},
+                        RecipeTable.CN_GROUP + "=?",
+                        new String[]{String.valueOf(groupID)},
+                        null,
+                        null,
+                        RecipeTable.CN_UPVOTES + " DESC"
+                );
+                List<Recipe> recipes = new LinkedList<>();
+                while (cursor.moveToNext()) {
+                    recipes.add(new Recipe(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getInt(4), cursor.getInt(5) == 1, cursor.getInt(0)));
+                }
+                cursor.close();
+
+                return recipes;
+            }
+
+            @Override
+            protected void onPostExecute(List<Recipe> recipes) {
+                dataSource = recipes;
+                Log.d(TAG, "onPostExecute: Fetched " + recipes.size() + " recipes");
+                RecipeAdapter.this.notifyDataSetChanged();
+            }
+        }
     }
 
     private class GetGroupInfoTask extends AsyncTask<Void, Void, GroupInformation> {
-
+        private static final String TAG = "GetGroupInfoTask";
         @Override
         protected GroupInformation doInBackground(Void... voids) {
             return GroupInformation.getGroupInfoFromId(getActivity(), groupID);
@@ -237,4 +286,36 @@ public class DinnerGroupFragment extends Fragment {
             }
         }
     }
+
+    private class FindLatestGroupTask extends AsyncTask<Void, Void, Integer> {
+        private static final String TAG = "FindLatestGroupTask";
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            SQLiteDatabase db = new FoodshipDbHelper(getActivity()).getReadableDatabase();
+            Cursor cursor = db.query(FoodshipContract.GroupTable.TABLE_NAME,
+                    new String[]{FoodshipContract.GroupTable.CN_ID},
+                    null,
+                    null,
+                    null,
+                    null,
+                    FoodshipContract.GroupTable.CN_DAY + " DESC",
+                    "0,1");
+            int id = 0;
+            if (cursor.moveToFirst()) {
+                id = cursor.getInt(0);
+            } else {
+                Log.i(TAG, "doInBackground: No Group Information found in database");
+            }
+            cursor.close();
+
+            return id;
+        }
+
+        @Override
+        protected void onPostExecute(Integer groupId) {
+            DinnerGroupFragment.this.changeGroupID(groupId);
+        }
+    }
+
 }
