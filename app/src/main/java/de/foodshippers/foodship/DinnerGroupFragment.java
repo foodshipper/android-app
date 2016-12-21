@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,6 +20,8 @@ import android.widget.TextView;
 import de.foodshippers.foodship.Bilder.AbstractImageManager;
 import de.foodshippers.foodship.Bilder.GroupImageManager;
 import de.foodshippers.foodship.api.FoodshipJobManager;
+import de.foodshippers.foodship.api.jobs.GetGroupInformationJob;
+import de.foodshippers.foodship.api.jobs.GetGroupRecipes;
 import de.foodshippers.foodship.api.jobs.RecipeVoteJob;
 import de.foodshippers.foodship.api.model.GroupInformation;
 import de.foodshippers.foodship.api.model.Recipe;
@@ -93,6 +96,16 @@ public class DinnerGroupFragment extends Fragment {
 
         recipeList.setAdapter(adapter);
 
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swiperefresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                FoodshipJobManager.getInstance(getActivity()).addJobInBackground(new GetGroupInformationJob(groupID, getActivity()));
+                FoodshipJobManager.getInstance(getActivity()).addJobInBackground(new GetGroupRecipes(groupID, getActivity()));
+                swipeRefreshLayout.setRefreshing(false);
+                changeGroupID(groupID);
+            }
+        });
         return v;
     }
 
@@ -231,6 +244,7 @@ public class DinnerGroupFragment extends Fragment {
 
             @Override
             protected List<Recipe> doInBackground(Void... voids) {
+
                 SQLiteDatabase db = new FoodshipDbHelper(getActivity()).getReadableDatabase();
                 Cursor cursor = db.query(RecipeTable.TABLE_NAME,
                         new String[]{RecipeTable.CN_ID, RecipeTable.CN_IMG, RecipeTable.CN_DESC, RecipeTable.CN_TITLE, RecipeTable.CN_UPVOTES, RecipeTable.CN_VETO},
@@ -317,5 +331,4 @@ public class DinnerGroupFragment extends Fragment {
             DinnerGroupFragment.this.changeGroupID(groupId);
         }
     }
-
 }

@@ -1,9 +1,14 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:paddingTop="@dimen/activity_vertical_margin">
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                              android:layout_width="match_parent"
+                                              android:layout_height="match_parent"
+                                              android:id="@+id/swiperefresh">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:tools="http://schemas.android.com/tools"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical"
+                  android:paddingTop="@dimen/activity_vertical_margin">
 
     <TextView
             android:id="@+id/dinnerDate"
@@ -16,27 +21,18 @@
             android:paddingStart="@dimen/activity_horizontal_margin"
             android:paddingEnd="@dimen/activity_horizontal_margin"/>
 
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingStart="@dimen/activity_horizontal_margin"
-            android:paddingEnd="@dimen/activity_horizontal_margin">
-
-        <ImageView
-                android:contentDescription="@string/group_symbol"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_group_black_24dp"/>
-
         <TextView
                 android:id="@+id/invitationsInfoHeadline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/invitationsTitle"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
-    </LinearLayout>
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:drawableLeft="@drawable/ic_group_black_24dp"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                />
 
     <TextView
             android:id="@+id/invitationsInfoBody"
@@ -69,3 +65,4 @@
             android:scrollbars="none"
             tools:listitem="@layout/recipe_item"/>
 </LinearLayout>
+</android.support.v4.widget.SwipeRefreshLayout>
