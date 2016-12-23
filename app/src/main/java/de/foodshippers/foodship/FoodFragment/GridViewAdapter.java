@@ -86,7 +86,7 @@ public class GridViewAdapter extends BaseAdapter implements FoodViewDataBase.OnF
     }
 
     @Override
-    public void onFoodChangesNotyfi() {
+    public void onFoodChangesNotify() {
         notifyDataSetChanged();
     }
 

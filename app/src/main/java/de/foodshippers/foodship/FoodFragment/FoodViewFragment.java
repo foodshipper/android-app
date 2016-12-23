@@ -36,7 +36,7 @@ public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnR
         swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
         swipeLayout.setOnRefreshListener(this);
         GridView gridView = (GridView) view.findViewById(R.id.gridView);
-        gridAdapter = new GridViewAdapter(this.getActivity(), R.layout.grid_item_layout);
+        gridAdapter = new GridViewAdapter(getActivity().getApplicationContext(), R.layout.grid_item_layout);
         FoodViewDataBase.getInstance(getActivity().getApplicationContext()).add(gridAdapter);
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -69,7 +69,7 @@ public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onRefresh() {
         Log.d(TAG, "Refresh");
-        FoodViewDataBase.getInstance(getActivity()).refreshFood();
+        FoodViewDataBase.getInstance(getActivity().getApplicationContext()).refreshFood();
         swipeLayout.setRefreshing(false);
     }
 

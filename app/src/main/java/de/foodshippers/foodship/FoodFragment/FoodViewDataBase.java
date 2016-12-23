@@ -81,7 +81,7 @@ public class FoodViewDataBase implements Callback<Product[]> {
 
 
     public interface OnFoodChangesListener {
-        void onFoodChangesNotyfi();
+        void onFoodChangesNotify();
     }
 
     public void add(OnFoodChangesListener me) {
@@ -97,7 +97,7 @@ public class FoodViewDataBase implements Callback<Product[]> {
             @Override
             public void run() {
                 for (OnFoodChangesListener list : observer) {
-                    list.onFoodChangesNotyfi();
+                    list.onFoodChangesNotify();
                 }
             }
         });
