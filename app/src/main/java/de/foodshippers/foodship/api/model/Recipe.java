@@ -19,14 +19,40 @@ public class Recipe {
     boolean veto;
     @SerializedName("id")
     int id;
+    @SerializedName("cheap")
+    boolean cheap;
+    @SerializedName("vegan")
+    boolean vegan;
+    @SerializedName("vegetarian")
+    boolean vegetarian;
 
-    public Recipe(String image, String desc, String title, int upvotes, boolean veto, int id) {
+    public Recipe(String image, String desc, String title, int upvotes, boolean veto, int id, boolean cheap, boolean vegan, boolean vegetarian) {
         this.image = image;
         this.desc = desc;
         this.title = title;
         this.upvotes = upvotes;
         this.veto = veto;
         this.id = id;
+        this.cheap = cheap;
+        this.vegan = vegan;
+        this.vegetarian = vegetarian;
+    }
+
+
+    public boolean isVeto() {
+        return veto;
+    }
+
+    public boolean isCheap() {
+        return cheap;
+    }
+
+    public boolean isVegan() {
+        return vegan;
+    }
+
+    public boolean isVegetarian() {
+        return vegetarian;
     }
 
     public String getDesc() {

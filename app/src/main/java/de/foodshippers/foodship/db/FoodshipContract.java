@@ -53,6 +53,9 @@ public final class FoodshipContract {
         public static final String CN_UPVOTES = "upvotes";
         public static final String CN_VETO = "veto";
         public static final String CN_GROUP = "group_id";
+        public static final String CN_VEGAN = "vegan";
+        public static final String CN_VEGETARIAN = "vegetarian";
+        public static final String CN_CHEAP = "cheap";
 
         public static final String SQL_CREATE = "CREATE TABLE " + TABLE_NAME + " (" +
                 RecipeTable._ID + " INTEGER PRIMARY KEY," +
@@ -62,6 +65,9 @@ public final class FoodshipContract {
                 RecipeTable.CN_TITLE + " TEXT," +
                 RecipeTable.CN_UPVOTES + " INTEGER," +
                 RecipeTable.CN_VETO + " INTEGER," +
+                RecipeTable.CN_VEGETARIAN + " INTEGER," +
+                RecipeTable.CN_VEGAN + " INTEGER," +
+                RecipeTable.CN_CHEAP + " INTEGER," +
                 RecipeTable.CN_GROUP + " INTEGER)";
 
         public static final String SQL_DELETE = "DROP TABLE " + TABLE_NAME;

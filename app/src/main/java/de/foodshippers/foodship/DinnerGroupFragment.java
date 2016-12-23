@@ -35,6 +35,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import static de.foodshippers.foodship.db.FoodshipContract.RecipeTable.*;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -247,7 +249,7 @@ public class DinnerGroupFragment extends Fragment {
 
                 SQLiteDatabase db = new FoodshipDbHelper(getActivity()).getReadableDatabase();
                 Cursor cursor = db.query(RecipeTable.TABLE_NAME,
-                        new String[]{RecipeTable.CN_ID, RecipeTable.CN_IMG, RecipeTable.CN_DESC, RecipeTable.CN_TITLE, RecipeTable.CN_UPVOTES, RecipeTable.CN_VETO},
+                        new String[]{RecipeTable.CN_ID, RecipeTable.CN_IMG, RecipeTable.CN_DESC, RecipeTable.CN_TITLE, RecipeTable.CN_UPVOTES, RecipeTable.CN_VETO, CN_CHEAP, CN_VEGAN, CN_VEGETARIAN},
                         RecipeTable.CN_GROUP + "=?",
                         new String[]{String.valueOf(groupID)},
                         null,
@@ -256,7 +258,8 @@ public class DinnerGroupFragment extends Fragment {
                 );
                 List<Recipe> recipes = new LinkedList<>();
                 while (cursor.moveToNext()) {
-                    recipes.add(new Recipe(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getInt(4), cursor.getInt(5) == 1, cursor.getInt(0)));
+                    recipes.add(new Recipe(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getInt(4),
+                            cursor.getInt(5) == 1, cursor.getInt(0), cursor.getInt(6) == 1, cursor.getInt(7) == 1, cursor.getInt(8) == 1));
                 }
                 cursor.close();
 

@@ -52,12 +52,17 @@ public class GetGroupRecipes extends SimpleNetworkJob<Recipe[]> {
                                 CN_TITLE + "=?," +
                                 CN_UPVOTES + "=?," +
                                 CN_VETO + "=?," +
+                                CN_VEGAN + "=?," +
+                                CN_VEGETARIAN + "=?," +
+                                CN_CHEAP + "=?," +
                                 CN_GROUP + "=? " +
                                 " WHERE " + CN_ID + "=?",
-                        new String[]{recipe.getImage(), recipe.getDesc(), recipe.getTitle(), String.valueOf(recipe.getUpvotes()), String.valueOf(recipe.getVeto()), String.valueOf(groupId), String.valueOf(recipe.getId())});
+                        new String[]{recipe.getImage(), recipe.getDesc(), recipe.getTitle(), String.valueOf(recipe.getUpvotes()),
+                                String.valueOf(recipe.getVeto()), String.valueOf(recipe.isVegan()), String.valueOf(recipe.isVegetarian()),
+                                String.valueOf(recipe.isCheap()), String.valueOf(groupId), String.valueOf(recipe.getId())});
                 Log.d(TAG, "onSuccessFullRun: Updated Recipe Information");
             } else {
-                db.execSQL("INSERT INTO " + TABLE_NAME + " (" + CN_ID + ", " + CN_IMG + ", " + CN_DESC + ", " + CN_TITLE + ", " + CN_UPVOTES + ", " + CN_VETO + ", " + CN_GROUP + ") VALUES (?, ?, ?, ?, ?, ?, ?)",
+                db.execSQL("INSERT INTO " + TABLE_NAME + " (" + CN_ID + ", " + CN_IMG + ", " + CN_DESC + ", " + CN_TITLE + ", " + CN_UPVOTES + ", " + CN_VETO + ", " + CN_VEGAN + ", " + CN_VEGETARIAN + ", " + CN_CHEAP + ", " + CN_GROUP + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                         new String[]{String.valueOf(recipe.getId()), recipe.getImage(), recipe.getDesc(), recipe.getTitle(), String.valueOf(recipe.getUpvotes()), String.valueOf(recipe.getVeto()), String.valueOf(groupId)});
                 Log.d(TAG, "onSuccessFullRun: Inserted Recipe Information");
             }
