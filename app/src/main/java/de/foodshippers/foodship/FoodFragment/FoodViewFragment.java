@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import de.foodshippers.foodship.R;
-import de.foodshippers.foodship.api.jobs.DeleteUserFoodJobSimple;
 import de.foodshippers.foodship.api.FoodshipJobManager;
+import de.foodshippers.foodship.api.jobs.DeleteUserFoodJobSimple;
 import de.foodshippers.foodship.api.model.Product;
 
 /**
@@ -20,9 +20,9 @@ import de.foodshippers.foodship.api.model.Product;
  */
 public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
+    private static final String TAG = FoodViewFragment.class.getSimpleName();
     private GridViewAdapter gridAdapter;
     private SwipeRefreshLayout swipeLayout;
-    private static final String TAG = FoodViewFragment.class.getSimpleName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class FoodViewFragment extends Fragment implements SwipeRefreshLayout.OnR
         swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
         swipeLayout.setOnRefreshListener(this);
         GridView gridView = (GridView) view.findViewById(R.id.gridView);
-        gridAdapter = new GridViewAdapter(getActivity().getApplicationContext(), R.layout.grid_item_layout);
+        gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout);
         FoodViewDataBase.getInstance(getActivity().getApplicationContext()).add(gridAdapter);
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

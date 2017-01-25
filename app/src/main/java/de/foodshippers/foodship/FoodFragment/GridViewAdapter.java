@@ -1,7 +1,6 @@
 package de.foodshippers.foodship.FoodFragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,17 +19,17 @@ import java.util.List;
  * Created by hannes on 09.11.16.
  */
 public class GridViewAdapter extends BaseAdapter implements FoodViewDataBase.OnFoodChangesListener {
-    private Context context;
+    private Activity activity;
     private int layoutResourceId;
     private List<Product> data;
     private FoodImageManager imagman;
 
-    public GridViewAdapter(Context context, int layoutResourceId) {
+    GridViewAdapter(Activity activity, int layoutResourceId) {
         super();
         this.layoutResourceId = layoutResourceId;
-        this.context = context;
-        this.data = FoodViewDataBase.getInstance(context).getFoodList();
-        this.imagman = FoodImageManager.getInstance(context);
+        this.activity = activity;
+        this.data = FoodViewDataBase.getInstance(this.activity).getFoodList();
+        this.imagman = FoodImageManager.getInstance(this.activity);
     }
 
     @Override
@@ -58,10 +57,10 @@ public class GridViewAdapter extends BaseAdapter implements FoodViewDataBase.OnF
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        ViewHolder holder = null;
+        ViewHolder holder;
 
         if (row == null) {
-            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+            LayoutInflater inflater = activity.getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
             holder = new ViewHolder();
             holder.imageTitle = (TextView) row.findViewById(R.id.text);
@@ -78,9 +77,9 @@ public class GridViewAdapter extends BaseAdapter implements FoodViewDataBase.OnF
             return row;
         } else {
             Product item = data.get(position);
-            Type t = Type.getTypeFromId(context, item.getType());
+            Type t = Type.getTypeFromId(activity, item.getType());
             holder.imageTitle.setText(String.valueOf(t.getName()));
-            holder.image.setImageBitmap(imagman.loadImage(Type.getTypeFromId(context, item.getType()).getImageUrl()));
+            holder.image.setImageBitmap(imagman.loadImage(Type.getTypeFromId(activity, item.getType()).getImageUrl()));
             return row;
         }
     }
@@ -91,7 +90,7 @@ public class GridViewAdapter extends BaseAdapter implements FoodViewDataBase.OnF
     }
 
     public static class ViewHolder {
-        public TextView imageTitle;
         public ImageView image;
+        TextView imageTitle;
     }
 }
