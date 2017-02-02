@@ -50,7 +50,7 @@ public abstract class SimpleNetworkJob<T> extends Job {
             }
         } else {
             Log.d(TAG, "onRun: Call was successfull!");
-            onSuccessFullRun(response.body());
+            onSuccessFullRun();
         }
     }
 

@@ -34,6 +34,7 @@ public class SendProductTypeJob extends SimpleNetworkJob {
 
     @Override
     protected void onSuccessFullRun() {
+        Log.d(TAG, "onSuccessFullRun: Added Food type");
         FoodshipJobManager.getInstance(getApplicationContext()).addJobInBackground(new AddUserFoodJobSimple(new Product("", ean, type)));
     }
 

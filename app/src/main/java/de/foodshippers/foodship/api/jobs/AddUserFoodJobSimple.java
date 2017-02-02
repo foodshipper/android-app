@@ -4,8 +4,8 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import com.birbit.android.jobqueue.Params;
 import com.birbit.android.jobqueue.TagConstraint;
-import de.foodshippers.foodship.FoodFragment.FoodViewDataBase;
 import de.foodshippers.foodship.Bilder.FoodImageManager;
+import de.foodshippers.foodship.FoodFragment.FoodViewDataBase;
 import de.foodshippers.foodship.Utils;
 import de.foodshippers.foodship.api.FoodshipJobManager;
 import de.foodshippers.foodship.api.RestClient;
@@ -47,6 +47,7 @@ public class AddUserFoodJobSimple extends SimpleNetworkJob {
 
     @Override
     protected void onSuccessFullRun() {
+        Log.d(TAG, "onSuccessFullRun: Added Food to Server Fridge");
         FoodViewDataBase.getInstance(getApplicationContext()).refreshFood();
     }
 }
