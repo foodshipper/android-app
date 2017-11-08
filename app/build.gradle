@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "de.foodshippers.foodship"
-        minSdkVersion 14
-        targetSdkVersion 25
+        minSdkVersion 16
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
     }
@@ -31,7 +31,8 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'org.parceler:parceler:1.1.6'
+    annotationProcessor 'org.parceler:parceler:1.1.9'
+    compile 'org.parceler:parceler:1.1.9'
     compile 'com.birbit:android-priority-jobqueue:2.0.1'
     compile 'com.google.firebase:firebase-messaging:10.0.1'
 }
